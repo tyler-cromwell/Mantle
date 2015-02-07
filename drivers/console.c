@@ -49,7 +49,7 @@ uint16_t console_write(char* message, uint16_t length, uint8_t attribute) {
     uint16_t b = 0, c = 0;
 
     /* Ensure that the number of characters to write does not exceed the maximum */
-    while (c < (CONSOLE_BYTES / 2) && c < length && message[c] != '\0') {
+    while (c < (CONSOLE_BYTES / CONSOLE_CHAR_WIDTH) && c < length && message[c] != '\0') {
         video_mem[b] = message[c];
         video_mem[b+1] = attribute;
         c++;
@@ -76,7 +76,7 @@ uint16_t console_write_newline(char* message, uint16_t length, uint8_t attribute
     uint16_t b = 0;
     char* video_mem = VIDEO_MEM_CURRENT;
 
-    while (b < (80 - written) * CONSOLE_CHAR_WIDTH) {
+    while (b < (CONSOLE_LINE_CHARS - written) * CONSOLE_CHAR_WIDTH) {
         video_mem[b] = 0x0;
         video_mem[b+1] = 0x0;
         b += CONSOLE_CHAR_WIDTH;
