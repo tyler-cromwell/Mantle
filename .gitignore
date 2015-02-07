@@ -1,2 +1,9 @@
+*.o
+*.swp
+boot/*.o
+boot/*.swp
+drivers/*.o
+drivers/*.swp
 kernel_image
+
 notes.txt
