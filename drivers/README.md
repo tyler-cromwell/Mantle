@@ -1,6 +1,4 @@
 # Drivers
-
-## Contents
 This directory contains all code for drivers such as the console.
 
 ## Files

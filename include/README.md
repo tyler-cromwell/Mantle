@@ -1,6 +1,4 @@
 # Include
-
-## Contents
 This directory contains all header files used in by the kernel.
 
 ## Files

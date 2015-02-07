@@ -1,6 +1,4 @@
 # Boot
-
-## Contents
 This directory contains all code necessary for booting/starting the Kernel. Currently only x86 will be supported.
 
 ## Files
