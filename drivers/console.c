@@ -5,14 +5,16 @@
 /* Kernel Headers */
 #include <console.h>
 
-#define VGA_START   (char*) 0xb8000
+#define VGA_START   (char*) 0xb8000 /* The starting address for video memory */
+#define VGA_END     (char*) 0xb8fa0 /* The ending address for video memory */
 
-#define LINES       25
-#define LINE_CHARS  80
-#define CHAR_WIDTH  2
-#define BYTES       (25 * 80 * 2)
+#define CHAR_WIDTH  2       /* The number of bytes used per character */
+#define LINES       25      /* The number of lines on the screen */
+#define LINE_CHARS  80      /* The number of characters per line */
+#define LINE_BYTES  160     /* The number of bytes per line */
+#define BYTES       4000    /* The number of usable bytes in video memory */
 
-/* Pointer to the next "empty" character byte. */
+/* Pointer to the next "empty" character byte */
 char* VGA_NEXT = VGA_START;
 
 /*
@@ -25,8 +27,8 @@ void console_clear(void) {
     uint16_t b = 0;
 
     while (b < BYTES) {
-        vga[b] = 0x0;
-        vga[b+1] = 0x0;
+        vga[b] = '\0';
+        vga[b+1] = '\0';
         b += CHAR_WIDTH; /* Move up 2 bytes */
     }
 
@@ -46,17 +48,30 @@ void console_clear(void) {
 */
 uint16_t console_write(char* message, uint16_t length, uint8_t attribute) {
     char* vga = VGA_NEXT;
-    uint16_t b = 0, c = 0;
+    uint16_t c = 0;
 
     /* Ensure that the number of characters to write does not exceed the maximum */
-    while (c < (BYTES / CHAR_WIDTH) && c < length && message[c] != '\0') {
-        vga[b] = message[c];
-        vga[b+1] = attribute;
+    while (message[c] != '\0') {
+        if (vga >= VGA_END) {
+            /* Scroll everything up one row */
+            vga -= LINE_BYTES;
+            char* start = VGA_START;
+
+            for (uint16_t i = LINE_BYTES; i < BYTES; i++) {
+                uint16_t j = i - LINE_BYTES;
+                start[j] = start[i];
+            }
+            
+            for (uint8_t i = 0; i < LINE_BYTES; i++) vga[i] = '\0';
+        }
+
+        *vga = message[c];
+        *(vga+1) = attribute;
         c++;
-        b += CHAR_WIDTH;
+        vga += CHAR_WIDTH;
     }
 
-    VGA_NEXT += b;
+    VGA_NEXT = vga;
     return c;
 }
 
@@ -73,15 +88,15 @@ uint16_t console_write(char* message, uint16_t length, uint8_t attribute) {
 */
 uint16_t console_write_newline(char* message, uint16_t length, uint8_t attribute) {
     uint16_t written = console_write(message, length, attribute);
-    uint16_t b = 0;
+    uint16_t remaining = LINE_CHARS - (((VGA_NEXT - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
     char* vga = VGA_NEXT;
 
-    while (b < (LINE_CHARS - written) * CHAR_WIDTH) {
-        vga[b] = 0x0;
-        vga[b+1] = 0x0;
-        b += CHAR_WIDTH;
+    for (uint8_t i = 0; i < remaining; i++) {
+        *vga = '\0';
+        *(vga+1) = '\0';
+        vga += CHAR_WIDTH;
     }
 
-    VGA_NEXT += b;
+    VGA_NEXT = vga;
     return written;
 }
