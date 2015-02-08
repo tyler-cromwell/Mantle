@@ -37,7 +37,7 @@
 #define BG_WHITE        0xf0
 
 extern void console_clear(void);
-extern uint16_t console_write(char* message, uint16_t length, uint8_t attribute);
-extern uint16_t console_write_newline(char* message, uint16_t length, uint8_t attribute);
+extern uint16_t console_write(char*, uint16_t, uint8_t);
+extern uint16_t console_write_newline(char*, uint16_t, uint8_t);
 
 #endif
