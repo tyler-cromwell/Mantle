@@ -3,7 +3,7 @@ CC=clang
 LD=ld
 
 ASFLAGS=-f elf32
-CFLAGS=-m32 -c -O0 -I ./include
+CFLAGS=-Wall -Werror -pedantic -m32 -c -O0 -I ./include
 LDFLAGS=-m elf_i386 -T
 
 CMD=qemu-system-i386
