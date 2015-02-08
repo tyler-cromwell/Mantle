@@ -5,32 +5,32 @@
 /* Kernel Headers */
 #include <console.h>
 
-#define VIDEO_MEM_START (char*) 0xb8000
+#define VGA_START   (char*) 0xb8000
 
-#define CONSOLE_LINES       25
-#define CONSOLE_LINE_CHARS  80
-#define CONSOLE_CHAR_WIDTH  2
-#define CONSOLE_BYTES       (25 * 80 * 2)
+#define LINES       25
+#define LINE_CHARS  80
+#define CHAR_WIDTH  2
+#define BYTES       (25 * 80 * 2)
 
 /* Pointer to the next "empty" character byte. */
-char* VIDEO_MEM_CURRENT = VIDEO_MEM_START;
+char* VGA_NEXT = VGA_START;
 
 /*
  * Clears the console.
  * Side Effect:
- *   Updates the video pointer.
+ *   Resets the video pointer.
  */
 void console_clear(void) {
-    char* video_mem = VIDEO_MEM_START;
+    char* vga = VGA_START;
     uint16_t b = 0;
 
-    while (b < CONSOLE_BYTES) {
-        video_mem[b] = 0x0;
-        video_mem[b+1] = 0x0;
-        b += CONSOLE_CHAR_WIDTH; /* Move up 2 bytes */
+    while (b < BYTES) {
+        vga[b] = 0x0;
+        vga[b+1] = 0x0;
+        b += CHAR_WIDTH; /* Move up 2 bytes */
     }
 
-    VIDEO_MEM_CURRENT = VIDEO_MEM_START;
+    VGA_NEXT = VGA_START;
 }
 
 /*
@@ -45,18 +45,18 @@ void console_clear(void) {
  *   Updates the video pointer.
 */
 uint16_t console_write(char* message, uint16_t length, uint8_t attribute) {
-    char* video_mem = VIDEO_MEM_CURRENT;
+    char* vga = VGA_NEXT;
     uint16_t b = 0, c = 0;
 
     /* Ensure that the number of characters to write does not exceed the maximum */
-    while (c < (CONSOLE_BYTES / CONSOLE_CHAR_WIDTH) && c < length && message[c] != '\0') {
-        video_mem[b] = message[c];
-        video_mem[b+1] = attribute;
+    while (c < (BYTES / CHAR_WIDTH) && c < length && message[c] != '\0') {
+        vga[b] = message[c];
+        vga[b+1] = attribute;
         c++;
-        b += CONSOLE_CHAR_WIDTH;
+        b += CHAR_WIDTH;
     }
 
-    VIDEO_MEM_CURRENT += b;
+    VGA_NEXT += b;
     return c;
 }
 
@@ -74,14 +74,14 @@ uint16_t console_write(char* message, uint16_t length, uint8_t attribute) {
 uint16_t console_write_newline(char* message, uint16_t length, uint8_t attribute) {
     uint16_t written = console_write(message, length, attribute);
     uint16_t b = 0;
-    char* video_mem = VIDEO_MEM_CURRENT;
+    char* vga = VGA_NEXT;
 
-    while (b < (CONSOLE_LINE_CHARS - written) * CONSOLE_CHAR_WIDTH) {
-        video_mem[b] = 0x0;
-        video_mem[b+1] = 0x0;
-        b += CONSOLE_CHAR_WIDTH;
+    while (b < (LINE_CHARS - written) * CHAR_WIDTH) {
+        vga[b] = 0x0;
+        vga[b+1] = 0x0;
+        b += CHAR_WIDTH;
     }
 
-    VIDEO_MEM_CURRENT += b;
+    VGA_NEXT += b;
     return written;
 }
