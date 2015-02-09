@@ -86,7 +86,7 @@ uint16_t console_write(char* message, uint16_t length, uint8_t attribute) {
  * Side Effect:
  *   Updates the video pointer.
 */
-uint16_t console_write_newline(char* message, uint16_t length, uint8_t attribute) {
+uint16_t console_write_line(char* message, uint16_t length, uint8_t attribute) {
     uint16_t written = console_write(message, length, attribute);
     uint16_t remaining = LINE_CHARS - (((VGA_NEXT - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
     char* vga = VGA_NEXT;

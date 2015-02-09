@@ -38,6 +38,6 @@
 
 extern void console_clear(void);
 extern uint16_t console_write(char*, uint16_t, uint8_t);
-extern uint16_t console_write_newline(char*, uint16_t, uint8_t);
+extern uint16_t console_write_line(char*, uint16_t, uint8_t);
 
 #endif
