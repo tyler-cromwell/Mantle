@@ -1,6 +1,7 @@
 #ifndef KERNEL_CONSOLE_H
 #define KERNEL_CONSOLE_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 #define FG_BLACK        0x00
@@ -37,7 +38,7 @@
 #define BG_WHITE        0xf0
 
 extern void console_clear(void);
-extern uint16_t console_write(char*, uint16_t, uint8_t);
-extern uint16_t console_write_line(char*, uint16_t, uint8_t);
+extern size_t console_write(char*, size_t, uint8_t);
+extern size_t console_write_line(char*, size_t, uint8_t);
 
 #endif

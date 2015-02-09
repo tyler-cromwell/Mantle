@@ -46,9 +46,9 @@ void console_clear(void) {
  * Side Effect:
  *   Updates the video pointer.
 */
-uint16_t console_write(char* message, uint16_t length, uint8_t attribute) {
+size_t console_write(char* message, size_t length, uint8_t attribute) {
     char* vga = VGA_NEXT;
-    uint16_t c = 0;
+    size_t c = 0;
 
     /* Ensure that the number of characters to write does not exceed the maximum */
     while (message[c] != '\0') {
@@ -86,8 +86,8 @@ uint16_t console_write(char* message, uint16_t length, uint8_t attribute) {
  * Side Effect:
  *   Updates the video pointer.
 */
-uint16_t console_write_line(char* message, uint16_t length, uint8_t attribute) {
-    uint16_t written = console_write(message, length, attribute);
+size_t console_write_line(char* message, size_t length, uint8_t attribute) {
+    size_t written = console_write(message, length, attribute);
     uint16_t remaining = LINE_CHARS - (((VGA_NEXT - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
     char* vga = VGA_NEXT;
 
