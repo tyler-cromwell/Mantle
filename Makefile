@@ -9,7 +9,7 @@ LDFLAGS=-m elf_i386 -T
 CMD=qemu-system-i386
 CMDFLAGS=-kernel
 
-IMAGE=kernel_image
+IMAGE=humboldt_image
 
 .PHONY: all
 all:

@@ -4,6 +4,6 @@ boot/*.o
 boot/*.swp
 drivers/*.o
 drivers/*.swp
-kernel_image
+humboldt_image
 
 notes.txt
