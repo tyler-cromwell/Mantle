@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <console.h>
+#include <drivers/console.h>
 
 #define VGA_START   (char*) 0xb8000 /* The starting address for video memory */
 #define VGA_END     (char*) 0xb8fa0 /* The ending address for video memory */

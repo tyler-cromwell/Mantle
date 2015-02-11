@@ -16,7 +16,8 @@ all:
 	$(AS) $(ASFLAGS) boot/start.asm -o boot/start.o
 	$(CC) $(CFLAGS) kernel.c
 	$(CC) $(CFLAGS) drivers/console.c -o drivers/console.o
-	$(LD) $(LDFLAGS) link.ld -o $(IMAGE) kernel.o boot/start.o drivers/console.o
+	$(CC) $(CFLAGS) lib/string.c -o lib/string.o
+	$(LD) $(LDFLAGS) link.ld -o $(IMAGE) kernel.o boot/start.o drivers/console.o lib/string.o
 
 # Because I don't want to always type this...
 .PHONY: run
@@ -25,7 +26,7 @@ run:
 
 .PHONY: clean
 clean:
-	rm -rf ./*.o ./boot/*.o ./drivers/*.o
+	rm -rf ./*.o ./boot/*.o ./drivers/*.o ./lib/*.o
 
 .PHONY: clean-image
 clean-image: clean

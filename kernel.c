@@ -1,10 +1,20 @@
 /* Kernel Headers */
-#include <console.h>
+#include <drivers/console.h>
+#include <humboldt/string.h>
 
 void kernel_init(void) {
-    console_clear();
-    console_write_line("Kernel started!", 16, FG_BROWN);
+    char* started = "Kernel started!";
+    char* halted = "System halted!";
 
-    console_write_line("System Halted!", 14, FG_BROWN);
+    size_t slen = strlen(started);
+    size_t hlen = strlen(halted);
+
+    char* s = itoa(34637472);
+
+    console_clear();
+    console_write_line(s, 2, FG_GREY_L);
+    console_write_line(started, slen, FG_GREEN);
+
+    console_write_line(halted, hlen, FG_RED);
     return; // the 'hlt' instruction is next
 }
