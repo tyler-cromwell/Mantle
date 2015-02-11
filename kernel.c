@@ -2,7 +2,7 @@
 #include <drivers/console.h>
 #include <humboldt/string.h>
 
-void kernel_init(void) {
+void kernel(void) {
     char* started = "Kernel started!";
     char* halted = "System halted!";
 

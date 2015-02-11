@@ -7,9 +7,9 @@ section .text
     dd - (0x1BADB002 + 0x00) ; Should be zero
 
 global start
-extern kernel_init
+extern kernel
 
 start:
     cli           ; Clear Interrupts
-    call kernel_init
+    call kernel
     hlt           ; Halt the CPU
