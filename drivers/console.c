@@ -1,9 +1,7 @@
 /* C Standard Library Headers,
    these don't need to link against libc */
+#include <stddef.h>
 #include <stdint.h>
-
-/* Kernel Headers */
-#include <drivers/console.h>
 
 #define VGA_START   (char*) 0xb8000 /* The starting address for video memory */
 #define VGA_END     (char*) 0xb8fa0 /* The ending address for video memory */
