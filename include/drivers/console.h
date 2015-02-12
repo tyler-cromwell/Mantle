@@ -1,5 +1,5 @@
-#ifndef KERNEL_CONSOLE_H
-#define KERNEL_CONSOLE_H
+#ifndef DRIVERS_CONSOLE_H
+#define DRIVERS_CONSOLE_H
 
 #include <stddef.h>
 #include <stdint.h>
