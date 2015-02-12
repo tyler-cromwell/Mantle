@@ -14,10 +14,10 @@ IMAGE=humboldt_image
 .PHONY: all
 all:
 	$(AS) $(ASFLAGS) boot/start.asm -o boot/start.o
-	$(CC) $(CFLAGS) kernel.c
+	$(CC) $(CFLAGS) kernel/kernel.c -o kernel/kernel.o
 	$(CC) $(CFLAGS) drivers/console.c -o drivers/console.o
 	$(CC) $(CFLAGS) lib/string.c -o lib/string.o
-	$(LD) $(LDFLAGS) link.ld -o $(IMAGE) kernel.o boot/start.o drivers/console.o lib/string.o
+	$(LD) $(LDFLAGS) link.ld -o $(IMAGE) boot/start.o drivers/console.o kernel/kernel.o lib/string.o
 
 # Because I don't want to always type this...
 .PHONY: run
@@ -26,7 +26,10 @@ run:
 
 .PHONY: clean
 clean:
-	rm -rf ./*.o ./boot/*.o ./drivers/*.o ./lib/*.o
+	rm -rf ./boot/*.o
+	rm -rf ./drivers/*.o
+	rm -rf ./kernel/*.o
+	rm -rf ./lib/*.o 
 
 .PHONY: clean-image
 clean-image: clean
