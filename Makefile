@@ -1,36 +1,49 @@
-AS=nasm
-CC=clang
-LD=ld
+# Programs for building
+AS = nasm
+CC = clang
+LD = ld
 
-ASFLAGS=-f elf32
-CFLAGS=-Wall -Werror -pedantic -m32 -c -O0 -I ./include
-LDFLAGS=-m elf_i386 -T
+# Respective Flags
+ASFLAGS = -f elf32
+CFLAGS = -Wall -Werror -pedantic -m32 -O0 -I include
+LDFLAGS = -m elf_i386 -T
 
-CMD=qemu-system-i386
-CMDFLAGS=-kernel
+# Assembly source files
+ASM_SRC = $(shell find . -name *.asm)
+ASM_OBJ = $(ASM_SRC:%.asm=%.o)
 
-IMAGE=humboldt_image
+# C source files
+C_SRC = $(shell find . -name *.c)
+C_OBJ = $(C_SRC:%.c=%.o)
+
+# Kernel image name
+BIN = humboldt_image
+
+# QEMU options
+CMD = qemu-system-i386
+CMDFLAGS = -kernel
 
 .PHONY: all
-all:
-	$(AS) $(ASFLAGS) boot/start.asm -o boot/start.o
-	$(CC) $(CFLAGS) kernel/kernel.c -o kernel/kernel.o
-	$(CC) $(CFLAGS) drivers/console.c -o drivers/console.o
-	$(CC) $(CFLAGS) lib/string.c -o lib/string.o
-	$(LD) $(LDFLAGS) link.ld -o $(IMAGE) boot/start.o drivers/console.o kernel/kernel.o lib/string.o
+all: $(BIN)
 
-# Because I don't want to always type this...
+$(BIN): $(ASM_OBJ) $(C_OBJ)
+	$(LD) $(LDFLAGS) link.ld -o $(BIN) $(ASM_OBJ) $(C_OBJ)
+
+%.o: %.asm
+	$(AS) $(ASFLAGS) $< -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# I hate typing this a lot...
 .PHONY: run
 run:
-	$(CMD) $(CMDFLAGS) $(IMAGE)
+	$(CMD) $(CMDFLAGS) $(BIN)
 
 .PHONY: clean
 clean:
-	rm -rf ./boot/*.o
-	rm -rf ./drivers/*.o
-	rm -rf ./kernel/*.o
-	rm -rf ./lib/*.o 
+	rm -rf $(ASM_OBJ) $(C_OBJ)
 
 .PHONY: clean-image
 clean-image: clean
-	rm -f $(IMAGE)
+	rm -rf $(BIN)
