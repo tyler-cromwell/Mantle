@@ -10,11 +10,11 @@ global start
 extern kernel
 
 start:
-    cli                     ; Clear Interrupts
-    mov esp, stack_space    ; Kernel stack space
+    cli                     ; Ignore Maskable Interrupts
+    mov esp, stack_space    ; Begin at the allocated stack space
     call kernel             ; Actually start the Kernel
     hlt; and catch fire
 
 section .bss
-resb 32768      ; Reserve 32KB for stack space
+    resb 32768  ; Reserve 32KB for stack space
 stack_space:
