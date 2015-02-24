@@ -13,3 +13,7 @@ start:
     cli         ; Clear Interrupts
     call kernel ; Actually start the Kernel
     hlt; and catch fire
+
+section .bss
+resb 32768      ; Reserve 32KB for stack space
+stack_space:
