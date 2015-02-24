@@ -11,7 +11,7 @@ void kernel(void) {
 
     console_clear();
     console_write_line(started, slen, FG_GREEN);
-
     console_write_line(halted, hlen, FG_RED);
-    return; // the 'hlt' instruction is next
+
+    return; /* Halt the system (the 'hlt' instruction is next) */
 }

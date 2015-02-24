@@ -43,7 +43,7 @@ void console_clear(void) {
  *   The number of characters written.
  * Side Effect:
  *   Updates the video pointer.
-*/
+ */
 size_t console_write(char* message, size_t length, uint8_t attribute) {
     char* vga = VGA_NEXT;
     size_t c = 0;
@@ -83,7 +83,7 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
  *   Returns the number of characters written.
  * Side Effect:
  *   Updates the video pointer.
-*/
+ */
 size_t console_write_line(char* message, size_t length, uint8_t attribute) {
     size_t written = console_write(message, length, attribute);
     uint16_t remaining = LINE_CHARS - (((VGA_NEXT - VGA_START) % LINE_BYTES) / CHAR_WIDTH);

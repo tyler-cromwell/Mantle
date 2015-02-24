@@ -3,7 +3,7 @@ AS = nasm
 CC = clang
 LD = ld
 
-# Respective Flags
+# Respective flags
 ASFLAGS = -f elf32
 CFLAGS = -Wall -Werror -pedantic -m32 -O0 -I include
 LDFLAGS = -m elf_i386 -T

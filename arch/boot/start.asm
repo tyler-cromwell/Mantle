@@ -10,6 +10,6 @@ global start
 extern kernel
 
 start:
-    cli           ; Clear Interrupts
-    call kernel
-    hlt           ; Halt the CPU
+    cli         ; Clear Interrupts
+    call kernel ; Actually start the Kernel
+    hlt; and catch fire
