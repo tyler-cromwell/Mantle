@@ -1,6 +1,6 @@
 /* Kernel Headers */
 #include <drivers/console.h>
-#include <humboldt/string.h>
+#include <lib/string.h>
 
 void kernel(void) {
     char* started = "Kernel started!";
