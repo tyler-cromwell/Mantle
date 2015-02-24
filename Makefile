@@ -43,7 +43,4 @@ run:
 .PHONY: clean
 clean:
 	rm -rf $(ASM_OBJ) $(C_OBJ)
-
-.PHONY: clean-image
-clean-image: clean
 	rm -rf $(BIN)
