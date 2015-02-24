@@ -10,8 +10,9 @@ global start
 extern kernel
 
 start:
-    cli         ; Clear Interrupts
-    call kernel ; Actually start the Kernel
+    cli                     ; Clear Interrupts
+    mov esp, stack_space    ; Kernel stack space
+    call kernel             ; Actually start the Kernel
     hlt; and catch fire
 
 section .bss
