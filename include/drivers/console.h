@@ -38,6 +38,7 @@
 #define BG_WHITE        0xf0
 
 extern void console_clear(void);
+extern void console_set_background(uint8_t);
 extern size_t console_write(char*, size_t, uint8_t);
 extern size_t console_write_line(char*, size_t, uint8_t);
 

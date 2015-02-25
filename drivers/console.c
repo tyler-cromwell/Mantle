@@ -3,6 +3,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/* Kernel Headers */
+#include <drivers/console.h>
+
 #define VGA_START   (char*) 0xb8000 /* The starting address for video memory */
 #define VGA_END     (char*) 0xb8fa0 /* The ending address for video memory */
 
@@ -27,10 +30,27 @@ void console_clear(void) {
     while (b < BYTES) {
         vga[b] = '\0';
         vga[b+1] = '\0';
-        b += CHAR_WIDTH; /* Move up 2 bytes */
+        b += CHAR_WIDTH;
     }
 
     VGA_NEXT = VGA_START;
+}
+
+/*
+ * Sets the background to a specific color.
+ * Argument:
+ *   uint8_t attribute: The color attribute.
+ */
+void console_set_background(uint8_t attribute) {
+    char* vga = VGA_START;
+    uint16_t b = 0;
+
+    while (b < BYTES) {
+        if (attribute >= 0x10) {
+            vga[b+1] = (vga[b+1] % 0x10) + attribute;
+        }
+        b += CHAR_WIDTH;
+    }
 }
 
 /*
@@ -64,7 +84,7 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
         }
 
         *vga = message[c];
-        *(vga+1) = attribute;
+        *(vga+1) = *(vga+1) | (attribute % 0x10);
         c++;
         vga += CHAR_WIDTH;
     }
@@ -91,7 +111,7 @@ size_t console_write_line(char* message, size_t length, uint8_t attribute) {
 
     for (uint8_t i = 0; i < remaining; i++) {
         *vga = '\0';
-        *(vga+1) = '\0';
+        *(vga+1) = *(vga+1) | (attribute % 0x10);
         vga += CHAR_WIDTH;
     }
 
