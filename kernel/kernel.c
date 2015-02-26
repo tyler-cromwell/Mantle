@@ -2,6 +2,10 @@
 #include <drivers/console.h>
 #include <lib/string.h>
 
+/*
+ * The main kernel function; this is where Humboldt begins operation.
+ * The system will halt when/if this function returns.
+ */
 void kernel(void) {
     char* started = "System started!";
     char* halted = "System halted!";
