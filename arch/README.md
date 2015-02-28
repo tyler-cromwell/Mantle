@@ -1,5 +1,5 @@
 # Arch
-This directory contains all architecture specific code. Currently, only x86 will be supported.
+This directory contains all architecture specific code.
 
 ## Directories
-- `boot` - Contains all code for booting/starting the Kernel.
+- `x86` - Contains code specific to the x86 architecture.
