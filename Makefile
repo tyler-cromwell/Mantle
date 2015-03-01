@@ -20,8 +20,8 @@ C_OBJ = $(C_SRC:%.c=%.o)
 BIN = humboldt_image
 
 # QEMU options
-CMD = qemu-system-i386
-CMDFLAGS = -kernel
+QEMU = qemu-system-i386
+QEMUFLAGS = -kernel
 
 .PHONY: all
 all: $(BIN)
@@ -35,10 +35,9 @@ $(BIN): $(ASM_OBJ) $(C_OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# I hate typing this a lot...
 .PHONY: run
-run:
-	$(CMD) $(CMDFLAGS) $(BIN)
+qemu:
+	$(QEMU) $(QEMUFLAGS) $(BIN)
 
 .PHONY: clean
 clean:
