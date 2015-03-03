@@ -11,11 +11,11 @@ extern kernel
 
 start:
     cli                     ; Ignore Maskable Interrupts
-    mov ebp, stack_base     ; Begin at the Kernel stack base
-    mov esp, stack_base
+    mov esp, kernel_stack   ; Begin at the Kernel stack base
     call kernel             ; Actually start the Kernel
     hlt; and catch fire
 
 section .bss
+    align 4
     resb 32768  ; Reserve 32KB for stack space
-stack_base:
+    kernel_stack:
