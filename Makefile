@@ -35,8 +35,8 @@ $(BIN): $(ASM_OBJ) $(C_OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: run
-qemu:
+.PHONY: qemu
+qemu: all
 	$(QEMU) $(QEMUFLAGS) $(BIN)
 
 .PHONY: clean
