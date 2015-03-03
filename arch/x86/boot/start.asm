@@ -11,7 +11,8 @@ extern kernel
 
 start:
     cli                     ; Ignore Maskable Interrupts
-    mov esp, stack_base     ; Begin at the Kernel stack base
+    mov ebp, stack_base     ; Begin at the Kernel stack base
+    mov esp, stack_base
     call kernel             ; Actually start the Kernel
     hlt; and catch fire
 
