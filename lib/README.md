@@ -1,5 +1,5 @@
 # Lib
 This directory contains code for the internal library.
 
-## Files
+## Contents
 - `string.c` - Contains string manipulation functions.
