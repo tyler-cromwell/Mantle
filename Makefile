@@ -21,7 +21,7 @@ BIN = humboldt_image
 
 # QEMU options
 QEMU = qemu-system-i386
-QEMUFLAGS = -kernel
+QEMUFLAGS = -enable-kvm -kernel
 
 .PHONY: all
 all: $(BIN)
