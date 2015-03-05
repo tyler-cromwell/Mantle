@@ -2,4 +2,4 @@
 This directory contains all code necessary for booting/starting the Kernel.
 
 ## Contents
-- `start.asm` - Simply jumps into the main kernel routine. Follows the Multiboot specification.
+- `start.asm` - Checks if the CPU supports CPUID and Long mode, then jumps into the kernel. Follows the Multiboot specification.
