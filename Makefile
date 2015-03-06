@@ -5,7 +5,7 @@ LD = ld
 
 # Respective flags
 ASFLAGS = -f elf32
-CFLAGS = -Wall -Werror -pedantic -m32 -O0 -I include
+CFLAGS = -Wall -Werror -pedantic -m32 -O0 -I include -I arch/include
 LDFLAGS = -m elf_i386 -T
 
 # Assembly source files
