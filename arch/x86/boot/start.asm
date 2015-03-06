@@ -8,15 +8,16 @@ section .text
     dd - (0x1badb002 + 0x00) ; Should be zero
 
 section .data
-    found db 'CPUID found', 0x0
-    found_len equ $-found
-    longmode db 'Long Mode available', 0x0
-    longmode_len equ $-longmode
-    paging db 'Paging disabled', 0x0
-    paging_len equ $-paging
+    found       db 'CPUID found',               0x0
+    longmode    db 'Long Mode is supported',    0x0
+    paging      db 'Disabled Paging',           0x0
 
+    found_len       equ $-found
+    longmode_len    equ $-longmode
+    paging_len      equ $-paging
+
+; Kernel binary entry point
 global start
-
 ; Kernel functions
 extern console_clear
 extern console_write_line
@@ -28,7 +29,7 @@ detect_cpuid:
     pushfd
     pop eax
     mov ecx, eax
-    xor eax, 1 << 21
+    xor eax, 0x200000
     push eax
     popfd
     pushfd
@@ -78,7 +79,7 @@ start:
     call detect_long_mode
 
     mov eax, cr0
-    and eax, 01111111111111111111111111111111b
+    and eax, 0x7fffffff
     mov cr0, eax
 
     push ebp
