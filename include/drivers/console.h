@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/* Text colors */
 #define FG_BLACK        0x00
 #define FG_BLUE         0x01
 #define FG_GREEN        0x02
@@ -21,6 +22,7 @@
 #define FG_BROWN_L      0x0e
 #define FG_WHITE        0x0f
 
+/* Background highlighting */
 #define BG_BLUE         0x10
 #define BG_GREEN        0x20
 #define BG_CYAN         0x30
