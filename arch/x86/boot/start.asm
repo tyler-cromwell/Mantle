@@ -8,9 +8,9 @@ section .text
     dd - (0x1badb002 + 0x00) ; Should be zero
 
 section .data
-    found       db 'CPUID found',               0x0
-    longmode    db 'Long Mode is supported',    0x0
-    paging      db 'Disabled Paging',           0x0
+    found       db '[', _FILE_, ']: CPUID found', 0x0
+    longmode    db '[', _FILE_, ']: Long Mode is supported', 0x0
+    paging      db '[', _FILE_, ']: Paging disabled', 0x0
 
     found_len       equ $-found
     longmode_len    equ $-longmode
@@ -44,7 +44,7 @@ detect_cpuid:
 cpuid_found:
     push ebp
     mov ebp, esp
-    push 0x0f
+    push 0x0e
     push found_len
     push found
     call console_write_line
@@ -64,7 +64,7 @@ detect_long_mode:
 long_mode_found:
     push ebp
     mov ebp, esp
-    push 0x0f
+    push 0x0e
     push longmode_len
     push longmode
     call console_write_line
@@ -84,7 +84,7 @@ start:
 
     push ebp
     mov ebp, esp
-    push 0x0f
+    push 0x0e
     push paging_len
     push paging
     call console_write_line
