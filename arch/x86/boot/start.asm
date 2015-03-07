@@ -8,10 +8,12 @@ section .text
     dd - (0x1badb002 + 0x00) ; Should be zero
 
 section .data
-    found       db '[', _FILE_, ']: CPUID found', 0x0
-    longmode    db '[', _FILE_, ']: Long Mode is supported', 0x0
-    paging      db '[', _FILE_, ']: Paging disabled', 0x0
+    file        db '[', _FILE_, ']: ', 0x0
+    found       db 'CPUID found', 0x0
+    longmode    db 'Long Mode is supported', 0x0
+    paging      db 'Paging disabled', 0x0
 
+    file_len        equ $-file
     found_len       equ $-found
     longmode_len    equ $-longmode
     paging_len      equ $-paging
@@ -20,6 +22,7 @@ section .data
 global start
 ; Kernel functions
 extern console_clear
+extern console_write
 extern console_write_line
 extern kernel
 
@@ -44,11 +47,19 @@ detect_cpuid:
 cpuid_found:
     push ebp
     mov ebp, esp
+
+    push 0x07
+    push file_len
+    push file
+    call console_write
+    add esp, 12
+
     push 0x0e
     push found_len
     push found
     call console_write_line
     add esp, 12
+
     pop ebp
     ret
 
@@ -64,11 +75,19 @@ detect_long_mode:
 long_mode_found:
     push ebp
     mov ebp, esp
+
+    push 0x07
+    push file_len
+    push file
+    call console_write
+    add esp, 12
+
     push 0x0e
     push longmode_len
     push longmode
     call console_write_line
     add esp, 12
+
     pop ebp
     ret
 
@@ -84,15 +103,23 @@ start:
 
     push ebp
     mov ebp, esp
+
+    push 0x07
+    push file_len
+    push file
+    call console_write
+    add esp, 12
+
     push 0x0e
     push paging_len
     push paging
     call console_write_line
     add esp, 12
-    pop ebp
 
+    pop ebp
     mov esp, kernel_stack   ; Begin at the Kernel stack base
     call kernel             ; Actually start the Kernel
+
     hlt; and catch fire
 
 section .bss

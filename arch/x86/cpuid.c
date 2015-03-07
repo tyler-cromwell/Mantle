@@ -1,5 +1,6 @@
-/* Kernel Headers */
-#include <drivers/console.h>
+/* C Standard Library Header,
+   this does not need to link against libc */
+#include <stdint.h>
 
 /*
  * Obtains the CPU vendor string using CPUID.

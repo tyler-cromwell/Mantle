@@ -8,18 +8,23 @@
  * The system will halt when/if this function returns.
  */
 void kernel(void) {
-    char* started = "["_FILE_"]: Kernel started!";
-    char* halted = "["_FILE_"]: System halted!";
-
-    console_write_line(started, strlen(started), FG_GREEN);
+    char* file = "["_FILE_"]: ";
+    char* started = "Kernel started";
+    char* halted = "System halted";
+    char* field = "Vendor_id: ";
 
     char id[13];
     cpuid_vendor(id);
-    char* field = "["_FILE_"]: Vendor ID: ";
 
+    console_write(file, strlen(file), FG_GREY_L);
+    console_write_line(started, strlen(started), FG_GREEN);
+
+    console_write(file, strlen(file), FG_GREY_L);
     console_write(field, strlen(field), FG_WHITE);
     console_write_line(id, 13, FG_WHITE);
 
+    console_write(file, strlen(file), FG_GREY_L);
     console_write_line(halted, strlen(halted), FG_RED);
+
     return; /* Halt the system (the 'hlt' instruction is next) */
 }
