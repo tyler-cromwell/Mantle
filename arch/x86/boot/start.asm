@@ -10,13 +10,9 @@ section .text
 section .data
     file        db '[', _FILE_, ']: ', 0x0
     found       db 'CPUID found', 0x0
-    longmode    db 'Long Mode is supported', 0x0
-    paging      db 'Paging disabled', 0x0
 
     file_len        equ $-file
     found_len       equ $-found
-    longmode_len    equ $-longmode
-    paging_len      equ $-paging
 
 ; Kernel binary entry point
 global start
@@ -24,11 +20,12 @@ global start
 extern console_clear
 extern console_write
 extern console_write_line
+extern detect_long_mode
+extern disable_paging
 extern kernel
 
 ; Checks for CPUID
 detect_cpuid:
-    call console_clear
     pushfd
     pop eax
     mov ecx, eax
@@ -41,6 +38,7 @@ detect_cpuid:
     popfd
     xor eax, ecx
     jnz cpuid_found
+    jz stop
     ret
 
 ; Prints confirmation message if CPUID is found
@@ -63,64 +61,22 @@ cpuid_found:
     pop ebp
     ret
 
-; Checks if the CPU supports Long Mode
-detect_long_mode:
-    mov eax, 0x80000000
-    cpuid
-    cmp eax, 0x80000001
-    jge long_mode_found
-    ret
-
-; Prints a confirmation message if Long Mode is supported
-long_mode_found:
-    push ebp
-    mov ebp, esp
-
-    push 0x07
-    push file_len
-    push file
-    call console_write
-    add esp, 12
-
-    push 0x0e
-    push longmode_len
-    push longmode
-    call console_write_line
-    add esp, 12
-
-    pop ebp
-    ret
-
 ; Entry point into the kernel binary
 start:
     cli                     ; Ignore Maskable Interrupts
+    call console_clear
+
     call detect_cpuid
     call detect_long_mode
+    call disable_paging
 
-    mov eax, cr0
-    and eax, 0x7fffffff
-    mov cr0, eax
-
-    push ebp
-    mov ebp, esp
-
-    push 0x07
-    push file_len
-    push file
-    call console_write
-    add esp, 12
-
-    push 0x0e
-    push paging_len
-    push paging
-    call console_write_line
-    add esp, 12
-
-    pop ebp
     mov esp, kernel_stack   ; Begin at the Kernel stack base
     call kernel             ; Actually start the Kernel
 
     hlt; and catch fire
+
+stop:
+    hlt
 
 section .bss
     align 4
