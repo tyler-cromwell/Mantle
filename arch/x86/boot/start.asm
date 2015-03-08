@@ -9,10 +9,7 @@ section .text
 
 section .data
     file        db '[', _FILE_, ']: ', 0x0
-    found       db 'CPUID found', 0x0
-
-    file_len        equ $-file
-    found_len       equ $-found
+    file_len    equ $-file
 
 ; Kernel binary entry point
 global start
