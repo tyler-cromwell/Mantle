@@ -15,6 +15,7 @@ void kernel(void) {
 
     char id[13];
     cpuid_vendor(id);
+    id[12] = '\0';
 
     console_write(file, strlen(file), FG_GREY_L);
     console_write_line(started, strlen(started), FG_GREEN);

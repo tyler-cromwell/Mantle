@@ -66,7 +66,7 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
     size_t c = 0;
 
     /* Ensure that the number of characters to write does not exceed the maximum */
-    while (message[c] != '\0') {
+    while (message[c] != '\0' && c < length) {
         if (vga >= VGA_END) {
             /* Scroll everything up one row */
             vga -= LINE_BYTES;
