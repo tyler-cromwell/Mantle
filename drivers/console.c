@@ -51,6 +51,7 @@ void console_set_background(uint8_t attribute) {
 
 /*
  * Writes a string of characters to the console.
+ * Will interpret the newline character.
  * Arguments:
  *   char* message:  The message to write.
  *   uint16_t length: The number of bytes to write.
@@ -78,36 +79,24 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
             for (uint8_t i = 0; i < LINE_BYTES; i++) screen[i] = '\0';
         }
 
-        *screen = message[c];
-        *(screen+1) = *(screen+1) | (attribute % 0x10);
+        /* Interpret the newline character */
+        if (message[c] == '\n') {
+            uint16_t remaining = LINE_CHARS - (((screen - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
+
+            /* Zero-out the rest of the line */
+            for (uint8_t i = 0; i < remaining; i++) {
+                *screen = '\0';
+                *(screen+1) = *(screen+1) | (attribute % 0x10);
+                screen += CHAR_WIDTH;
+            }
+        }
+        else {
+            *screen = message[c];
+            *(screen+1) = *(screen+1) | (attribute % 0x10);
+            screen += CHAR_WIDTH;
+        }
         c++;
-        screen += CHAR_WIDTH;
     }
 
     return c;
-}
-
-/*
- * Writes a string of characters to the console, then zeros until the end of the line.
- * Arguments:
- *   char* message:  The message to write.
- *   uint16_t length: The number of bytes to write.
- *   uint8_t attribute: The coloring attribute.
- * Returns:
- *   Returns the number of characters written.
- * Side Effect:
- *   Updates the video pointer.
- */
-size_t console_write_line(char* message, size_t length, uint8_t attribute) {
-    size_t written = console_write(message, length, attribute);
-    uint16_t remaining = LINE_CHARS - (((screen - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
-
-    /* Zero-out the rest of the line */
-    for (uint8_t i = 0; i < remaining; i++) {
-        *screen = '\0';
-        *(screen+1) = *(screen+1) | (attribute % 0x10);
-        screen += CHAR_WIDTH;
-    }
-
-    return written;
 }

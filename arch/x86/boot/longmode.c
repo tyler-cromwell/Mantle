@@ -20,31 +20,28 @@ void detect_long_mode(void) {
 
     /* Check for Long mode */
     if (0x80000001 >= eax) {
-        char* mesg = "Long mode is supported";
+        char* mesg = "Long mode is supported\n";
         size_t mesg_l = strlen(mesg);
 
-        console_write_line(mesg, mesg_l, FG_BROWN_L);
+        console_write(mesg, mesg_l, FG_BROWN_L);
     }
     else {
-        char* mesg = "Long mode is NOT supported, halting...";
+        char* mesg = "Long mode is NOT supported, halting...\n";
         size_t mesg_l = strlen(mesg);
 
-        console_write_line(mesg, mesg_l, FG_RED);
+        console_write(mesg, mesg_l, FG_RED);
         __asm__("hlt");
     }
 }
 
 /*
- * Disables 32-bit Protected mode Paging.
+ * Prints the "Paging disabled" message.
+ * Used to reduce assembly code.
  */
-void disable_paging(void) {
-    char* mesg = "Paging disabled";
+void paging_disabled(void) {
+    char* mesg = "Paging disabled\n";
     size_t mesg_l = strlen(mesg);
 
-    __asm__("mov %eax, %cr0");
-    __asm__("and %eax, 0x7fffffff");
-    __asm__("mov %cr0, %eax");
-
     console_write(file, file_l, FG_GREY_L);
-    console_write_line(mesg, mesg_l, FG_BROWN_L);
+    console_write(mesg, mesg_l, FG_BROWN_L);
 }
