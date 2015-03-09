@@ -1,11 +1,5 @@
 *.o
 *.swp
-boot/*.o
-boot/*.swp
-drivers/*.o
-drivers/*.swp
-lib/*.o
-lib/*.swp
 humboldt_image
 
 notes.txt
