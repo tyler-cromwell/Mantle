@@ -13,7 +13,7 @@
 #define BYTES       4000    /* The number of usable bytes in video memory */
 
 /* Pointer to the next "empty" character byte */
-char* VGA_NEXT = VGA_START;
+char* screen = VGA_START;
 
 /*
  * Clears the console.
@@ -21,16 +21,15 @@ char* VGA_NEXT = VGA_START;
  *   Resets the video pointer.
  */
 void console_clear(void) {
-    char* vga = VGA_START;
-    uint16_t b = 0;
+    screen = VGA_START;
+    uint16_t offset = 0;
 
-    while (b < BYTES) {
-        vga[b] = '\0';
-        vga[b+1] = '\0';
-        b += CHAR_WIDTH;
+    /* Zero-out the screen buffer */
+    while (offset < BYTES) {
+        screen[offset] = '\0';
+        screen[offset+1] = '\0';
+        offset += CHAR_WIDTH;
     }
-
-    VGA_NEXT = VGA_START;
 }
 
 /*
@@ -39,14 +38,14 @@ void console_clear(void) {
  *   uint8_t attribute: The color attribute.
  */
 void console_set_background(uint8_t attribute) {
-    char* vga = VGA_START;
-    uint16_t b = 0;
+    screen = VGA_START;
+    uint16_t offset = 0;
 
-    while (b < BYTES) {
+    while (offset < BYTES) {
         if (attribute >= 0x10) {
-            vga[b+1] = (vga[b+1] % 0x10) + attribute;
+            screen[offset+1] = (screen[offset+1] % 0x10) + attribute;
         }
-        b += CHAR_WIDTH;
+        offset += CHAR_WIDTH;
     }
 }
 
@@ -62,14 +61,13 @@ void console_set_background(uint8_t attribute) {
  *   Updates the video pointer.
  */
 size_t console_write(char* message, size_t length, uint8_t attribute) {
-    char* vga = VGA_NEXT;
     size_t c = 0;
 
     /* Ensure that the number of characters to write does not exceed the maximum */
     while (message[c] != '\0' && c < length) {
-        if (vga >= VGA_END) {
+        if (screen >= VGA_END) {
             /* Scroll everything up one row */
-            vga -= LINE_BYTES;
+            screen -= LINE_BYTES;
             char* start = VGA_START;
 
             for (uint16_t i = LINE_BYTES; i < BYTES; i++) {
@@ -77,16 +75,15 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
                 start[j] = start[i];
             }
             
-            for (uint8_t i = 0; i < LINE_BYTES; i++) vga[i] = '\0';
+            for (uint8_t i = 0; i < LINE_BYTES; i++) screen[i] = '\0';
         }
 
-        *vga = message[c];
-        *(vga+1) = *(vga+1) | (attribute % 0x10);
+        *screen = message[c];
+        *(screen+1) = *(screen+1) | (attribute % 0x10);
         c++;
-        vga += CHAR_WIDTH;
+        screen += CHAR_WIDTH;
     }
 
-    VGA_NEXT = vga;
     return c;
 }
 
@@ -103,15 +100,14 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
  */
 size_t console_write_line(char* message, size_t length, uint8_t attribute) {
     size_t written = console_write(message, length, attribute);
-    uint16_t remaining = LINE_CHARS - (((VGA_NEXT - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
-    char* vga = VGA_NEXT;
+    uint16_t remaining = LINE_CHARS - (((screen - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
 
+    /* Zero-out the rest of the line */
     for (uint8_t i = 0; i < remaining; i++) {
-        *vga = '\0';
-        *(vga+1) = *(vga+1) | (attribute % 0x10);
-        vga += CHAR_WIDTH;
+        *screen = '\0';
+        *(screen+1) = *(screen+1) | (attribute % 0x10);
+        screen += CHAR_WIDTH;
     }
 
-    VGA_NEXT = vga;
     return written;
 }
