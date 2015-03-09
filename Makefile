@@ -26,12 +26,15 @@ QEMUFLAGS = -enable-kvm -kernel
 .PHONY: all
 all: $(BIN)
 
+# Main rule for compiling the kernel
 $(BIN): $(ASM_OBJ) $(C_OBJ)
 	$(LD) $(LDFLAGS) link.ld -o $(BIN) $(ASM_OBJ) $(C_OBJ)
 
+# Rule for compiling .asm files
 %.o: %.asm
 	$(AS) $(ASFLAGS) $< -o $@
 
+# Rule for compiling .c files
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
