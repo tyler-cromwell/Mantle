@@ -9,7 +9,6 @@ The project is inspired by Linux and BSD, and gets it's name from the Humboldt P
 - `drivers` - Driver code.
 - `include` - Platform independent header files.
 - `kernel` - Kernel core.
-- `lib` - Internal function library.
 
 ## Toolchain
 - `Makefile` - This Makefile is used to build the kernel and test it. Rules are as follows:

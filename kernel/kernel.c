@@ -1,6 +1,6 @@
 /* Kernel Headers */
 #include <drivers/console.h>
-#include <lib/string.h>
+#include <kernel/string.h>
 #include <x86/cpuid.h>
 
 /*

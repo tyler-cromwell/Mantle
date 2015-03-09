@@ -1,4 +1,4 @@
-# Lib
+# Kernel
 This directory contains the internal library header files.
 
 ## Contents

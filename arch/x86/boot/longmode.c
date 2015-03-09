@@ -1,5 +1,5 @@
 #include <drivers/console.h>
-#include <lib/string.h>
+#include <kernel/string.h>
 
 static char* file = "["_FILE_"]: ";
 static size_t file_l = 14;
