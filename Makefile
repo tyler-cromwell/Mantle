@@ -5,7 +5,7 @@ LD = ld
 
 # Respective flags
 ASFLAGS = -f elf32 -D _FILE_=\"$(<F)\"
-CFLAGS = -Wall -Werror -pedantic -m32 -O0 -I include -I arch/include -D _FILE_=\"$(<F)\"
+CFLAGS = -nostdlib -Wall -Werror -pedantic -m32 -O0 -I include -I arch/include -D _FILE_=\"$(<F)\"
 LDFLAGS = -m elf_i386 -T
 
 # Assembly source files
