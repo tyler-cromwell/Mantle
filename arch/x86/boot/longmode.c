@@ -39,7 +39,7 @@ void detect_long_mode(void) {
  * Used to reduce assembly code.
  */
 void paging_disabled(void) {
-    char* mesg = "Paging disabled\n";
+    char* mesg = "Paging is disabled\n";
     size_t mesg_l = strlen(mesg);
 
     console_write(file, file_l, FG_GREY_L);
