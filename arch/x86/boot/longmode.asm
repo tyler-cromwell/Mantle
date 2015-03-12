@@ -47,13 +47,9 @@ detect_long_mode:
 
 ; Disables Protected mode Paging
 disable_paging:
-    mov eax, cr0
-    and eax, 0x7fffffff ; Unset the Paging bit
-    cmp eax, 0x7fffffff ; Ensure Paging bit is 0 (probably an unnecessary step)
-    jge cannot_switch   ; Could not disable paging
+    ; Under QEMU, paging is already disabled
+    ; therefore, only a message is printed
 
-    mov cr0, eax        ; Load the new value back into the Control register,
-                        ; actually unsetting the Paging bit
     push ebp
     mov ebp, esp
 
