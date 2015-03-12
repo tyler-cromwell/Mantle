@@ -20,8 +20,8 @@ C_OBJ = $(C_SRC:%.c=%.o)
 BIN = humboldt_image
 
 # QEMU options
-QEMU = qemu-system-i386
-QEMUFLAGS = -enable-kvm -kernel
+QEMU = qemu-system-x86_64
+QEMUFLAGS = -kernel
 
 .PHONY: all
 all: $(BIN)

@@ -16,7 +16,7 @@ global start
 ; Kernel functions
 extern console_clear
 extern detect_long_mode
-extern paging_disabled
+extern disable_paging
 extern kernel
 
 ; Entry point into the kernel binary
@@ -24,12 +24,7 @@ start:
     cli                     ; Ignore Maskable Interrupts
     call console_clear
     call detect_long_mode
-
-    ; Disable 32-bit Protected mode Paging
-    mov eax, cr0
-    and eax, 0x7fffffff
-    mov cr0, eax
-    call paging_disabled
+    call disable_paging
 
     mov esp, kernel_stack   ; Begin at the Kernel stack base
     call kernel             ; Actually start the Kernel
