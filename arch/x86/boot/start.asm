@@ -1,16 +1,5 @@
 bits 32
 
-section .text
-    ; The Multiboot spec
-    align 4
-    dd 0x1badb002            ; Magic
-    dd 0x00                  ; Flags
-    dd - (0x1badb002 + 0x00) ; Should be zero
-
-section .data
-    file        db '[', _FILE_, ']: ', 0x0
-    file_len    equ $-file
-
 ; Kernel binary entry point
 global start
 ; Kernel functions
@@ -18,6 +7,17 @@ extern console_clear
 extern detect_long_mode
 extern disable_paging
 extern kernel
+
+section .data
+    file        db '[', _FILE_, ']: ', 0x0
+    file_len    equ $-file
+
+section .text
+    ; The Multiboot spec
+    align 4
+    dd 0x1badb002            ; Magic
+    dd 0x00                  ; Flags
+    dd - (0x1badb002 + 0x00) ; Should be zero
 
 ; Entry point into the kernel binary
 start:
