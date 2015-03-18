@@ -5,7 +5,7 @@ LD = ld
 
 # Respective flags
 ASFLAGS = -f elf32 -D _FILE_=\"$(<F)\"
-CFLAGS = -nostdlib -Wall -Werror -pedantic -m32 -O0 -I include -I arch/include -D _FILE_=\"$(<F)\"
+CFLAGS = -nostdlib -Wall -Werror -Wno-unused-command-line-argument -pedantic -m32 -O0 -I include -I arch/include -D _FILE_=\"$(<F)\"
 LDFLAGS = -m elf_i386 -T
 
 # Assembly source files
@@ -21,7 +21,7 @@ BIN = humboldt_image
 
 # QEMU options
 QEMU = qemu-system-x86_64
-QEMUFLAGS = -kernel
+QEMUFLAGS = -kernel $(BIN) -monitor stdio
 
 .PHONY: all
 all: $(BIN)
@@ -40,7 +40,7 @@ $(BIN): $(ASM_OBJ) $(C_OBJ)
 
 .PHONY: qemu
 qemu: all
-	$(QEMU) $(QEMUFLAGS) $(BIN)
+	$(QEMU) $(QEMUFLAGS)
 
 .PHONY: clean
 clean:
