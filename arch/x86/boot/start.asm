@@ -4,8 +4,6 @@ bits 32
 global start
 ; Kernel functions
 extern console_clear
-extern detect_long_mode
-extern disable_paging
 extern kernel
 
 section .data
@@ -23,12 +21,8 @@ section .text
 start:
     cli                     ; Ignore Maskable Interrupts
     call console_clear
-    call detect_long_mode
-    call disable_paging
-
     mov esp, kernel_stack   ; Begin at the Kernel stack base
     call kernel             ; Actually start the Kernel
-
     hlt; and catch fire
 
 section .bss
