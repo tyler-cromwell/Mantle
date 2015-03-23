@@ -3,6 +3,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <kernel/mem.h>
+
 #define VGA_START   (char*) 0xb8000 /* The starting address for video memory */
 #define VGA_END     (char*) 0xb8fa0 /* The ending address for video memory */
 
@@ -16,20 +18,13 @@
 char* screen = VGA_START;
 
 /*
- * Clears the console.
+ * Clears the console by zero-ing the screen buffer.
  * Side Effect:
  *   Resets the video pointer.
  */
 void console_clear(void) {
     screen = VGA_START;
-    uint16_t offset = 0;
-
-    /* Zero-out the screen buffer */
-    while (offset < BYTES) {
-        screen[offset] = '\0';
-        screen[offset+1] = '\0';
-        offset += CHAR_WIDTH;
-    }
+    memset(VGA_START, 0, BYTES);
 }
 
 /*
