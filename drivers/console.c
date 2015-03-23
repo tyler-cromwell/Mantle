@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/* Kernel Headers */
 #include <kernel/mem.h>
 
 #define VGA_START   (char*) 0xb8000 /* The starting address for video memory */
