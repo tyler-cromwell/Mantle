@@ -1,8 +1,13 @@
 bits 32
 
-; Kernel binary entry point
+; Global routines
 global start
-; Kernel functions
+global gdt_flush
+
+; External variables
+extern gdtptr
+
+; External functions
 extern console_clear
 extern kernel
 
@@ -17,11 +22,27 @@ section .text
     dd 0x00                  ; Flags
     dd - (0x1badb002 + 0x00) ; Should be zero
 
+; Flush the Global Descriptor Table to the lgdt register
+gdt_flush:
+    lgdt[gdtptr]
+    mov ax, 0x10    ; Point to the data selector
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+    jmp 0x08:flush  ; Far jump to the code selector
+flush:
+    ret
+
 ; Entry point into the kernel binary
 start:
     cli                     ; Ignore Maskable Interrupts
     call console_clear
-    mov esp, kernel_stack   ; Begin at the Kernel stack base
+
+    mov ebp, kernel_stack   ; Setup the kernel stack
+    mov esp, kernel_stack
+
     call kernel             ; Actually start the Kernel
     hlt; and catch fire
 
