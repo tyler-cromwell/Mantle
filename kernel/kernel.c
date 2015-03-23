@@ -12,6 +12,8 @@ static size_t file_l = 12;
  * The system will halt when/if this function returns.
  */
 void kernel(void) {
+    gdt_init();
+
     console_write(file, file_l, FG_GREY_L);
     console_write("Kernel started\n", 15, FG_GREEN);
 
@@ -23,8 +25,6 @@ void kernel(void) {
     console_write(file, file_l, FG_GREY_L);
     console_write(field, strlen(field), FG_WHITE);
     console_write(id, 14, FG_WHITE);
-
-    gdt_init();
 
     console_write(file, file_l, FG_GREY_L);
     console_write("System halted\n", 14, FG_RED);

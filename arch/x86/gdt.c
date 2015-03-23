@@ -103,5 +103,5 @@ void gdt_init(void) {
 
     gdt_flush();
     console_write(file, file_l, FG_GREY_L);
-    console_write("GDT Initialized\n", 16, FG_WHITE);
+    console_write("GDT Initialized\n", 16, FG_BROWN_L);
 }
