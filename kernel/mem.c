@@ -13,7 +13,7 @@
  *   A pointer to 'dest'.
  */
 void* memset(void* dest, int c, size_t n) {
-    uint8_t* buf = (uint8_t*) dest;
+    uint8_t* buf = dest;
     for (size_t i = 0; i < n; i++)
         buf[i] = (uint8_t) c;
     return dest;

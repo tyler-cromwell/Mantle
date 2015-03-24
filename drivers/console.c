@@ -72,7 +72,7 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
                 start[j] = start[i];
             }
             
-            for (uint8_t i = 0; i < LINE_BYTES; i++) screen[i] = '\0';
+            memset(screen, 0, LINE_BYTES);
         }
 
         /* Interpret the newline character */
