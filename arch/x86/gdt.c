@@ -58,7 +58,7 @@ struct gdt_ptr {
 } __attribute__((__packed__));
 
 /* The GDT and a pointer to it */
-struct gdt_entry gdt[3];
+struct gdt_entry gdt[4];
 struct gdt_ptr gdtptr;
 
 /* External - Flush the GDT */
