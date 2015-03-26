@@ -4,9 +4,6 @@ bits 32
 global start
 global gdt_flush
 
-; External variables
-extern gdtptr
-
 ; External functions
 extern console_clear
 extern kernel
@@ -23,16 +20,19 @@ section .text
     dd - (0x1badb002 + 0x00) ; Should be zero
 
 ; Flush the Global Descriptor Table to the lgdt register
+; Argument:
+;   [esp+4]: GDT pointer
 gdt_flush:
-    lgdt[gdtptr]
-    mov ax, 0x10    ; Point to the data selector
+    lgdt[esp+4]
+    jmp 0x08:flush  ; Far jump to the Code descriptor
+flush:
+    mov ax, 0x10    ; Data descriptor
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
+    mov ax, 0x18    ; Stack Descriptor
     mov ss, ax
-    jmp 0x08:flush  ; Far jump to the code selector
-flush:
     ret
 
 ; Entry point into the kernel binary

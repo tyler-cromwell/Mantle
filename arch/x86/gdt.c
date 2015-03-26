@@ -43,7 +43,7 @@ static size_t file_l = 9;
  *     0 if 16-bit protected mode.
  *     1 if 32-bit protected mode.
  */
-struct gdt_entry {
+struct gdt_descriptor {
     uint16_t limit;             /* 0:15 */
     uint16_t base_low;          /* 0:15 */
     uint8_t base_mid;           /* 16:23 */
@@ -58,14 +58,14 @@ struct gdt_ptr {
 } __attribute__((__packed__));
 
 /* The GDT and a pointer to it */
-struct gdt_entry gdt[4];
-struct gdt_ptr gdtptr;
+struct gdt_descriptor gdt[4];
+struct gdt_ptr gdtr;
 
 /* External - Flush the GDT */
-extern void gdt_flush(void);
+extern void gdt_flush(struct gdt_ptr);
 
 /*
- * Builds a Global Descriptor Table entry and writes it to the given 'index'.
+ * Builds a Global Descriptor Table descriptor and writes it to the given 'index'.
  * The maximum number of entries is 8192.
  * Arguments:
  *   uint32_t index: Index in the GDT to write the entry to.
@@ -74,8 +74,8 @@ extern void gdt_flush(void);
  *   uint8_t access: Access byte.
  *   uint8_t gran: Granularity byte.
  */
-static void gdt_write_entry(uint32_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
-    struct gdt_entry entry = {
+static void gdt_write_descriptor(uint32_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
+    struct gdt_descriptor descriptor = {
         .limit = limit & 0xffff,
         .base_low = base & 0xffff,
         .base_mid = (base >> 16) & 0xff,
@@ -84,7 +84,7 @@ static void gdt_write_entry(uint32_t index, uint32_t base, uint32_t limit, uint8
         .base_high = (base >> 24) & 0xff
     };
 
-    gdt[index] = entry;
+    gdt[index] = descriptor;
 }
 
 /*
@@ -92,16 +92,16 @@ static void gdt_write_entry(uint32_t index, uint32_t base, uint32_t limit, uint8
  */
 void gdt_init(void) {
     /* Setup pointer */
-    gdtptr.limit = (sizeof(struct gdt_entry) * 4) - 1;
-    gdtptr.base = (uint32_t) &gdt;
+    gdtr.limit = (sizeof(struct gdt_descriptor) * 4) - 1;
+    gdtr.base = (uint32_t) &gdt;
 
     /* Initialize entries */
-    gdt_write_entry(0, 0x0, 0x00000000, 0x00, 0x00);    /* Null, 0x00 */
-    gdt_write_entry(1, 0x0, 0xffffffff, 0x9a, 0xcf);    /* Code, 0x08 */
-    gdt_write_entry(2, 0x0, 0xffffffff, 0x92, 0xcf);    /* Data, 0x10 */
-    gdt_write_entry(3, 0x0, 0x00000000, 0x96, 0xcf);    /* Stack, 0x18 */
+    gdt_write_descriptor(0, 0x0, 0x00000000, 0x00, 0x00);   /* Null, 0x00 */
+    gdt_write_descriptor(1, 0x0, 0xffffffff, 0x9a, 0xcf);   /* Code, 0x08 */
+    gdt_write_descriptor(2, 0x0, 0xffffffff, 0x92, 0xcf);   /* Data, 0x10 */
+    gdt_write_descriptor(3, 0x0, 0x00000000, 0x96, 0xcf);   /* Stack, 0x18 */
 
-    gdt_flush();
+    gdt_flush(gdtr);
     console_write(file, file_l, FG_GREY_L);
     console_write("GDT Initialized\n", 16, FG_BROWN_L);
 }

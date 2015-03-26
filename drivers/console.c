@@ -16,7 +16,7 @@
 #define BYTES       4000    /* The number of usable bytes in video memory */
 
 /* Pointer to the next "empty" character byte */
-char* screen = VGA_START;
+char* next = VGA_START;
 
 /*
  * Clears the console by zero-ing the screen buffer.
@@ -24,7 +24,7 @@ char* screen = VGA_START;
  *   Resets the video pointer.
  */
 void console_clear(void) {
-    screen = VGA_START;
+    next = VGA_START;
     memset(VGA_START, 0, BYTES);
 }
 
@@ -34,12 +34,12 @@ void console_clear(void) {
  *   uint8_t attribute: The color attribute.
  */
 void console_set_background(uint8_t attribute) {
-    screen = VGA_START;
+    next = VGA_START;
     uint16_t offset = 0;
 
     while (offset < BYTES) {
         if (attribute >= 0x10) {
-            screen[offset+1] = (screen[offset+1] % 0x10) + attribute;
+            next[offset+1] = (next[offset+1] % 0x10) + attribute;
         }
         offset += CHAR_WIDTH;
     }
@@ -62,34 +62,34 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
 
     /* Ensure that the number of characters to write does not exceed the maximum */
     while (message[c] != '\0' && c < length) {
-        if (screen >= VGA_END) {
+        if (next >= VGA_END) {
             /* Scroll everything up one row */
-            screen -= LINE_BYTES;
+            next -= LINE_BYTES;
             char* start = VGA_START;
 
             for (uint16_t i = LINE_BYTES; i < BYTES; i++) {
                 uint16_t j = i - LINE_BYTES;
                 start[j] = start[i];
             }
-            
-            memset(screen, 0, LINE_BYTES);
+
+            memset(next, 0, LINE_BYTES);
         }
 
         /* Interpret the newline character */
         if (message[c] == '\n') {
-            uint16_t remaining = LINE_CHARS - (((screen - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
+            uint16_t remaining = LINE_CHARS - (((next - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
 
             /* Zero-out the rest of the line */
             for (uint8_t i = 0; i < remaining; i++) {
-                *screen = '\0';
-                *(screen+1) = *(screen+1) | (attribute % 0x10);
-                screen += CHAR_WIDTH;
+                *next = '\0';
+                *(next+1) = *(next+1) | (attribute % 0x10);
+                next += CHAR_WIDTH;
             }
         }
         else {
-            *screen = message[c];
-            *(screen+1) = *(screen+1) | (attribute % 0x10);
-            screen += CHAR_WIDTH;
+            *next = message[c];
+            *(next+1) = *(next+1) | (attribute % 0x10);
+            next += CHAR_WIDTH;
         }
         c++;
     }

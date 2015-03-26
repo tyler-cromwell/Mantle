@@ -1,6 +1,6 @@
-#ifndef KERNEL_GDT_H
-#define KERNEL_GDT_H
+#ifndef X86_GDT_H
+#define X86_GDT_H
 
-void gdt_init(void);
+extern void gdt_init(void);
 
 #endif
