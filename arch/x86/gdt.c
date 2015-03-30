@@ -18,15 +18,15 @@ static size_t file_l = 9;
  *
  * Pr: Present bit, must be one for all valid selectors.
  * Privl: Privilege bits (2). Contains the ring level, 0 = Kernel, 3 = User.
- * Ex: Executable bit. Code in this segment is executable if 1.
+ * Ex: Executable bit. 1 for code selector, 0 for data selector.
  * DC: Direction/Conforming bit.
  *     Direction for data selectors:
- *         0, the segment grows up; 1, the segment grows up.
+ *         0 the segment grows up, 1 the segment grows up.
  *     Conforming for code selectors:
  *         1 if code can be executed from <= privilege level.
  *         0 if only the level set in Privl.
  * RW: Read/Write bit.
- *     For code selectors: Readable bit. No writing.
+ *     For code selectors: Readable bit. Write is never allowed.
  *     For data selectors: Writable bit. Read is always allowed.
  * Ac: Accessed bit, default 0, CPU sets to 1 when accessed.
  *
@@ -72,7 +72,7 @@ extern void gdt_flush(struct gdt_ptr);
  *   uint32_t base: Descriptor base address.
  *   uint32_t limit: Descriptor limit.
  *   uint8_t access: Access byte.
- *   uint8_t gran: Granularity byte.
+ *   uint8_t gran: Granularity byte, contains the 4 'flags' and upper 4 'limit' bits.
  */
 static void gdt_write_descriptor(uint32_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
     struct gdt_descriptor descriptor = {

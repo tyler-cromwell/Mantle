@@ -4,8 +4,9 @@ CC = clang
 LD = ld
 
 # Respective flags
-ASFLAGS = -f elf32 -D _FILE_=\"$(<F)\"
-CFLAGS = -nostdlib -Wall -Werror -Wno-unused-command-line-argument -pedantic -m32 -O0 -I include -I arch/include -D _FILE_=\"$(<F)\"
+ASFLAGS = -f elf32 -D_FILE_=\"$(<F)\"
+CPPFLAGS = -D_FILE_=\"$(<F)\" -Iinclude -Iarch/include
+CFLAGS = -nostdlib -Wall -Werror -Wno-unused-command-line-argument -pedantic -m32 -O0
 LDFLAGS = -m elf_i386 -T
 
 # Assembly source files
@@ -36,7 +37,7 @@ $(BIN): $(ASM_OBJ) $(C_OBJ)
 
 # Rule for compiling .c files
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 .PHONY: qemu
 qemu: all
