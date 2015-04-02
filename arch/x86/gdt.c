@@ -6,8 +6,10 @@
 #include <drivers/console.h>
 #include <x86/gdt.h>
 
-static char* file = "["_FILE_"]: ";
-static size_t file_l = 9;
+#ifdef _FILE_
+#define file "["_FILE_"]: "
+#define file_l 9
+#endif
 
 /* (Information taken from osdev.org)
  * Access Byte:
@@ -102,6 +104,8 @@ void gdt_init(void) {
     gdt_write_descriptor(3, 0x0, 0xffffffff, 0x96, 0xcf);   /* Stack, 0x18 */
 
     gdt_flush(gdtr);
+    #ifdef _FILE_
     console_write(file, file_l, FG_GREY_L);
+    #endif
     console_write("GDT Initialized\n", 16, FG_BROWN_L);
 }

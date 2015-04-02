@@ -4,10 +4,14 @@ CC = clang
 LD = ld
 
 # Respective flags
-ASFLAGS = -f elf32 -D_FILE_=\"$(<F)\"
-CPPFLAGS = -D_FILE_=\"$(<F)\" -Iinclude -Iarch/include
+ASFLAGS = -f elf32
+CPPFLAGS = -Iinclude -Iarch/include
 CFLAGS = -nostdlib -Wall -Werror -Wno-unused-command-line-argument -pedantic -m32 -O0
 LDFLAGS = -m elf_i386 -T
+
+# Debugging options
+ASFLAGS += -D_FILE_=\"$(<F)\"
+CPPFLAGS += -D_FILE_=\"$(<F)\"
 
 # Assembly source files
 ASM_SRC = $(shell find . -name *.asm)
@@ -18,11 +22,11 @@ C_SRC = $(shell find . -name *.c)
 C_OBJ = $(C_SRC:%.c=%.o)
 
 # Kernel image name
-BIN = humboldt
+BIN = humboldt_debug
 
 # QEMU options
 QEMU = qemu-system-x86_64
-QEMUFLAGS = -kernel $(BIN) -monitor stdio
+QEMUFLAGS = -monitor stdio -kernel $(BIN)
 
 .PHONY: all
 all: $(BIN)

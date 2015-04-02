@@ -8,10 +8,6 @@ global gdt_flush
 extern console_clear
 extern kernel
 
-section .data
-    file        db '[', _FILE_, ']: ', 0x0
-    file_len    equ $-file
-
 section .text
     ; The Multiboot spec
     align 4

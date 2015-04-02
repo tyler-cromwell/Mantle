@@ -4,8 +4,10 @@
 #include <x86/cpuid.h>
 #include <x86/gdt.h>
 
-static char* file = "["_FILE_"]: ";
-static size_t file_l = 12;
+#ifdef _FILE_
+#define file "["_FILE_"]: "
+#define file_l 12
+#endif
 
 /*
  * The main kernel function; this is where Humboldt begins operation.
@@ -14,7 +16,9 @@ static size_t file_l = 12;
 void kernel(void) {
     gdt_init();
 
+    #ifdef _FILE_
     console_write(file, file_l, FG_GREY_L);
+    #endif
     console_write("Kernel started\n", 15, FG_GREEN);
 
     char id[14] = {0};
@@ -22,11 +26,15 @@ void kernel(void) {
     cpuid_vendor(id);
 
     char* field = "Vendor_id: ";
+    #ifdef _FILE_
     console_write(file, file_l, FG_GREY_L);
+    #endif
     console_write(field, strlen(field), FG_WHITE);
     console_write(id, 14, FG_WHITE);
 
+    #ifdef _FILE_
     console_write(file, file_l, FG_GREY_L);
+    #endif
     console_write("System halted\n", 14, FG_RED);
     return; /* Halt the system */
 }
