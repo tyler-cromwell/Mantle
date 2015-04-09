@@ -4,7 +4,7 @@
 
 /* Kernel Headers */
 #include <drivers/console.h>
-#include <x86/gdt.h>
+#include <x86.h>
 
 #ifdef _FILE_
 #define file "["_FILE_"]: "
