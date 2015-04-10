@@ -11,4 +11,6 @@ SECTIONS {
         *(COMMON)
         *(.bss)
     }
+
+    kernel_size = . - 0x01000000;
 }
