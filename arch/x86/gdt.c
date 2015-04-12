@@ -4,7 +4,7 @@
 
 /* Kernel Headers */
 #include <drivers/console.h>
-#include <x86.h>
+#include <x86/x86.h>
 
 #ifdef _FILE_
 #define file "["_FILE_"]: "
@@ -63,8 +63,8 @@ struct gdt_ptr {
 struct gdt_descriptor gdt[4];
 struct gdt_ptr gdtr;
 
-/* External - Flush the GDT */
-extern void gdt_flush(struct gdt_ptr);
+/* External - Load the GDT */
+extern void gdt_load(struct gdt_ptr);
 
 /*
  * Builds a Global Descriptor Table descriptor and writes it to the given 'index'.
@@ -103,7 +103,7 @@ void gdt_init(void) {
     gdt_write_descriptor(2, 0x0, 0xffffffff, 0x92, 0xcf);   /* Data, 0x10 */
     gdt_write_descriptor(3, 0x0, 0xffffffff, 0x96, 0xcf);   /* Stack, 0x18 */
 
-    gdt_flush(gdtr);
+    gdt_load(gdtr);
     #ifdef _FILE_
     console_write(file, file_l, FG_GREY_L);
     #endif

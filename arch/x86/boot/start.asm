@@ -2,7 +2,7 @@ bits 32
 
 ; Global routines
 global start
-global gdt_flush
+global gdt_load
 
 ; External functions
 extern console_clear
@@ -15,13 +15,13 @@ section .text
     dd 0x00                  ; Flags
     dd - (0x1badb002 + 0x00) ; Should be zero
 
-; Flush the Global Descriptor Table to the lgdt register
+; Load the Global Descriptor Table into the lgdt register
 ; Argument:
 ;   [esp+4]: GDT pointer
-gdt_flush:
+gdt_load:
     lgdt[esp+4]
-    jmp 0x08:flush  ; Far jump to the Code descriptor
-flush:
+    jmp 0x08:load  ; Far jump to the Code descriptor
+load:
     mov ax, 0x10    ; Data descriptor
     mov ds, ax
     mov es, ax
@@ -33,13 +33,17 @@ flush:
 
 ; Entry point into the kernel binary
 start:
-    cli                     ; Ignore Maskable Interrupts
-    call console_clear
+    cli; Ignore Maskable Interrupts
 
-    mov ebp, kernel_stack   ; Setup the kernel stack
+    ; Setup the kernel stack
+    mov ebp, kernel_stack
     mov esp, kernel_stack
 
-    call kernel             ; Actually start the Kernel
+    ; Actually start the Kernel
+    push ebx; Address of Multiboot information
+    call kernel
+    add esp, 4
+
     hlt; and catch fire
 
 section .bss
