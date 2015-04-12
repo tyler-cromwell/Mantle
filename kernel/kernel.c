@@ -3,9 +3,9 @@
 #include <kernel/string.h>
 #include <x86/x86.h>
 
-#ifdef _FILE_
-#define file "["_FILE_"]: "
-#define file_l 12
+#ifdef __file
+    #define file "["__file"]: "
+    #define file_l 12
 #endif
 
 /* Linker Script Symbol */
@@ -18,9 +18,7 @@ extern char* kernel_size;
 void kernel(void) {
     console_clear();
 
-    #ifdef _FILE_
-    console_write(file, file_l, FG_GREY_L);
-    #endif
+    __console_write(file, file_l);
     console_write("Kernel started\n", 15, FG_GREEN);
 
     char* size = itoa(((uint32_t) &kernel_size) / 1024);
@@ -29,24 +27,18 @@ void kernel(void) {
     id[12] = '\n';
     cpuid_vendor(id);
 
-    #ifdef _FILE_
-    console_write(file, file_l, FG_GREY_L);
-    #endif
+    __console_write(file, file_l);
     console_write("Kernel size: ", 13, FG_WHITE);
     console_write(size, 2, FG_WHITE);
     console_write("KB\n", 3, FG_WHITE);
 
-    #ifdef _FILE_
-    console_write(file, file_l, FG_GREY_L);
-    #endif
+    __console_write(file, file_l);
     console_write("Vendor_id: ", 11, FG_WHITE);
     console_write(id, 13, FG_WHITE);
 
     gdt_init();
 
-    #ifdef _FILE_
-    console_write(file, file_l, FG_GREY_L);
-    #endif
+    __console_write(file, file_l);
     console_write("System halted", 13, FG_RED);
     return; /* Halt the system */
 }

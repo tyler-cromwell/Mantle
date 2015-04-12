@@ -6,9 +6,9 @@
 #include <drivers/console.h>
 #include <x86/x86.h>
 
-#ifdef _FILE_
-#define file "["_FILE_"]: "
-#define file_l 9
+#ifdef __file
+    #define file "["__file"]: "
+    #define file_l 9
 #endif
 
 /* (Information taken from osdev.org)
@@ -104,8 +104,7 @@ void gdt_init(void) {
     gdt_write_descriptor(3, 0x0, 0xffffffff, 0x96, 0xcf);   /* Stack, 0x18 */
 
     gdt_load(gdtr);
-    #ifdef _FILE_
-    console_write(file, file_l, FG_GREY_L);
-    #endif
+
+    __console_write(file, file_l);
     console_write("GDT Initialized\n", 16, FG_BROWN_L);
 }

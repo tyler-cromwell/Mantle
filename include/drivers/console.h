@@ -39,6 +39,13 @@
 #define BG_BROWN_L      0xe0
 #define BG_WHITE        0xf0
 
+#ifdef __file
+    /* Macro wrapper to avoid a bunch of ifdef __file checks */
+    #define __console_write(message, length) { \
+        console_write(message, length, FG_GREY_L); \
+    }
+#endif
+
 extern void console_clear(void);
 extern void console_set_background(uint8_t);
 extern size_t console_write(char*, size_t, uint8_t);
