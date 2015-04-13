@@ -44,6 +44,8 @@
     #define __console_write(message, length) { \
         console_write(message, length, FG_GREY_L); \
     }
+#else
+    #define __console_write(message, length) {}
 #endif
 
 extern void console_clear(void);

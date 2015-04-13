@@ -10,7 +10,6 @@ CFLAGS = -nostdlib -Wall -Werror -Wno-unused-command-line-argument -pedantic -m3
 LDFLAGS = -m elf_i386 -T
 
 # Debugging options
-ASFLAGS += -D__file=\"$(<F)\"
 CPPFLAGS += -D__file=\"$(<F)\"
 
 # Assembly source files
