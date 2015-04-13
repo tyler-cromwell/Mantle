@@ -1,7 +1,7 @@
 # Humboldt
 
 ## What is Humboldt?
-Humboldt is a toy Operating System Kernel I am working on to get familiar with Operating System development.
+Humboldt is a hobbyist Operating System Kernel I am working on to learn more about different CPU architectures (currently x86/amd64), Operating System concepts, and to get more C/Assembly programming practice.
 
 ## Repository Hierarchy
 - `arch` - Architecture specific code.
