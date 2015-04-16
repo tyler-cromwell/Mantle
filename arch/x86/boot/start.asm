@@ -5,7 +5,6 @@ global start
 global gdt_load
 
 ; External functions
-extern console_clear
 extern kernel
 
 section .text
@@ -19,16 +18,16 @@ section .text
 ; Argument:
 ;   [esp+4]: GDT pointer
 gdt_load:
-    lgdt[esp+4]
-    jmp 0x08:load  ; Far jump to the Code descriptor
-load:
-    mov ax, 0x10    ; Data descriptor
+    lgdt[esp+4]     ; Tell the CPU where to find the table
+    mov ax, 0x10    ; Load Data selector
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
-    mov ax, 0x18    ; Stack Descriptor
+    mov ax, 0x18    ; Load Stack selsector
     mov ss, ax
+    jmp 0x08:load   ; Load Code selector and far jump
+load:
     ret
 
 ; Entry point into the kernel binary
@@ -42,6 +41,7 @@ start:
     ; Actually start the Kernel
     push ebx; Address of Multiboot information
     call kernel
+    mov dword [esp], 0
     add esp, 4
 
     hlt; and catch fire
