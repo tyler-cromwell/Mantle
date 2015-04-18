@@ -28,16 +28,16 @@ char* itoa(long number) {
 }
 
 /*
- * Copies the contents of one buffer to another.
- * Argument(s):
- *   char* dest: The destination buffer.
- *   const char* src: The source buffer.
+ * Copies a string.
+ * Arguments:
+ *   char* dest: The new string.
+ *   const char* src: The source string.
  *   size_t n: The number of bytes to copy.
  * Returns:
- *   A pointer to the destination buffer.
+ *   A pointer to the new string.
  */
 char* strncpy(char* dest, const char* src, size_t n) {
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < n || src[i] == '\0'; i++)
         dest[i] = src[i];
     return dest;
 }
