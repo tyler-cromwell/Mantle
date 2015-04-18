@@ -16,7 +16,7 @@
 #define BYTES       4000    /* The number of usable bytes in video memory */
 
 /* Pointer to the next "empty" character byte */
-char* next = VGA_START;
+static char* next = VGA_START;
 
 /*
  * Clears the console by zero-ing the screen buffer.
