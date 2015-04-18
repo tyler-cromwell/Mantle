@@ -60,8 +60,8 @@ struct gdt_ptr {
 } __attribute__((__packed__));
 
 /* The GDT and a pointer to it */
-struct gdt_descriptor gdt[4];
-struct gdt_ptr gdtr;
+static struct gdt_descriptor gdt[4];
+static struct gdt_ptr gdtr;
 
 /* External - Load the GDT */
 extern void gdt_load(struct gdt_ptr);
