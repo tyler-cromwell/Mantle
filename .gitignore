@@ -1,5 +1,4 @@
 *.o
 *.swp
+*.txt
 humboldt*
-
-notes.txt
