@@ -25,7 +25,7 @@ BIN = humboldt_debug
 
 # QEMU options
 QEMU = qemu-system-x86_64
-QEMUFLAGS = -monitor stdio -kernel $(BIN)
+QEMUFLAGS = -monitor stdio -kernel $(BIN) -m 4G
 
 .PHONY: all
 all: $(BIN)
