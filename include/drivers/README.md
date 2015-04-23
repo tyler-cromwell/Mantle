@@ -1,4 +1,4 @@
-## Drivers
+# Drivers
 This directory contains the driver header files.
 
 ## Contents
