@@ -51,5 +51,6 @@
 extern void console_clear(void);
 extern void console_set_background(uint8_t);
 extern size_t console_write(char*, size_t, uint8_t);
+extern size_t console_printf(uint8_t, char*, ...);
 
 #endif

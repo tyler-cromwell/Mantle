@@ -1,10 +1,13 @@
 /* C Standard Library Headers,
    these don't need to link against libc */
+#include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
 
 /* Kernel Headers */
+#include <drivers/console.h>
 #include <kernel/mem.h>
+#include <kernel/string.h>
 
 #define VGA_START   (char*) 0xb8000 /* The starting address for video memory */
 #define VGA_END     (char*) 0xb8fa0 /* The ending address for video memory */
@@ -63,15 +66,17 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
     /* Ensure that the number of characters to write does not exceed the maximum */
     while (message[c] != '\0' && c < length) {
         if (next >= VGA_END) {
-            /* Scroll everything up one row */
+            /* Shift the next pointer up one row */
             next -= LINE_BYTES;
             char* start = VGA_START;
 
+            /* Scroll everything up one row */
             for (uint16_t i = LINE_BYTES; i < BYTES; i++) {
                 uint16_t j = i - LINE_BYTES;
                 start[j] = start[i];
             }
 
+            /* Clear the bottom line */
             memset(next, 0, LINE_BYTES);
         }
 
@@ -95,4 +100,41 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
     }
 
     return c;
+}
+
+/*
+ * Printf style function that writes a string of characters to the console.
+ * Arguments:
+ *   uint8_t attribute: The coloring attribute.
+ *   char* format: The format string.
+ *   ... : A variable length list of other arguments.
+ */
+size_t console_printf(uint8_t attribute, char* format, ...) {
+    va_list arguments;
+    va_start(arguments, format);
+
+    /* Process each character */
+    for (; *format != '\0'; format++) {
+        if (*format != '%') {
+            console_write(format, 1, attribute);
+        } else {
+            /* Increment again for tag character */
+            char* tag = format+1;
+            char* s = NULL;
+
+            switch (*tag) {
+                case 's':
+                    /* Get the next argument */
+                    s = va_arg(arguments, char*);
+                    console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
+                default:
+                    console_write(format, 1, attribute);
+            }
+        }
+    }
+
+    va_end(arguments);
+    return 0;
 }
