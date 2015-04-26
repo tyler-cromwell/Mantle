@@ -12,7 +12,7 @@
 extern char* kernel_size;
 
 /*
- * The main kernel function; this is where Humboldt begins operation.
+ * The main kernel function; this is where Edsger begins operation.
  * The system will halt when/if this function returns.
  */
 void kernel(void) {

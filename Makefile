@@ -21,7 +21,7 @@ C_SRC = $(shell find . -name *.c)
 C_OBJ = $(C_SRC:%.c=%.o)
 
 # Kernel image name
-BIN = humboldt_debug
+BIN = edsger_debug
 
 # QEMU options
 QEMU = qemu-system-x86_64

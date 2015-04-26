@@ -1,7 +1,7 @@
-# Humboldt
+# Edsger
 
-## What is Humboldt?
-Humboldt is a hobbyist Operating System Kernel I am working on to learn more about different CPU architectures (currently x86/amd64), Operating System concepts, and to get more C/Assembly programming practice.
+## What is Edsger?
+Edsger is a hobbyist Operating System Kernel I am working on to learn more about different CPU architectures (currently x86/amd64), Operating System concepts, and to get more C/Assembly programming practice.
 
 ## Repository Hierarchy
 - `arch` - Architecture specific code.
