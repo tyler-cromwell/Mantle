@@ -84,16 +84,15 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
         if (message[c] == '\n') {
             uint16_t remaining = LINE_CHARS - (((next - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
 
-            /* Zero-out the rest of the line */
+            /* Write blank characters for rest of the line */
             for (uint8_t i = 0; i < remaining; i++) {
                 *next = '\0';
-                *(next+1) = *(next+1) | (attribute % 0x10);
                 next += CHAR_WIDTH;
             }
         }
         else {
             *next = message[c];
-            *(next+1) = *(next+1) | (attribute % 0x10);
+            *(next+1) = *(next+1) | attribute;
             next += CHAR_WIDTH;
         }
         c++;
