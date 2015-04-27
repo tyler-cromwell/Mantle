@@ -5,7 +5,6 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <drivers/console.h>
 #include <kernel/mem.h>
 #include <kernel/string.h>
 
@@ -107,15 +106,18 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
  *   uint8_t attribute: The coloring attribute.
  *   char* format: The format string.
  *   ... : A variable length list of other arguments.
+ * Returns:
+ *   The number of characters written.
  */
 size_t console_printf(uint8_t attribute, char* format, ...) {
+    size_t c = 0;
     va_list arguments;
     va_start(arguments, format);
 
     /* Process each character */
     for (; *format != '\0'; format++) {
         if (*format != '%') {
-            console_write(format, 1, attribute);
+            c += console_write(format, 1, attribute);
         } else {
             /* Increment again for tag character */
             char* tag = format+1;
@@ -125,15 +127,15 @@ size_t console_printf(uint8_t attribute, char* format, ...) {
                 case 's':
                     /* Get the next argument */
                     s = va_arg(arguments, char*);
-                    console_write(s, strlen(s), attribute);
+                    c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
                 default:
-                    console_write(format, 1, attribute);
+                    c += console_write(format, 1, attribute);
             }
         }
     }
 
     va_end(arguments);
-    return 0;
+    return c;
 }
