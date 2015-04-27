@@ -106,5 +106,5 @@ void gdt_init(void) {
     gdt_load(gdtr);
 
     __console_write(file, file_l);
-    console_write("GDT Initialized\n", 16, FG_BROWN_L);
+    console_printf(FG_BROWN_L, "GDT Initialized\n");
 }

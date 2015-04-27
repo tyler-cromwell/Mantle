@@ -8,7 +8,7 @@
     #define file_l 12
 #endif
 
-/* Linker Script Symbol */
+/* Linker Script Symbol - Kernel size string */
 extern char* kernel_size;
 
 /*
@@ -19,23 +19,20 @@ void kernel(void) {
     console_clear();
 
     __console_write(file, file_l);
-    console_write("Kernel started\n", 15, FG_GREEN);
+    console_printf(FG_GREEN, "Kernel started\n");
 
+    /* Get Kernel size and CPU vendor id */
     char* size = itoa(((uint32_t) &kernel_size) / 1024);
-
     char id[13] = {0};
-    id[12] = '\n';
     cpuid_vendor(id);
 
     __console_write(file, file_l);
-    console_write("Kernel size: ", 13, FG_WHITE);
-    console_write(size, 2, FG_WHITE);
-    console_write("KB\n", 3, FG_WHITE);
+    console_printf(FG_WHITE, "Vendor_id: %s\n", id);
 
     __console_write(file, file_l);
-    console_write("Vendor_id: ", 11, FG_WHITE);
-    console_write(id, 13, FG_WHITE);
+    console_printf(FG_WHITE, "Kernel size: %sKB\n", size);
 
+    /* Initialize the Global Descriptor Table */
     gdt_init();
 
     __console_write(file, file_l);
