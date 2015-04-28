@@ -41,11 +41,11 @@
 
 #ifdef __file
     /* Macro wrapper to avoid a bunch of ifdef __file checks */
-    #define __console_write(message, length) { \
+    #define debug_console_write(message, length) { \
         console_write(message, length, FG_GREY_L); \
     }
 #else
-    #define __console_write(message, length) {}
+    #define debug_console_write(message, length) {}
 #endif
 
 extern void console_clear(void);

@@ -19,7 +19,7 @@ extern char* kernel_size;
 void kernel(void) {
     console_clear();
 
-    __console_write(file, file_l);
+    debug_console_write(file, file_l);
     console_printf(FG_GREEN, STRING", Started!\n");
 
     /* Get Kernel size and CPU vendor id */
@@ -27,16 +27,16 @@ void kernel(void) {
     char id[13] = {0};
     cpuid_vendor(id);
 
-    __console_write(file, file_l);
+    debug_console_write(file, file_l);
     console_printf(FG_WHITE, "Vendor_id: %s\n", id);
 
-    __console_write(file, file_l);
+    debug_console_write(file, file_l);
     console_printf(FG_WHITE, "Kernel size: %sKB\n", size);
 
     /* Initialize the Global Descriptor Table */
     gdt_init();
 
-    __console_write(file, file_l);
-    console_write("System halted", 13, FG_RED);
+    debug_console_write(file, file_l);
+    console_printf(FG_RED, "System halted");
     return; /* Halt the system */
 }

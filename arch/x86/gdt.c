@@ -45,7 +45,7 @@
  *     0 if 16-bit protected mode.
  *     1 if 32-bit protected mode.
  */
-struct GDTDescriptor {
+struct GdtDescriptor {
     uint16_t limit;             /* 0:15 */
     uint16_t base_low;          /* 0:15 */
     uint8_t base_mid;           /* 16:23 */
@@ -54,17 +54,17 @@ struct GDTDescriptor {
     uint8_t base_high;          /* 24:31 */
 } __attribute__((__packed__));  /* Packed to ensure a size of 8 bytes */
 
-struct GDTR {
+struct Gdtr {
     uint16_t limit;
     uint32_t base;
 } __attribute__((__packed__));
 
 /* The GDT and a pointer to it */
-static struct GDTDescriptor gdt[4];
-static struct GDTR gdtr;
+static struct GdtDescriptor gdt[4];
+static struct Gdtr gdtr;
 
 /* External - Load the GDT */
-extern void gdt_load(struct GDTR);
+extern void gdt_load(struct Gdtr);
 
 /*
  * Builds a Global Descriptor Table descriptor and writes it to the given 'index'.
@@ -77,7 +77,7 @@ extern void gdt_load(struct GDTR);
  *   uint8_t gran: Granularity byte, contains the 4 'flags' and upper 4 'limit' bits.
  */
 static void gdt_write_descriptor(uint32_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
-    struct GDTDescriptor descriptor = {
+    struct GdtDescriptor descriptor = {
         .limit = limit & 0xffff,
         .base_low = base & 0xffff,
         .base_mid = (base >> 16) & 0xff,
@@ -94,7 +94,7 @@ static void gdt_write_descriptor(uint32_t index, uint32_t base, uint32_t limit, 
  */
 void gdt_init(void) {
     /* Setup pointer */
-    gdtr.limit = (sizeof(struct GDTDescriptor) * 4) - 1;
+    gdtr.limit = (sizeof(struct GdtDescriptor) * 4) - 1;
     gdtr.base = (uint32_t) &gdt;
 
     /* Initialize entries */
@@ -105,6 +105,6 @@ void gdt_init(void) {
 
     gdt_load(gdtr);
 
-    __console_write(file, file_l);
+    debug_console_write(file, file_l);
     console_printf(FG_BROWN_L, "GDT Initialized\n");
 }
