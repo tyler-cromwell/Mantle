@@ -1,5 +1,6 @@
 /* Kernel Headers */
 #include <drivers/console.h>
+#include <kernel/kernel.h>
 #include <kernel/string.h>
 #include <x86/x86.h>
 
@@ -19,7 +20,7 @@ void kernel(void) {
     console_clear();
 
     __console_write(file, file_l);
-    console_printf(FG_GREEN, "Kernel started\n");
+    console_printf(FG_GREEN, STRING", Started!\n");
 
     /* Get Kernel size and CPU vendor id */
     char* size = itoa(((uint32_t) &kernel_size) / 1024);
