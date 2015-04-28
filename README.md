@@ -11,7 +11,7 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `include` - Platform independent header files.
 - `kernel` - Kernel core.
 
-## Naming Convention
+## Coding Convention
  - All uppercase for Macros and Constants with underscores for spaces (i.e. `FG_WHITE`)
  - Camelcase for Structs and Typedefs (i.e. `GdtDescriptor`)
  - All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`, `gdt_init`)
