@@ -11,8 +11,8 @@ section .text
     ; The Multiboot spec
     align 4
     dd 0x1badb002            ; Magic
-    dd 0x00                  ; Flags
-    dd - (0x1badb002 + 0x00) ; Should be zero
+    dd 0x03                  ; Flags
+    dd - (0x1badb002 + 0x03) ; Should be zero
 
 ; Load the Global Descriptor Table into the lgdt register
 ; Argument:
@@ -24,7 +24,7 @@ gdt_load:
     mov es, ax
     mov fs, ax
     mov gs, ax
-    mov ax, 0x18    ; Load Stack selsector
+    mov ax, 0x18    ; Load Stack selector
     mov ss, ax
     jmp 0x08:load   ; Load Code selector and far jump
 load:
@@ -40,9 +40,9 @@ start:
 
     ; Actually start the Kernel
     push ebx; Address of Multiboot information
+    push eax; Location of Multiboot bootloader magic number
     call kernel
-    mov dword [esp], 0
-    add esp, 4
+    add esp, 8
 
     hlt; and catch fire
 
