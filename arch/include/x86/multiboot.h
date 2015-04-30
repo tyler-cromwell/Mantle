@@ -56,15 +56,11 @@ struct MultibootInfo {
     uint16_t vbe_interface_len; /* If bit 11 & bit 2 in header: */
 } __attribute__((__packed__));
 
-/* Memory region types */
-#define MULTIBOOT_MMAP_AVAILABLE    1
-#define MULTIBOOT_MMAP_RESERVED     2
-
 /* 
  * A region of memory.
  * May be used if mutliboot_info.flags bit 6 is set
  */
-struct MultibootMemoryRegion {
+struct MultibootMmap {
     uint32_t size;              /* */
     uint64_t base_addr;         /* */
     uint64_t length;            /* */
