@@ -11,12 +11,16 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `include` - Platform independent header files.
 - `kernel` - Kernel core.
 
+## Branches
+- `master` - Mainline branch, documentation and feature merges are pushed to this branch.
+- `<feature>` - All other branches are meant for development of specific features (i.e. `multiboot`, `paging`).
+
 ## Coding Convention
- - All uppercase for Macros and Constants with underscores for spaces (i.e. `FG_WHITE`)
- - Camelcase for Structs and Typedefs (i.e. `GdtDescriptor`)
- - All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`, `gdt_init`)
-   - Double underscore prefix for functions or function-like macros that should not be called directly (`__console_write`)
- - Data types only in forward declarations (`strncpy(char*, char*, size_t)`)
+- All uppercase for Macros and Constants with underscores for spaces (i.e. `FG_WHITE`).
+- Camelcase for Structs and Typedefs (i.e. `GdtDescriptor`).
+- All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`, `gdt_init`).
+   - Double underscore prefix for functions or function-like macros that should not be called directly (`__console_write`).
+- Data types only in forward declarations (`strncpy(char*, char*, size_t)`).
 
 ## Toolchain
 - `Makefile` - This Makefile is used to build the kernel and test it. Rules are as follows:
