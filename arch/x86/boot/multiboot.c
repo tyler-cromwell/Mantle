@@ -31,6 +31,38 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
         
         size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
 
+        /* Create an entry for the Kernel */
+        struct MultibootMmap kernel = {
+            .size = 20,
+            .base_addr = 0x00100000,    /* Start 16MB into RAM */
+            .length = 16 * 1024 * 1024, /* Region is 16MB wide, gives space to grow */
+            .type = MMAP_RESERVED       /* Don't overwrite the kernel */
+        };
+
+        for (size_t i = 0; i < ents; i++) {
+            uint64_t ent_addr_upper = mmap[i].base_addr + mmap[i].length;
+            uint64_t kernel_addr_upper = kernel.base_addr + kernel.length;
+
+            /* If the kernel region fits in the first available region */
+            if (mmap[i].type == MMAP_AVAILABLE &&
+                kernel.base_addr >= mmap[i].base_addr &&
+                kernel_addr_upper <= ent_addr_upper) {
+
+                mmap[i].base_addr += kernel.length;
+                mmap[i].length -= kernel.length;
+
+                /* Shift entries forward */
+                for (size_t j = ents; j >= i; j--) {
+                    mmap[j+1] = mmap[j];
+                }
+
+                /* Add kernel entry */
+                mmap[i] = kernel;
+                break;
+            }
+        }
+
+        /* Dump the Memory Map to console */
         console_printf(FG_CYAN, "Memory Map:\n0");
         for (size_t i = 0; i < ents; i++) {
             char* l = itoa(mmap[i].base_addr / 1024);
@@ -58,30 +90,6 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
                 console_printf(FG_CYAN, "?");
 
             console_printf(FG_CYAN, ")\n");
-        }
-
-        /* Create an entry for the Kernel */
-        struct MultibootMmap kernel = {
-            .size = 20,
-            .base_addr = 0x01000000,    /* Start 16MB into RAM */
-            .length = 16 * 1024 * 1024, /* Region is 16MB wide, gives space to grow */
-            .type = MMAP_RESERVED       /* Don't overwrite the kernel */
-        };
-
-        for (size_t i = 0; i < ents; i++) {
-            uint64_t ent_addr_upper = mmap[i].base_addr + mmap[i].length;
-            uint64_t kernel_addr_upper = kernel.base_addr + kernel.length;
-
-            /* If the kernel region fits in the first available region */
-            if (mmap[i].type == MMAP_AVAILABLE &&
-                kernel.base_addr >= mmap[i].base_addr &&
-                kernel_addr_upper <= ent_addr_upper) {
-                ;
-                // Partition that AVAILABLE space
-                // Shift (memmove) map forward 16MB from end of first partition
-                // Insert (memcpy) kernel struct
-                break;
-            }
         }
     }
 
