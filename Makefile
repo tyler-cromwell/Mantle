@@ -25,7 +25,7 @@ BIN = ritchie_debug
 
 # QEMU options
 QEMU = qemu-system-x86_64
-QEMUFLAGS = -monitor stdio -kernel $(BIN) -m 4G
+QEMUFLAGS = -monitor stdio -m 4G
 
 .PHONY: all
 all: $(BIN)
@@ -42,11 +42,30 @@ $(BIN): $(ASM_OBJ) $(C_OBJ)
 %.o: %.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
+.PHONY: iso
+iso: all
+	mkdir -p isodir
+	mkdir -p isodir/boot
+	cp $(BIN) isodir/boot/$(BIN)
+	mkdir -p isodir/boot/grub
+	cp grub.cfg isodir/boot/grub/grub.cfg
+	grub2-mkrescue -o $(BIN).iso isodir
+	rm -rf isodir/
+
+.PHONY: usb
+usb: iso
+	dd if=$(BIN).iso of=$(DEV)
+
 .PHONY: qemu
 qemu: all
-	$(QEMU) $(QEMUFLAGS)
+	$(QEMU) $(QEMUFLAGS) -kernel $(BIN)
+
+.PHONY: qemu-iso
+qemu-iso: iso
+	$(QEMU) $(QEMUFLAGS) $(BIN).iso
 
 .PHONY: clean
 clean:
 	rm -rf $(ASM_OBJ) $(C_OBJ)
 	rm -rf $(BIN)
+	rm -rf $(BIN).iso
