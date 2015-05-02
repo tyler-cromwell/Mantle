@@ -79,5 +79,6 @@ struct MultibootDrives {
 } __attribute__((__packed__));
 
 void multiboot_init(struct MultibootInfo*);
+void multiboot_mmap_dump(void);
 
 #endif

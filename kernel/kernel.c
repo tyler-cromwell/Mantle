@@ -41,8 +41,10 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_printf(FG_WHITE, "Kernel size: %sKB\n", size);
 
     /* Was the kernel booted by a Multiboot bootloader? */
-    if (magic == MULTIBOOT_BOOT_MAGIC)
+    if (magic == MULTIBOOT_BOOT_MAGIC) {
         multiboot_init(mbinfo);
+        multiboot_mmap_dump();
+    }
 
     /* Initialize the Global Descriptor Table */
     gdt_init();

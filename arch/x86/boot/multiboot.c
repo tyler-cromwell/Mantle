@@ -66,41 +66,45 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
                 break;
             }
         }
-
-        /* Dump the Memory Map to console */
-        debug_console_write(file, file_l);
-        console_printf(FG_CYAN, "Memory Map:\n");
-
-        for (size_t i = 0; i < ents; i++) {
-            debug_console_write(file, file_l);
-
-            char* l = itoa(mmap[i].base_addr / 1024);
-            if (strlen(l) >= 4) {
-                l = itoa(mmap[i].base_addr / 1024 / 1024);
-                console_printf(FG_CYAN, "%sMB - ", l);
-            }
-            else console_printf(FG_CYAN, "%sKB - ", l);
-
-            char* h = itoa((mmap[i].base_addr + mmap[i].length) / 1024);
-            if (strlen(h) >= 4) {
-                h = itoa((mmap[i].base_addr + mmap[i].length) / 1024 / 1024);
-                console_printf(FG_CYAN, "%sMB (", h);
-            }
-            else console_printf(FG_CYAN, "%sKB (", h);
-
-            char* len = itoa(mmap[i].length / 1024);
-            console_printf(FG_CYAN, "%sKB, ", len);
-            
-            if (mmap[i].type == MMAP_AVAILABLE)
-                console_printf(FG_CYAN, "Available");
-            else if (mmap[i].type == MMAP_RESERVED)
-                console_printf(FG_CYAN, "Reserved");
-            else
-                console_printf(FG_CYAN, "?");
-
-            console_printf(FG_CYAN, ")\n");
-        }
     }
 
     if (info->flags & MULTIBOOT_DRIVES) {}
+}
+
+void multiboot_mmap_dump(void) {
+    /* Dump the Memory Map to console */
+    debug_console_write(file, file_l);
+    console_printf(FG_CYAN, "Memory Map:\n");
+
+    size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
+
+    for (size_t i = 0; i < ents; i++) {
+        debug_console_write(file, file_l);
+
+        char* l = itoa(mmap[i].base_addr / 1024);
+        if (strlen(l) >= 4) {
+            l = itoa(mmap[i].base_addr / 1024 / 1024);
+            console_printf(FG_CYAN, "%sMB - ", l);
+        }
+        else console_printf(FG_CYAN, "%sKB - ", l);
+
+        char* h = itoa((mmap[i].base_addr + mmap[i].length) / 1024);
+        if (strlen(h) >= 4) {
+            h = itoa((mmap[i].base_addr + mmap[i].length) / 1024 / 1024);
+            console_printf(FG_CYAN, "%sMB (", h);
+        }
+        else console_printf(FG_CYAN, "%sKB (", h);
+
+        char* len = itoa(mmap[i].length / 1024);
+        console_printf(FG_CYAN, "%sKB, ", len);
+
+        if (mmap[i].type == MMAP_AVAILABLE)
+            console_printf(FG_CYAN, "Available");
+        else if (mmap[i].type == MMAP_RESERVED)
+            console_printf(FG_CYAN, "Reserved");
+        else
+            console_printf(FG_CYAN, "?");
+
+        console_printf(FG_CYAN, ")\n");
+    }
 }
