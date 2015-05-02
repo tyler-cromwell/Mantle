@@ -21,8 +21,12 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 ## Toolchain
 - `Makefile` - This Makefile is used to build the kernel and test it. Rules are as follows:
   - `make` - Builds the kernel image file.
-  - `make qemu` - Boots the kernel under QEMU.
+  - `make iso` - Builds an iso image with GRUB as the bootloader.
+  - `make usb` - Burns the iso image to the given device file (Makefile variable "DEV").
+  - `make qemu` - Boots the kernel directly under QEMU.
+  - `make qemu-iso` - Boots the iso image under QEMU.
   - `make clean` - Deletes all object files and the kernel image file.
 - `link.ld` - Simple linker script that determines the physical address the kernel is loaded at during boot.
+- `grub.cfg` - Basic GRUB config file, tells GRUB to use Multiboot to load the kernel.
 
 [dmr]: http://en.wikipedia.org/wiki/Dennis_Ritchie
