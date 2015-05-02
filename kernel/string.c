@@ -12,17 +12,20 @@
 char* itoa(long number) {
     static char buffer[12];
     char* string = buffer + 11;
-    if (number >= 0) {
+    if (number > 0) {
         while (number != 0) {
             *--string = 48 + (number % 10);
             number /= 10;
         }
-    } else {
+    } else if (number < 0) {
         while (number != 0) {
             *--string = 48 - (number % 10);
             number /= 10;
         }
         *--string = '-';
+    } else {
+        buffer[0] = 48;
+        string = buffer;
     }
     return string;
 }
