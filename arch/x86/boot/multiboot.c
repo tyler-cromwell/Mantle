@@ -8,6 +8,11 @@
 #include <kernel/string.h> // Delete
 #include <x86/multiboot.h>
 
+#ifdef __file
+    #define file "["__file"]: "
+    #define file_l 15
+#endif
+
 #define MMAP_MAX        20  /* Maximum memory map entries (completely arbitrary for now) */
 #define MMAP_AVAILABLE  1   /* Memory available for use */
 #define MMAP_RESERVED   2   /* Reserved memory */
@@ -63,8 +68,12 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
         }
 
         /* Dump the Memory Map to console */
-        console_printf(FG_CYAN, "Memory Map:\n0");
+        debug_console_write(file, file_l);
+        console_printf(FG_CYAN, "Memory Map:\n");
+
         for (size_t i = 0; i < ents; i++) {
+            debug_console_write(file, file_l);
+
             char* l = itoa(mmap[i].base_addr / 1024);
             if (strlen(l) >= 4) {
                 l = itoa(mmap[i].base_addr / 1024 / 1024);
