@@ -39,7 +39,7 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
         /* Create an entry for the Kernel */
         struct MultibootMmap kernel = {
             .size = 20,
-            .base_addr = 0x00100000,    /* Start 16MB into RAM */
+            .base_addr = 0x00100000,    /* Start 1MB into RAM */
             .length = 16 * 1024 * 1024, /* Region is 16MB wide, gives space to grow */
             .type = MMAP_RESERVED       /* Don't overwrite the kernel */
         };
@@ -71,8 +71,10 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
     if (info->flags & MULTIBOOT_DRIVES) {}
 }
 
+/*
+ * Dumps the Memory Map to console
+ */
 void multiboot_mmap_dump(void) {
-    /* Dump the Memory Map to console */
     debug_console_write(file, file_l);
     console_printf(FG_CYAN, "Memory Map:\n");
 
