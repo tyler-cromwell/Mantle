@@ -13,7 +13,7 @@
     #define file_l 15
 #endif
 
-#define MMAP_MAX        20  /* Maximum memory map entries (completely arbitrary for now) */
+#define MMAP_MAX        30  /* Maximum memory map entries (completely arbitrary for now) */
 #define MMAP_AVAILABLE  1   /* Memory available for use */
 #define MMAP_RESERVED   2   /* Reserved memory */
 
@@ -57,9 +57,9 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
                 mmap[i].length -= kernel.length;
 
                 /* Shift entries forward */
-                for (size_t j = ents; j >= i; j--) {
+                for (size_t j = ents-2; j >= i; j--) {
                     mmap[j+1] = mmap[j];
-                }
+                } // Last entry of full mmap gets dropped
 
                 /* Add kernel entry */
                 mmap[i] = kernel;
