@@ -60,7 +60,7 @@ struct Gdtr {
 } __attribute__((__packed__));
 
 /* The GDT and a pointer to it */
-static struct GdtDescriptor gdt[4];
+static struct GdtDescriptor gdt[3];
 static struct Gdtr gdtr;
 
 /* External - Load the GDT */
@@ -101,7 +101,6 @@ void gdt_init(void) {
     gdt_write_descriptor(0, 0x0, 0x00000000, 0x00, 0x00);   /* Null, 0x00 */
     gdt_write_descriptor(1, 0x0, 0xffffffff, 0x9a, 0xcf);   /* Code, 0x08 */
     gdt_write_descriptor(2, 0x0, 0xffffffff, 0x92, 0xcf);   /* Data, 0x10 */
-    gdt_write_descriptor(3, 0x0, 0xffffffff, 0x96, 0xcf);   /* Stack, 0x18 */
 
     gdt_load(gdtr);
 

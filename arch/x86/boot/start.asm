@@ -24,7 +24,6 @@ gdt_load:
     mov es, ax
     mov fs, ax
     mov gs, ax
-    mov ax, 0x18    ; Load Stack selector
     mov ss, ax
     jmp 0x08:load   ; Load Code selector and far jump
 load:
