@@ -97,7 +97,11 @@ void multiboot_mmap_dump(void) {
         else console_printf(FG_CYAN, "%sKB (", h);
 
         char* len = itoa(mmap[i].length / 1024);
-        console_printf(FG_CYAN, "%sKB, ", len);
+        if (strlen(len) >= 4) {
+            len = itoa(mmap[i].length / 1024 / 1024);
+            console_printf(FG_CYAN, "%sMB, ", len);
+        }
+        else console_printf(FG_CYAN, "%sKB, ", len);
 
         if (mmap[i].type == MMAP_AVAILABLE)
             console_printf(FG_CYAN, "Available");
