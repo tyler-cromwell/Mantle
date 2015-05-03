@@ -15,7 +15,6 @@
 
 #define MMAP_MAX        30  /* Maximum memory map entries (completely arbitrary for now) */
 #define MMAP_AVAILABLE  1   /* Memory available for use */
-#define MMAP_RESERVED   2   /* Reserved memory */
 
 /* Multiboot information structures */
 static struct MultibootInfo* info;
@@ -41,7 +40,7 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
             .size = 20,
             .base_addr = 0x00100000,    /* Start 1MB into RAM */
             .length = 16 * 1024 * 1024, /* Region is 16MB wide, gives space to grow */
-            .type = MMAP_RESERVED       /* Don't overwrite the kernel */
+            .type = 2                   /* Don't overwrite the kernel */
         };
 
         for (size_t i = 0; i < ents; i++) {
@@ -102,10 +101,8 @@ void multiboot_mmap_dump(void) {
 
         if (mmap[i].type == MMAP_AVAILABLE)
             console_printf(FG_CYAN, "Available");
-        else if (mmap[i].type == MMAP_RESERVED)
-            console_printf(FG_CYAN, "Reserved");
         else
-            console_printf(FG_CYAN, "?");
+            console_printf(FG_CYAN, "Reserved");
 
         console_printf(FG_CYAN, ")\n");
     }
