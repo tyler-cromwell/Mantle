@@ -12,8 +12,8 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `kernel` - Kernel core.
 
 ## Branches
-- `master` - Mainline branch, documentation and feature merges are pushed to this branch.
-- `<feature>` - All other branches are meant for development of specific features (i.e. `multiboot`, `paging`).
+- `master` - Mainline branch. Documentation changes, bug fixes, and feature/subsystem merges are committed to this branch.
+- `<branch>` - All other branches are meant for development of specific features/subsystems (i.e. `multiboot`, `paging`).
 
 ## Coding Convention
 - All uppercase for Macros and Constants with underscores for spaces (i.e. `FG_WHITE`).
