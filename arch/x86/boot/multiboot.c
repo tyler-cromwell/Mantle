@@ -13,6 +13,11 @@
     #define file_l 15
 #endif
 
+/* Macros for converting byte metrics */
+#define CONVERT_NUM 1024
+#define CONVERT_UP(number) (number) / CONVERT_NUM
+#define CONVERT_DOWN(number) (number) * CONVERT_NUM
+
 #define MMAP_MAX        30  /* Maximum memory map entries (completely arbitrary for now) */
 #define MMAP_AVAILABLE  1   /* Memory available for use */
 
@@ -82,23 +87,26 @@ void multiboot_mmap_dump(void) {
     for (size_t i = 0; i < ents; i++) {
         debug_console_write(file, file_l);
 
-        char* l = itoa(mmap[i].base_addr / 1024);
-        if (strlen(l) >= 4) {
-            l = itoa(mmap[i].base_addr / 1024 / 1024);
+        uint32_t n = CONVERT_UP(mmap[i].base_addr);
+        char* l = itoa(n);
+        if (n >= CONVERT_NUM) {
+            l = itoa(CONVERT_UP(n));
             console_printf(FG_CYAN, "%sMB - ", l);
         }
         else console_printf(FG_CYAN, "%sKB - ", l);
 
-        char* h = itoa((mmap[i].base_addr + mmap[i].length) / 1024);
-        if (strlen(h) >= 4) {
-            h = itoa((mmap[i].base_addr + mmap[i].length) / 1024 / 1024);
+        n = CONVERT_UP(mmap[i].base_addr + mmap[i].length);
+        char* h = itoa(n);
+        if (n >= CONVERT_NUM) {
+            h = itoa(CONVERT_UP(n));
             console_printf(FG_CYAN, "%sMB (", h);
         }
         else console_printf(FG_CYAN, "%sKB (", h);
 
-        char* len = itoa(mmap[i].length / 1024);
-        if (strlen(len) >= 4) {
-            len = itoa(mmap[i].length / 1024 / 1024);
+        n = CONVERT_UP(mmap[i].length);
+        char* len = itoa(n);
+        if (n >= CONVERT_NUM) {
+            len = itoa(CONVERT_UP(n));
             console_printf(FG_CYAN, "%sMB, ", len);
         }
         else console_printf(FG_CYAN, "%sKB, ", len);
