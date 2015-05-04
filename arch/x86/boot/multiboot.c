@@ -57,16 +57,19 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
                 kernel.base_addr >= mmap[i].base_addr &&
                 kernel_addr_upper <= ent_addr_upper) {
 
+                /* Create a Memory hole */
                 mmap[i].base_addr += kernel.length;
                 mmap[i].length -= kernel.length;
 
-                /* Shift entries forward */
-                for (size_t j = ents-2; j >= i; j--) {
-                    mmap[j+1] = mmap[j];
-                } // Last entry of full mmap gets dropped
+                /* Fill the hole if there's at least one empty space */
+                if (ents < MMAP_MAX) {
+                    /* Shift entries forward by one struct */
+                    for (size_t j = ents-2; j >= i; j--) {
+                        mmap[j+1] = mmap[j];
+                    }
 
-                /* Add kernel entry */
-                mmap[i] = kernel;
+                    mmap[i] = kernel; /* Add kernel entry */
+                }
                 break;
             }
         }
