@@ -2,6 +2,7 @@
 #include <drivers/console.h>
 #include <kernel/kernel.h>
 #include <kernel/string.h>
+#include <x86/multiboot.h>
 #include <x86/x86.h>
 
 #ifdef __file
@@ -15,12 +16,18 @@ extern char* kernel_size;
 /*
  * The main kernel function; this is where Ritchie begins operation.
  * The system will halt when/if this function returns.
+ * Arguments:
+ *   uint32_t magic: A Multiboot bootloaders magic number.
+ *   struct MultibootInfo* mbinfo:
+ *       The physical memory address of the Multiboot information struct.
  */
-void kernel(void) {
+void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_clear();
 
     debug_console_write(file, file_l);
-    console_printf(FG_GREEN, STRING", Started!\n");
+    console_printf(FG_GREEN, "Kernel Started!\n");
+    debug_console_write(file, file_l);
+    console_printf(FG_BLUE_L, STRING"\n");
 
     /* Get Kernel size and CPU vendor id */
     char* size = itoa(((uint32_t) &kernel_size) / 1024);
@@ -32,6 +39,12 @@ void kernel(void) {
 
     debug_console_write(file, file_l);
     console_printf(FG_WHITE, "Kernel size: %sKB\n", size);
+
+    /* Was the kernel booted by a Multiboot bootloader? */
+    if (magic == MULTIBOOT_BOOT_MAGIC) {
+        multiboot_init(mbinfo);
+        multiboot_mmap_dump();
+    }
 
     /* Initialize the Global Descriptor Table */
     gdt_init();
