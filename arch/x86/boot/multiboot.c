@@ -57,7 +57,7 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
  */
 void multiboot_mmap_dump(void) {
     debug_console_write(file, file_l);
-    console_printf(FG_CYAN, "Memory Map:\n");
+    console_printf(FG_WHITE, "Memory Map:\n");
 
     size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
 
@@ -68,31 +68,31 @@ void multiboot_mmap_dump(void) {
         char* l = itoa(n);
         if (n >= CONVERT_NUM) {
             l = itoa(CONVERT_UP(n));
-            console_printf(FG_CYAN, "%sMB - ", l);
+            console_printf(FG_WHITE, "%sMB - ", l);
         }
-        else console_printf(FG_CYAN, "%sKB - ", l);
+        else console_printf(FG_WHITE, "%sKB - ", l);
 
         n = CONVERT_UP(mmap[i].base_addr + mmap[i].length);
         char* h = itoa(n);
         if (n >= CONVERT_NUM) {
             h = itoa(CONVERT_UP(n));
-            console_printf(FG_CYAN, "%sMB (", h);
+            console_printf(FG_WHITE, "%sMB (", h);
         }
-        else console_printf(FG_CYAN, "%sKB (", h);
+        else console_printf(FG_WHITE, "%sKB (", h);
 
         n = CONVERT_UP(mmap[i].length);
         char* len = itoa(n);
         if (n >= CONVERT_NUM) {
             len = itoa(CONVERT_UP(n));
-            console_printf(FG_CYAN, "%sMB, ", len);
+            console_printf(FG_WHITE, "%sMB, ", len);
         }
-        else console_printf(FG_CYAN, "%sKB, ", len);
+        else console_printf(FG_WHITE, "%sKB, ", len);
 
         if (mmap[i].type == MMAP_AVAILABLE)
-            console_printf(FG_CYAN, "Available");
+            console_printf(FG_WHITE, "Available");
         else
-            console_printf(FG_CYAN, "Reserved");
+            console_printf(FG_WHITE, "Reserved");
 
-        console_printf(FG_CYAN, ")\n");
+        console_printf(FG_WHITE, ")\n");
     }
 }

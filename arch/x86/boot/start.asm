@@ -20,13 +20,13 @@ section .text
 gdt_load:
     lgdt[esp+4]     ; Tell the CPU where to find the table
     mov ax, 0x10    ; Load Data selector
+    jmp 0x08:load   ; Load Code selector and far jump
+load:
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
     mov ss, ax
-    jmp 0x08:load   ; Load Code selector and far jump
-load:
     ret
 
 ; Entry point into the kernel binary

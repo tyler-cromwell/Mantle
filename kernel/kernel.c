@@ -29,6 +29,9 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     debug_console_write(file, file_l);
     console_printf(FG_BLUE_L, STRING"\n");
 
+    /* Initialize the Global Descriptor Table */
+    gdt_init();
+
     /* Get Kernel size and CPU vendor id */
     char* size = itoa(((uint32_t) &kernel_size) / 1024);
     char id[13] = {0};
@@ -45,9 +48,6 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
         multiboot_init(mbinfo);
         multiboot_mmap_dump();
     }
-
-    /* Initialize the Global Descriptor Table */
-    gdt_init();
 
     debug_console_write(file, file_l);
     console_printf(FG_RED, "System halted");
