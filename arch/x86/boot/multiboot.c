@@ -3,9 +3,9 @@
 #include <stddef.h>
 
 /* Kernel Headers */
-#include <drivers/console.h> // Delete
+#include <drivers/console.h>
 #include <kernel/mem.h>
-#include <kernel/string.h> // Delete
+#include <kernel/string.h>
 #include <x86/multiboot.h>
 
 #ifdef __file
@@ -13,12 +13,17 @@
     #define file_l 15
 #endif
 
-#define MMAP_MAX        30  /* Maximum memory map entries (completely arbitrary for now) */
-#define MMAP_AVAILABLE  1   /* Memory available for use */
+/* Macros for converting byte metrics */
+#define CONVERT_NUM 1024
+#define CONVERT_UP(number) (number) / CONVERT_NUM
+#define CONVERT_DOWN(number) (number) * CONVERT_NUM
+
+#define MMAP_AVAILABLE      1           /* Memory available for use */
+#define MMAP_KERNEL_LENGTH  16777216    /* "Allocated" length for the kernel binary (16MB) */
 
 /* Multiboot information structures */
 static struct MultibootInfo* info;
-static struct MultibootMmap mmap[MMAP_MAX];
+static struct MultibootMmap* mmap;
 
 /*
  * Initializes all applicable structures from information passed in from the Bootloader.
@@ -30,44 +35,21 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
 
     /* Initialize the Memory Map */
     if (info->flags & MULTIBOOT_MMAP) {
-        /* Partition the memory map buffer into an array of structs */
-        memcpy(mmap, (void*) info->mmap_addr, info->mmap_length);
-        
+        mmap = (struct MultibootMmap*) info->mmap_addr;
         size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
 
-        /* Create an entry for the Kernel */
-        struct MultibootMmap kernel = {
-            .size = 20,
-            .base_addr = 0x00100000,    /* Start 1MB into RAM */
-            .length = 16 * 1024 * 1024, /* Region is 16MB wide, gives space to grow */
-            .type = 2                   /* Don't overwrite the kernel */
-        };
-
         for (size_t i = 0; i < ents; i++) {
-            uint64_t ent_addr_upper = mmap[i].base_addr + mmap[i].length;
-            uint64_t kernel_addr_upper = kernel.base_addr + kernel.length;
-
             /* If the kernel region fits in the first available region */
             if (mmap[i].type == MMAP_AVAILABLE &&
-                kernel.base_addr >= mmap[i].base_addr &&
-                kernel_addr_upper <= ent_addr_upper) {
+                mmap[i].length >= MMAP_KERNEL_LENGTH) {
 
-                mmap[i].base_addr += kernel.length;
-                mmap[i].length -= kernel.length;
-
-                /* Shift entries forward */
-                for (size_t j = ents-2; j >= i; j--) {
-                    mmap[j+1] = mmap[j];
-                } // Last entry of full mmap gets dropped
-
-                /* Add kernel entry */
-                mmap[i] = kernel;
+                /* Create a Memory hole */
+                mmap[i].base_addr += MMAP_KERNEL_LENGTH;
+                mmap[i].length -= MMAP_KERNEL_LENGTH;
                 break;
             }
         }
     }
-
-    if (info->flags & MULTIBOOT_DRIVES) {}
 }
 
 /*
@@ -82,23 +64,26 @@ void multiboot_mmap_dump(void) {
     for (size_t i = 0; i < ents; i++) {
         debug_console_write(file, file_l);
 
-        char* l = itoa(mmap[i].base_addr / 1024);
-        if (strlen(l) >= 4) {
-            l = itoa(mmap[i].base_addr / 1024 / 1024);
+        uint32_t n = CONVERT_UP(mmap[i].base_addr);
+        char* l = itoa(n);
+        if (n >= CONVERT_NUM) {
+            l = itoa(CONVERT_UP(n));
             console_printf(FG_CYAN, "%sMB - ", l);
         }
         else console_printf(FG_CYAN, "%sKB - ", l);
 
-        char* h = itoa((mmap[i].base_addr + mmap[i].length) / 1024);
-        if (strlen(h) >= 4) {
-            h = itoa((mmap[i].base_addr + mmap[i].length) / 1024 / 1024);
+        n = CONVERT_UP(mmap[i].base_addr + mmap[i].length);
+        char* h = itoa(n);
+        if (n >= CONVERT_NUM) {
+            h = itoa(CONVERT_UP(n));
             console_printf(FG_CYAN, "%sMB (", h);
         }
         else console_printf(FG_CYAN, "%sKB (", h);
 
-        char* len = itoa(mmap[i].length / 1024);
-        if (strlen(len) >= 4) {
-            len = itoa(mmap[i].length / 1024 / 1024);
+        n = CONVERT_UP(mmap[i].length);
+        char* len = itoa(n);
+        if (n >= CONVERT_NUM) {
+            len = itoa(CONVERT_UP(n));
             console_printf(FG_CYAN, "%sMB, ", len);
         }
         else console_printf(FG_CYAN, "%sKB, ", len);
