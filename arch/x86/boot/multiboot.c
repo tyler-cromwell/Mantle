@@ -53,46 +53,83 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
 }
 
 /*
- * Dumps the Memory Map to console
+ * Dumps Multiboot information to the console
  */
-void multiboot_mmap_dump(void) {
-    debug_console_write(file, file_l);
-    console_printf(FG_WHITE, "Memory Map:\n");
-
-    size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
-
-    for (size_t i = 0; i < ents; i++) {
+void multiboot_dump(void) {
+    /* Dump the Bootloader name */
+    if (info->flags & MULTIBOOT_BOOTLOADER) {
         debug_console_write(file, file_l);
+        console_printf(FG_WHITE, "Booted via: ");
+        console_printf(FG_BROWN_L, "%s\n", info->boot_loader_name);
+    }
 
-        uint32_t n = CONVERT_UP(mmap[i].base_addr);
-        char* l = itoa(n);
-        if (n >= CONVERT_NUM) {
-            l = itoa(CONVERT_UP(n));
-            console_printf(FG_WHITE, "%sMB - ", l);
+    /* Dump number of boot modules */
+    if (info->flags & MULTIBOOT_MODULES) {
+        char* mods = itoa(info->mods_count);
+        debug_console_write(file, file_l);
+        console_printf(FG_WHITE, "Number of boot modules: %s\n", mods);
+    }
+
+    /* Dump the amount of Lower and Upper Memory */
+    if (info->flags & MULTIBOOT_MEMORY) {
+        char* lower = itoa(info->mem_lower);
+        debug_console_write(file, file_l);
+        console_printf(FG_WHITE, "Lower Memory: %sKB\n", lower);
+
+        uint32_t n = info->mem_upper;
+        char* upper = itoa(n);
+            debug_console_write(file, file_l);
+        if (n >= 1024) {
+            upper = itoa(n / 1024);
+            console_printf(FG_WHITE, "Upper Memory: %sMB\n", upper);
         }
-        else console_printf(FG_WHITE, "%sKB - ", l);
+        else console_printf(FG_WHITE, "Upper Memory: %sKB\n", upper);
+    }
 
-        n = CONVERT_UP(mmap[i].base_addr + mmap[i].length);
-        char* h = itoa(n);
-        if (n >= CONVERT_NUM) {
-            h = itoa(CONVERT_UP(n));
-            console_printf(FG_WHITE, "%sMB (", h);
+    /* Dump the Memory Map */
+    if (info->flags & MULTIBOOT_MMAP) {
+        debug_console_write(file, file_l);
+        console_printf(FG_WHITE, "Memory Map:\n");
+
+        size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
+
+        for (size_t i = 0; i < ents; i++) {
+            debug_console_write(file, file_l);
+
+            /* Region Base Address */
+            uint32_t n = CONVERT_UP(mmap[i].base_addr);
+            char* l = itoa(n);
+            if (n >= CONVERT_NUM) {
+                l = itoa(CONVERT_UP(n));
+                console_printf(FG_WHITE, "%sMB - ", l);
+            }
+            else console_printf(FG_WHITE, "%sKB - ", l);
+
+            /* Region Ending Address */
+            n = CONVERT_UP(mmap[i].base_addr + mmap[i].length);
+            char* h = itoa(n);
+            if (n >= CONVERT_NUM) {
+                h = itoa(CONVERT_UP(n));
+                console_printf(FG_WHITE, "%sMB (", h);
+            }
+            else console_printf(FG_WHITE, "%sKB (", h);
+
+            /* Region length */
+            n = CONVERT_UP(mmap[i].length);
+            char* len = itoa(n);
+            if (n >= CONVERT_NUM) {
+                len = itoa(CONVERT_UP(n));
+                console_printf(FG_WHITE, "%sMB, ", len);
+            }
+            else console_printf(FG_WHITE, "%sKB, ", len);
+
+            /* Region type */
+            if (mmap[i].type == MMAP_AVAILABLE)
+                console_printf(FG_WHITE, "Available");
+            else
+                console_printf(FG_WHITE, "Reserved");
+
+            console_printf(FG_WHITE, ")\n");
         }
-        else console_printf(FG_WHITE, "%sKB (", h);
-
-        n = CONVERT_UP(mmap[i].length);
-        char* len = itoa(n);
-        if (n >= CONVERT_NUM) {
-            len = itoa(CONVERT_UP(n));
-            console_printf(FG_WHITE, "%sMB, ", len);
-        }
-        else console_printf(FG_WHITE, "%sKB, ", len);
-
-        if (mmap[i].type == MMAP_AVAILABLE)
-            console_printf(FG_WHITE, "Available");
-        else
-            console_printf(FG_WHITE, "Reserved");
-
-        console_printf(FG_WHITE, ")\n");
     }
 }

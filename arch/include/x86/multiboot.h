@@ -9,9 +9,11 @@
  */
 
 #define MULTIBOOT_BOOT_MAGIC    0x2badb002  /* Bootloader magic number */
+#define MULTIBOOT_MEMORY        1 << 0      /* Lower and Upper Memory flag */
 #define MULTIBOOT_MODULES       1 << 3      /* Boot modules flag */
 #define MULTIBOOT_MMAP          1 << 6      /* Memory map flag */
 #define MULTIBOOT_DRIVE         1 << 7      /* Drives flag */
+#define MULTIBOOT_BOOTLOADER    1 << 9      /* Bootloader Name flag */
 
 /* Signifies that the Kernel complies with Multiboot */
 struct MultibootHeader {
@@ -111,6 +113,6 @@ struct MultibootDrive {
 } __attribute__((__packed__));
 
 void multiboot_init(struct MultibootInfo*);
-void multiboot_mmap_dump(void);
+void multiboot_dump(void);
 
 #endif

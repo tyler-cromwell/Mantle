@@ -25,7 +25,7 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_clear();
 
     debug_console_write(file, file_l);
-    console_printf(FG_GREEN, "Kernel Started!\n");
+    console_printf(FG_GREEN, "Kernel Started\n");
     debug_console_write(file, file_l);
     console_printf(FG_BLUE_L, STRING"\n");
 
@@ -46,7 +46,7 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {
         multiboot_init(mbinfo);
-        multiboot_mmap_dump();
+        multiboot_dump();
     }
 
     debug_console_write(file, file_l);
