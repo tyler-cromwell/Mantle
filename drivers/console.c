@@ -125,8 +125,14 @@ size_t console_printf(uint8_t attribute, char* format, ...) {
 
             switch (*tag) {
                 case 's':
-                    /* Get the next argument */
+                    /* String */
                     s = va_arg(arguments, char*);
+                    c += console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
+                case 'u':
+                    /* Unsigned 32-bit Integer */
+                    s = itoa(va_arg(arguments, uint32_t));
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;

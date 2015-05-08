@@ -65,25 +65,21 @@ void multiboot_dump(void) {
 
     /* Dump number of boot modules */
     if (info->flags & MULTIBOOT_MODULES) {
-        char* mods = itoa(info->mods_count);
         debug_console_write(file, file_l);
-        console_printf(FG_WHITE, "Number of boot modules: %s\n", mods);
+        console_printf(FG_WHITE, "Number of boot modules: %u\n", info->mods_count);
     }
 
     /* Dump the amount of Lower and Upper Memory */
     if (info->flags & MULTIBOOT_MEMORY) {
-        char* lower = itoa(info->mem_lower);
         debug_console_write(file, file_l);
-        console_printf(FG_WHITE, "Lower Memory: %sKB\n", lower);
+        console_printf(FG_WHITE, "Lower Memory: %uKB\n", info->mem_lower);
 
-        uint32_t n = info->mem_upper;
-        char* upper = itoa(n);
-            debug_console_write(file, file_l);
-        if (n >= 1024) {
-            upper = itoa(n / 1024);
-            console_printf(FG_WHITE, "Upper Memory: %sMB\n", upper);
-        }
-        else console_printf(FG_WHITE, "Upper Memory: %sKB\n", upper);
+        uint32_t upper = info->mem_upper;
+        debug_console_write(file, file_l);
+        if (upper >= 1024)
+            console_printf(FG_WHITE, "Upper Memory: %uMB\n", (upper / 1024));
+        else
+            console_printf(FG_WHITE, "Upper Memory: %uKB\n", upper);
     }
 
     /* Dump the Memory Map */
@@ -98,30 +94,27 @@ void multiboot_dump(void) {
 
             /* Region Base Address */
             uint32_t n = CONVERT_UP(mmap[i].base_addr);
-            char* l = itoa(n);
             if (n >= CONVERT_NUM) {
-                l = itoa(CONVERT_UP(n));
-                console_printf(FG_WHITE, "%sMB - ", l);
+                n = CONVERT_UP(n);
+                console_printf(FG_WHITE, "%uMB - ", n);
             }
-            else console_printf(FG_WHITE, "%sKB - ", l);
+            else console_printf(FG_WHITE, "%uKB - ", n);
 
             /* Region Ending Address */
             n = CONVERT_UP(mmap[i].base_addr + mmap[i].length);
-            char* h = itoa(n);
             if (n >= CONVERT_NUM) {
-                h = itoa(CONVERT_UP(n));
-                console_printf(FG_WHITE, "%sMB (", h);
+                n = CONVERT_UP(n);
+                console_printf(FG_WHITE, "%uMB (", n);
             }
-            else console_printf(FG_WHITE, "%sKB (", h);
+            else console_printf(FG_WHITE, "%uKB (", n);
 
             /* Region length */
             n = CONVERT_UP(mmap[i].length);
-            char* len = itoa(n);
             if (n >= CONVERT_NUM) {
-                len = itoa(CONVERT_UP(n));
-                console_printf(FG_WHITE, "%sMB, ", len);
+                n = CONVERT_UP(n);
+                console_printf(FG_WHITE, "%uMB, ", n);
             }
-            else console_printf(FG_WHITE, "%sKB, ", len);
+            else console_printf(FG_WHITE, "%uKB, ", n);
 
             /* Region type */
             if (mmap[i].type == MMAP_AVAILABLE)

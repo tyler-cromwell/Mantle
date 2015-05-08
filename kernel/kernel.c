@@ -33,7 +33,7 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     gdt_init();
 
     /* Get Kernel size and CPU vendor id */
-    char* size = itoa(((uint32_t) &kernel_size) / 1024);
+    uint32_t size = ((uint32_t) &kernel_size) / 1024;
     char id[13] = {0};
     cpuid_vendor(id);
 
@@ -41,7 +41,7 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_printf(FG_WHITE, "Vendor_id: %s\n", id);
 
     debug_console_write(file, file_l);
-    console_printf(FG_WHITE, "Kernel size: %sKB\n", size);
+    console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
 
     /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {
