@@ -14,11 +14,18 @@
 #define CONVERT_DOWN(number) (number) * CONVERT_NUM
 
 #define MMAP_AVAILABLE      1           /* Memory available for use */
-#define MMAP_KERNEL_LENGTH  16777216    /* "Allocated" length for the kernel binary (16MB) */
 
 /* Multiboot information structures */
 static struct MultibootInfo* info;
 static struct MultibootMmap* mmap;
+
+static struct MultibootMmap* kernel_region; /* A pointer to the available mmap region the kerne lis within */
+static struct MultibootMmap kernel = {
+    .size = 24,
+    .base_addr = 0x01000000,    /* The address the kernel is loaded at */
+    .length = 16777216,         /* "Allocated" length for the kernel binary (16MB) */
+    .type = 2                   /* This area is reserved */
+};
 
 /*
  * Initializes all applicable structures from information passed in from the Bootloader.
@@ -36,11 +43,9 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
         for (size_t i = 0; i < ents; i++) {
             /* If the kernel region fits in the first available region */
             if (mmap[i].type == MMAP_AVAILABLE &&
-                mmap[i].length >= MMAP_KERNEL_LENGTH) {
-
-                /* Create a Memory hole */
-                mmap[i].base_addr += MMAP_KERNEL_LENGTH;
-                mmap[i].length -= MMAP_KERNEL_LENGTH;
+                mmap[i].length >= kernel.length) {
+                /* Bookmark for later */
+                kernel_region = mmap + (i * sizeof(struct MultibootMmap));
                 break;
             }
         }
