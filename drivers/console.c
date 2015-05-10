@@ -122,8 +122,21 @@ size_t console_printf(uint8_t attribute, char* format, ...) {
             /* Increment again for tag character */
             char* tag = format+1;
             char* s = NULL;
+            char b = 0;
 
             switch (*tag) {
+                case 'c':
+                    /* Character */
+                    b = va_arg(arguments, int32_t);
+                    c += console_write(&b, 1, attribute);
+                    format++;
+                    break;
+                case 'd':
+                    /* Signed 32-bit Integer */
+                    s = itoa(va_arg(arguments, int32_t));
+                    c += console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
                 case 's':
                     /* String */
                     s = va_arg(arguments, char*);

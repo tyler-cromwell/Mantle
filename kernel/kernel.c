@@ -47,7 +47,6 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     else if (!strncmp(id, VENDOR_AMD, strlen(id)))
         console_printf(FG_RED_L, "%s\n", id);
 
-
     debug_console_write(file, file_l);
     console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
 
