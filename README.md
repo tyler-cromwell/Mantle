@@ -23,10 +23,10 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - Data types only in forward declarations (`strncpy(char*, char*, size_t)`).
 
 ## Toolchain
-- `Makefile` - This Makefile is used to build the kernel and test it. Rules are as follows:
+- `Makefile` - This Makefile is used to build the kernel and test it.
   - `make` - Builds the kernel image file.
   - `make iso` - Builds an iso image with GRUB as the bootloader.
-  - `make usb` - Burns the iso image to the given device file (Makefile variable "DEV").
+  - `make burn` - Burns the iso image to the given device file.
   - `make qemu` - Boots the kernel directly under QEMU.
   - `make qemu-iso` - Boots the iso image under QEMU.
   - `make clean` - Deletes all object files and the kernel image file.

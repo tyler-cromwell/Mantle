@@ -12,6 +12,9 @@ LDFLAGS = -m elf_i386 -T
 # Debugging options
 CPPFLAGS += -D__file=\"$(<F)\"
 
+# Block device to burn ISO to
+BDEV = 
+
 # Assembly source files
 ASM_SRC = $(shell find . -name *.asm)
 ASM_OBJ = $(ASM_SRC:%.asm=%.o)
@@ -53,8 +56,8 @@ iso: all
 	rm -rf isodir/
 
 .PHONY: usb
-usb: iso
-	dd if=$(BIN).iso of=$(DEV)
+burn: iso
+	dd if=$(BIN).iso of=$(BDEV)
 
 .PHONY: qemu
 qemu: all
