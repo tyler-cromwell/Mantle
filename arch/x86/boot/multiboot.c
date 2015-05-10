@@ -60,7 +60,7 @@ void multiboot_dump(void) {
     if (info->flags & MULTIBOOT_BOOTLOADER) {
         debug_console_write(file, file_l);
         console_printf(FG_WHITE, "Booted via: ");
-        console_printf(FG_BROWN_L, "%s\n", info->boot_loader_name);
+        console_printf(FG_BROWN, "%s\n", info->boot_loader_name);
     }
 
     /* Dump number of boot modules */
