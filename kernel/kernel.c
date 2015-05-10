@@ -10,6 +10,9 @@
     #define file_l 12
 #endif
 
+#define VENDOR_INTEL    "GenuineIntel"
+#define VENDOR_AMD      "AuthenticAMD"
+
 /* Linker Script Symbol - Kernel size string */
 extern char* kernel_size;
 
@@ -38,7 +41,12 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     cpuid_vendor(id);
 
     debug_console_write(file, file_l);
-    console_printf(FG_WHITE, "Vendor_id: %s\n", id);
+    console_printf(FG_WHITE, "Vendor_id: ");
+    if (!strncmp(id, VENDOR_INTEL, strlen(id)))
+        console_printf(FG_CYAN_L, "%s\n", id);
+    else if (!strncmp(id, VENDOR_AMD, strlen(id)))
+        console_printf(FG_RED_L, "%s\n", id);
+
 
     debug_console_write(file, file_l);
     console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
