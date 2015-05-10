@@ -8,11 +8,6 @@
 #include <kernel/string.h>
 #include <x86/multiboot.h>
 
-#ifdef __file
-    #define file "["__file"]: "
-    #define file_l 15
-#endif
-
 /* Macros for converting byte metrics */
 #define CONVERT_NUM 1024
 #define CONVERT_UP(number) (number) / CONVERT_NUM
@@ -58,24 +53,20 @@ void multiboot_init(struct MultibootInfo* mbinfo) {
 void multiboot_dump(void) {
     /* Dump the Bootloader name */
     if (info->flags & MULTIBOOT_BOOTLOADER) {
-        debug_console_write(file, file_l);
         console_printf(FG_WHITE, "Booted via: ");
-        console_printf(FG_BROWN, "%s\n", info->boot_loader_name);
+        console_printf(FG_GREY_L, "%s\n", info->boot_loader_name);
     }
 
     /* Dump number of boot modules */
     if (info->flags & MULTIBOOT_MODULES) {
-        debug_console_write(file, file_l);
         console_printf(FG_WHITE, "Number of boot modules: %u\n", info->mods_count);
     }
 
     /* Dump the amount of Lower and Upper Memory */
     if (info->flags & MULTIBOOT_MEMORY) {
-        debug_console_write(file, file_l);
         console_printf(FG_WHITE, "Lower Memory: %uKB\n", info->mem_lower);
 
         uint32_t upper = info->mem_upper;
-        debug_console_write(file, file_l);
         if (upper >= 1024)
             console_printf(FG_WHITE, "Upper Memory: %uMB\n", (upper / 1024));
         else
@@ -84,14 +75,11 @@ void multiboot_dump(void) {
 
     /* Dump the Memory Map */
     if (info->flags & MULTIBOOT_MMAP) {
-        debug_console_write(file, file_l);
         console_printf(FG_WHITE, "Memory Map:\n");
 
         size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
 
         for (size_t i = 0; i < ents; i++) {
-            debug_console_write(file, file_l);
-
             /* Region Base Address */
             uint32_t n = CONVERT_UP(mmap[i].base_addr);
             if (n >= CONVERT_NUM) {

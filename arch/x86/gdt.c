@@ -6,11 +6,6 @@
 #include <drivers/console.h>
 #include <x86/x86.h>
 
-#ifdef __file
-    #define file "["__file"]: "
-    #define file_l 9
-#endif
-
 /* (Information taken from osdev.org)
  * Access Byte:
  * | 7  | 6   5 | 4 | 3  | 2  | 1  | 0  |
@@ -104,6 +99,5 @@ void gdt_init(void) {
 
     gdt_load(gdtr);
 
-    debug_console_write(file, file_l);
     console_printf(FG_WHITE, "GDT Initialized\n");
 }

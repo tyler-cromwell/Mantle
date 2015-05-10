@@ -5,11 +5,6 @@
 #include <x86/multiboot.h>
 #include <x86/x86.h>
 
-#ifdef __file
-    #define file "["__file"]: "
-    #define file_l 12
-#endif
-
 #define VENDOR_INTEL    "GenuineIntel"
 #define VENDOR_AMD      "AuthenticAMD"
 
@@ -27,9 +22,7 @@ extern char* kernel_size;
 void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_clear();
 
-    debug_console_write(file, file_l);
     console_printf(FG_GREEN, "Kernel Started\n");
-    debug_console_write(file, file_l);
     console_printf(FG_BLUE_L, STRING"\n");
 
     /* Initialize the Global Descriptor Table */
@@ -40,14 +33,12 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
     char id[13] = {0};
     cpuid_vendor(id);
 
-    debug_console_write(file, file_l);
     console_printf(FG_WHITE, "Vendor_id: ");
     if (!strncmp(id, VENDOR_INTEL, strlen(id)))
         console_printf(FG_CYAN_L, "%s\n", id);
     else if (!strncmp(id, VENDOR_AMD, strlen(id)))
         console_printf(FG_RED_L, "%s\n", id);
 
-    debug_console_write(file, file_l);
     console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
 
     /* Was the kernel booted by a Multiboot bootloader? */
@@ -56,7 +47,6 @@ void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
         multiboot_dump();
     }
 
-    debug_console_write(file, file_l);
     console_printf(FG_RED, "System halted");
     return; /* Halt the system */
 }

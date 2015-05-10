@@ -10,7 +10,7 @@ CFLAGS = -nostdlib -Wall -Werror -Wno-unused-command-line-argument -pedantic -m3
 LDFLAGS = -m elf_i386 -T
 
 # Debugging options
-CPPFLAGS += -D__file=\"$(<F)\"
+CPPFLAGS += 
 
 # Block device to burn ISO to
 BDEV = 
