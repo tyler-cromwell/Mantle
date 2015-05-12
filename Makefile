@@ -1,3 +1,8 @@
+# Required variables
+ARCH =
+BDEV =
+BIN =
+
 # Programs for building
 LD = ld
 
@@ -11,9 +16,6 @@ ASM_OBJ = $(ASM_SRC:%.asm=%.o)
 # C source files
 C_SRC = $(shell find . -name *.c)
 C_OBJ = $(C_SRC:%.c=%.o)
-
-# Kernel image name
-BIN = ritchie_$(ARCH)_debug
 
 # Root directory
 ROOT = $(shell pwd)

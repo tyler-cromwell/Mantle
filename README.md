@@ -28,6 +28,10 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
   - `make iso` - Builds an iso image with GRUB as the bootloader.
   - `make burn` - Burns the iso image to the given device file.
   - `make clean` - Deletes all object files and the kernel image file.
+  - Variables - The variables MUST be set otherwise make will fail
+    1. `ARCH` - The architecture to build for (i.e. `x86`)
+    2. `BDEV` - The block device to burn the ISO image to (i.e. `/dev/sdc`)
+    3. `BIN` - The name of the kernel image (i.e. `ritchie_x86_debug`)
 - `link.ld` - Simple linker script that determines the physical address the kernel is loaded at during boot.
 - `grub.cfg` - Basic GRUB config file, tells GRUB to use Multiboot to load the kernel.
 
