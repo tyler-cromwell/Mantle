@@ -19,10 +19,6 @@ BIN = ritchie_$(ARCH)_debug
 ROOT = $(shell pwd)
 export ROOT
 
-# QEMU options
-QEMU = qemu-system-x86_64
-QEMUFLAGS = -monitor stdio -m 4G
-
 .PHONY: all
 all:
 ifeq ($(ARCH),x86)
@@ -50,14 +46,6 @@ iso: all
 .PHONY: usb
 burn: iso
 	dd if=$(BIN).iso of=$(BDEV)
-
-.PHONY: qemu
-qemu: all
-	$(QEMU) $(QEMUFLAGS) -kernel $(BIN)
-
-.PHONY: qemu-iso
-qemu-iso: iso
-	$(QEMU) $(QEMUFLAGS) $(BIN).iso
 
 .PHONY: clean
 clean:
