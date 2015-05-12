@@ -1,6 +1,7 @@
 # Important variables
 ARCH = $(shell head -1 make.conf | tail -1)
 BDEV = $(shell head -2 make.conf | tail -1)
+export ARCH
 
 # Programs for building
 LD = ld

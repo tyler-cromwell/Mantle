@@ -17,4 +17,11 @@ C_OBJ = $(C_SRC:%.c=%.o)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 .PHONY: all
-all: $(C_OBJ)
+all:
+ifeq ($(ARCH),x86)
+	CPPFLAGS += -D ARCH_X86
+	$(MAKE) x86
+endif
+
+.PHONY: x86
+x86: $(C_OBJ)

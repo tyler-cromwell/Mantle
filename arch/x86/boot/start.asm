@@ -5,7 +5,7 @@ global start
 global gdt_load
 
 ; External functions
-extern kernel
+extern kernel_x86
 
 section .text
     ; The Multiboot spec
@@ -40,7 +40,7 @@ start:
     ; Actually start the Kernel
     push ebx; Address of Multiboot information
     push eax; Location of Multiboot bootloader magic number
-    call kernel
+    call kernel_x86
     add esp, 8
 
     hlt; and catch fire

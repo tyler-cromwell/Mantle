@@ -2,11 +2,14 @@
 #include <drivers/console.h>
 #include <kernel/kernel.h>
 #include <kernel/string.h>
-#include <x86/multiboot.h>
-#include <x86/x86.h>
 
-#define VENDOR_INTEL    "GenuineIntel"
-#define VENDOR_AMD      "AuthenticAMD"
+#ifdef ARCH_X86
+    #include <x86/multiboot.h>
+    #include <x86/x86.h>
+
+    #define VENDOR_INTEL    "GenuineIntel"
+    #define VENDOR_AMD      "AuthenticAMD"
+#endif
 
 /* Linker Script Symbol - Kernel size string */
 extern char* kernel_size;
@@ -19,7 +22,7 @@ extern char* kernel_size;
  *   struct MultibootInfo* mbinfo:
  *       The physical memory address of the Multiboot information struct.
  */
-void kernel(uint32_t magic, struct MultibootInfo* mbinfo) {
+void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_clear();
 
     console_printf(FG_GREEN, "Kernel Started\n");
