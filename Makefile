@@ -1,3 +1,7 @@
+# Important variables
+ARCH = $(shell head -1 make.conf | tail -1)
+BDEV = $(shell head -2 make.conf | tail -1)
+
 # Programs for building
 LD = ld
 
@@ -18,7 +22,7 @@ export ROOT
 
 .PHONY: all
 all:
-ifeq ($(arch),x86)
+ifeq ($(ARCH),x86)
 	$(MAKE) x86
 endif
 
@@ -28,24 +32,24 @@ x86:
 	$(MAKE) -C arch/x86/boot/
 	$(MAKE) -C drivers/
 	$(MAKE) -C kernel/
-	$(LD) $(LDFLAGS) link.ld -o $(bin) $(ASM_OBJ) $(C_OBJ)
+	$(LD) $(LDFLAGS) link.ld -o ritchie $(ASM_OBJ) $(C_OBJ)
 
 .PHONY: iso
 iso: all
 	mkdir -p isodir
 	mkdir -p isodir/boot
-	cp $(bin) isodir/boot/$(bin)
+	cp ritchie isodir/boot/ritchie
 	mkdir -p isodir/boot/grub
 	cp grub.cfg isodir/boot/grub/grub.cfg
-	grub2-mkrescue -o $(bin).iso isodir
+	grub2-mkrescue -o ritchie.iso isodir
 	rm -rf isodir/
 
 .PHONY: usb
 burn: iso
-	dd if=$(bin).iso of=$(bdev)
+	dd if=ritchie.iso of=$(BDEV)
 
 .PHONY: clean
 clean:
 	rm -rf $(ASM_OBJ) $(C_OBJ)
-	rm -rf $(bin)
-	rm -rf $(bin).iso
+	rm -rf ritchie
+	rm -rf ritchie.iso
