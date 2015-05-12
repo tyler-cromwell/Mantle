@@ -14,6 +14,8 @@
 /* Linker Script Symbol - Kernel size string */
 extern char* kernel_size;
 
+
+#ifdef ARCH_X86
 /*
  * The main kernel function; this is where Ritchie begins operation.
  * The system will halt when/if this function returns.
@@ -53,3 +55,4 @@ void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_printf(FG_RED, "System halted");
     return; /* Halt the system */
 }
+#endif
