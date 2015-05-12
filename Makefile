@@ -4,15 +4,16 @@ LD = ld
 # Respective flags
 LDFLAGS = -m elf_i386 -T
 
-# Block device to burn ISO to
-BDEV = 
+# Assembly source files
+ASM_SRC = $(shell find . -name *.asm)
+ASM_OBJ = $(ASM_SRC:%.asm=%.o)
 
-# Object files
-OBJS = $(shell find . -name *.o)
-OBJS = $(OBJS:%.o=%.o)
+# C source files
+C_SRC = $(shell find . -name *.c)
+C_OBJ = $(C_SRC:%.c=%.o)
 
 # Kernel image name
-BIN = ritchie_debug
+BIN = ritchie_$(ARCH)_debug
 
 # Root directory
 ROOT = $(shell pwd)
@@ -22,13 +23,19 @@ export ROOT
 QEMU = qemu-system-x86_64
 QEMUFLAGS = -monitor stdio -m 4G
 
+.PHONY: all
+all:
+ifeq ($(ARCH),x86)
+	$(MAKE) x86
+endif
+
 .PHONY: x86
 x86:
 	$(MAKE) -C arch/x86/
 	$(MAKE) -C arch/x86/boot/
 	$(MAKE) -C drivers/
 	$(MAKE) -C kernel/
-	$(LD) $(LDFLAGS) link.ld -o $(BIN) $(OBJS)
+	$(LD) $(LDFLAGS) link.ld -o $(BIN) $(ASM_OBJ) $(C_OBJ)
 
 .PHONY: iso
 iso: all
@@ -54,6 +61,6 @@ qemu-iso: iso
 
 .PHONY: clean
 clean:
-	rm -rf $(OBJS)
+	rm -rf $(ASM_OBJ) $(C_OBJ)
 	rm -rf $(BIN)
 	rm -rf $(BIN).iso
