@@ -24,11 +24,11 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 
 ## Toolchain
 - `Makefile` - This Makefile is used to build the kernel and test it.
-  - `make` - Builds the kernel image file.
-  - `make iso` - Builds an iso image with GRUB as the bootloader.
-  - `make burn` - Burns the iso image to the given device file.
-  - `make clean` - Deletes all object files and the kernel image file.
-  - Variables - The variables MUST be set otherwise make will fail
+  - `make` - Builds the kernel image file (requires `arch`, `bin`)
+  - `make iso` - Builds an iso image with GRUB as the bootloader (requires (`arch`, `bin`)
+  - `make burn` - Burns the iso image to the given device file (requires `arch`, `bdev`, `bin`).
+  - `make clean` - Deletes all object files and the kernel image file (requires `bin`).
+  - Variables - The variables MUST be set otherwise make will fail.
     1. `ARCH` - The architecture to build for (i.e. `x86`)
     2. `BDEV` - The block device to burn the ISO image to (i.e. `/dev/sdc`)
     3. `BIN` - The name of the kernel image (i.e. `ritchie_x86_debug`)

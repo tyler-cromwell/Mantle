@@ -1,8 +1,3 @@
-# Required variables
-ARCH =
-BDEV =
-BIN =
-
 # Programs for building
 LD = ld
 
@@ -23,7 +18,7 @@ export ROOT
 
 .PHONY: all
 all:
-ifeq ($(ARCH),x86)
+ifeq ($(arch),x86)
 	$(MAKE) x86
 endif
 
@@ -33,24 +28,24 @@ x86:
 	$(MAKE) -C arch/x86/boot/
 	$(MAKE) -C drivers/
 	$(MAKE) -C kernel/
-	$(LD) $(LDFLAGS) link.ld -o $(BIN) $(ASM_OBJ) $(C_OBJ)
+	$(LD) $(LDFLAGS) link.ld -o $(bin) $(ASM_OBJ) $(C_OBJ)
 
 .PHONY: iso
 iso: all
 	mkdir -p isodir
 	mkdir -p isodir/boot
-	cp $(BIN) isodir/boot/$(BIN)
+	cp $(bin) isodir/boot/$(bin)
 	mkdir -p isodir/boot/grub
 	cp grub.cfg isodir/boot/grub/grub.cfg
-	grub2-mkrescue -o $(BIN).iso isodir
+	grub2-mkrescue -o $(bin).iso isodir
 	rm -rf isodir/
 
 .PHONY: usb
 burn: iso
-	dd if=$(BIN).iso of=$(BDEV)
+	dd if=$(bin).iso of=$(bdev)
 
 .PHONY: clean
 clean:
 	rm -rf $(ASM_OBJ) $(C_OBJ)
-	rm -rf $(BIN)
-	rm -rf $(BIN).iso
+	rm -rf $(bin)
+	rm -rf $(bin).iso
