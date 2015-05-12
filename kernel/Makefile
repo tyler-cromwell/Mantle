@@ -10,18 +10,17 @@ CPPFLAGS +=
 
 # C source files
 C_SRC = $(shell ls *.c)
-C_OBJ = $(C_SRC:%.c=%.o)
+C_OBJ_X86 = $(C_SRC:%.c=%.o)
 
 # Rule for compiling .c files
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) -D ARCH_X86 $(CFLAGS) -c $< -o $@
 
 .PHONY: all
 all:
 ifeq ($(ARCH),x86)
-	CPPFLAGS += -D ARCH_X86
 	$(MAKE) x86
 endif
 
 .PHONY: x86
-x86: $(C_OBJ)
+x86: $(C_OBJ_X86)
