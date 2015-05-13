@@ -23,11 +23,11 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - Data types only in forward declarations (`strncpy(char*, char*, size_t)`).
 
 ## Toolchain
-- `Makefile` - This Makefile is used to build the kernel and test it.
-  - `make` - Builds the kernel image file.
-  - `make iso` - Builds an iso image with GRUB as the bootloader.
-  - `make burn` - Burns the iso image to the given device file.
-  - `make clean` - Deletes all object files and the kernel image file.
+- `Makefile` - This [GNU] Makefile is used to build the kernel and test it.
+  - `[g]make` - Builds the kernel image file.
+  - `[g]make iso` - Builds an iso image with GRUB as the bootloader.
+  - `[g]make burn` - Burns the iso image to the given device file.
+  - `[g]make clean` - Deletes all object files and the kernel image/iso file(s).
 - `make.conf` - These variables MUST be set otherwise make will fail.
   - `ARCH` - Line 1: The architecture to build for (i.e. `x86`)
   - `BDEV` - Line 2: The block device to burn the ISO image to (i.e. `/dev/sdc`)
