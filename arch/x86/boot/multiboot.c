@@ -72,10 +72,11 @@ void multiboot_dump(void) {
         console_printf(FG_WHITE, "Lower Memory: %uKB\n", info->mem_lower);
 
         uint32_t upper = info->mem_upper;
-        if (upper >= 1024)
-            console_printf(FG_WHITE, "Upper Memory: %uMB\n", (upper / 1024));
-        else
-            console_printf(FG_WHITE, "Upper Memory: %uKB\n", upper);
+        if (upper >= CONVERT_NUM) {
+            upper /= CONVERT_NUM;
+            console_printf(FG_WHITE, "Upper Memory: %uMB\n", upper);
+        }
+        else console_printf(FG_WHITE, "Upper Memory: %uKB\n", upper);
     }
 
     /* Dump the Memory Map */
