@@ -14,7 +14,6 @@
 /* Linker Script Symbol - Kernel size string */
 extern char* kernel_size;
 
-
 #ifdef ARCH_X86
 /*
  * The main kernel function; this is where Ritchie begins operation.
@@ -26,8 +25,6 @@ extern char* kernel_size;
  */
 void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_clear();
-
-    console_printf(FG_GREEN, "Kernel Started\n");
     console_printf(FG_BLUE_L, STRING"\n");
 
     /* Initialize the Global Descriptor Table */
@@ -38,13 +35,12 @@ void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
     char id[13] = {0};
     cpuid_vendor(id);
 
+    console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
     console_printf(FG_WHITE, "Vendor_id: ");
     if (!strncmp(id, VENDOR_INTEL, strlen(id)))
         console_printf(FG_CYAN_L, "%s\n", id);
     else if (!strncmp(id, VENDOR_AMD, strlen(id)))
         console_printf(FG_RED_L, "%s\n", id);
-
-    console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
 
     /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {
