@@ -13,7 +13,7 @@
 #define CONVERT_UP(number) (number) / CONVERT_NUM
 #define CONVERT_DOWN(number) (number) * CONVERT_NUM
 
-#define MMAP_AVAILABLE      1           /* Memory available for use */
+#define MMAP_AVAILABLE  1   /* Memory available for use */
 
 /* Multiboot information structures */
 static struct MultibootInfo* info;
