@@ -28,10 +28,20 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
   - `[g]make iso` - Builds an iso image with GRUB as the bootloader.
   - `[g]make burn` - Burns the iso image to the given device file.
   - `[g]make clean` - Deletes all object files and the kernel image/iso file(s).
-- `make.conf` - These variables MUST be set otherwise make will fail.
-  - `ARCH` - Line 1: The architecture to build for (i.e. `x86`)
-  - `BDEV` - Line 2: The block device to burn the ISO image to (i.e. `/dev/sdc`)
 - `link.ld` - Simple linker script that determines the physical address the kernel is loaded at during boot.
 - `grub.cfg` - Basic GRUB config file, tells GRUB to use Multiboot to load the kernel.
+- 'configure.py' - Python 3 script that updates the following files:
+  - `config.make`, `grub.cfg`, and `version.h`.
+- 'ritchie.conf' - Project configuration file, contains various options.
+  - `Name`: The project name.
+  - `Version`: The version string (i.e. `v0.0`).
+  - `Codename`: The codename (i.e. `Make Moves Son`).
+  - `Arch`: The architecture to build for (i.e. `x86`).
+  - `Image`: The kernel binary image (i.e. `ritchie_debug`).
+  - `Device`: The block device to burn the iso file to (i.e. `/dev/sdc`).
+- 'config.make' - File containing Makefile variables.
+  - `ARCH`: The architecture to build for (i.e. `x86`).
+  - `IMAGE`: The kernel binary image (i.e. `ritchie_debug`).
+  - `DEVICE`: The block device to burn the iso file to (i.e. `/dev/sdc`).
 
 [dmr]: http://en.wikipedia.org/wiki/Dennis_Ritchie

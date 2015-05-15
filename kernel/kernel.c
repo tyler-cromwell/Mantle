@@ -1,7 +1,7 @@
 /* Kernel Headers */
 #include <drivers/console.h>
-#include <kernel/kernel.h>
 #include <kernel/string.h>
+#include <kernel/version.h>
 
 #ifdef ARCH_X86
     #include <x86/multiboot.h>

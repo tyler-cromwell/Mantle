@@ -1,6 +1,5 @@
 # Important variables
-ARCH = $(shell head -1 make.conf | tail -1)
-BDEV = $(shell head -2 make.conf | tail -1)
+include config.make
 export ARCH
 
 # Programs for building
@@ -25,32 +24,36 @@ export ROOT
 all:
 ifeq ($(ARCH),x86)
 	$(MAKE) x86
+else
+	$(info *** Please specify an architecture to build for.)
+	$(info *** Perhaps run './configure.py'?)
 endif
 
 .PHONY: x86
 x86:
+	$(eval ARCH=x86)
 	$(MAKE) -C arch/x86/
 	$(MAKE) -C arch/x86/boot/
 	$(MAKE) -C drivers/
 	$(MAKE) -C kernel/
-	$(LD) $(LDFLAGS) link.ld -o ritchie $(ASM_OBJ) $(C_OBJ)
+	$(LD) $(LDFLAGS) link.ld -o $(IMAGE) $(ASM_OBJ) $(C_OBJ)
 
 .PHONY: iso
 iso: all
 	mkdir -p isodir
 	mkdir -p isodir/boot
-	cp ritchie isodir/boot/ritchie
+	cp $(IMAGE) isodir/boot/$(IMAGE)
 	mkdir -p isodir/boot/grub
 	cp grub.cfg isodir/boot/grub/grub.cfg
-	grub2-mkrescue -o ritchie.iso isodir
+	grub2-mkrescue -o $(IMAGE).iso isodir
 	rm -rf isodir/
 
 .PHONY: usb
 burn: iso
-	dd if=ritchie.iso of=$(BDEV)
+	dd if=$(IMAGE).iso of=$(DEVICE)
 
 .PHONY: clean
 clean:
 	rm -rf $(ASM_OBJ) $(C_OBJ)
-	rm -rf ritchie
-	rm -rf ritchie.iso
+	rm -rf $(IMAGE)
+	rm -rf $(IMAGE).iso

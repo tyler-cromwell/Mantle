@@ -1,9 +1,9 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-#define PROJECT "Ritchie"
-#define VERSION "v0.0"
-#define CODENAME "Make Moves Son"
+#define PROJECT "<NAME>"
+#define VERSION "<VERSION>"
+#define CODENAME "<CODENAME>"
 #define STRING PROJECT" "VERSION" ("CODENAME")"
 
 #endif

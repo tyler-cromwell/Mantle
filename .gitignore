@@ -3,7 +3,6 @@
 *.txt
 *.iso
 ritchie*
-
-make.conf
+!ritchie.conf
 
 isodir/
