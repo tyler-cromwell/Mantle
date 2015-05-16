@@ -133,7 +133,7 @@ size_t console_printf(uint8_t attribute, char* format, ...) {
                     break;
                 case 'd':
                     /* Signed 32-bit Integer */
-                    s = itoa(va_arg(arguments, int32_t));
+                    s = itoa(va_arg(arguments, int32_t), 10);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
@@ -145,7 +145,7 @@ size_t console_printf(uint8_t attribute, char* format, ...) {
                     break;
                 case 'u':
                     /* Unsigned 32-bit Integer */
-                    s = itoa(va_arg(arguments, uint32_t));
+                    s = itoa(va_arg(arguments, uint32_t), 10);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;

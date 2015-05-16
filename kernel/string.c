@@ -12,18 +12,19 @@
  * Returns:
  *   The string representation of number.
  */
-char* itoa(long number) {
-    static char buffer[12];
+char* itoa(int32_t number, int32_t base) {
+    static char buffer[12] = {0};
+    
     char* string = buffer + 11;
     if (number > 0) {
         while (number != 0) {
-            *--string = 48 + (number % 10);
-            number /= 10;
+            *--string = 48 + (number % base);
+            number /= base;
         }
     } else if (number < 0) {
         while (number != 0) {
-            *--string = 48 - (number % 10);
-            number /= 10;
+            *--string = base - (number % base);
+            number /= base;
         }
         *--string = '-';
     } else {
