@@ -23,7 +23,7 @@ char* itoa(int32_t number, int32_t base) {
         }
     } else if (number < 0) {
         while (number != 0) {
-            *--string = base - (number % base);
+            *--string = 48 - (number % base);
             number /= base;
         }
         *--string = '-';
