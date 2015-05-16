@@ -14,8 +14,8 @@
  */
 char* itoa(int32_t number, int32_t base) {
     static char buffer[12] = {0};
-    
     char* string = buffer + 11;
+
     if (number > 0) {
         while (number != 0) {
             *--string = 48 + (number % base);

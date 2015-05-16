@@ -137,6 +137,13 @@ size_t console_printf(uint8_t attribute, char* format, ...) {
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
+                case 'o':
+                    /* Unsigned Octal Integer */
+                    s = itoa(va_arg(arguments, uint32_t), 8);
+                    c += console_write("0o", 2, attribute);
+                    c += console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
                 case 's':
                     /* String */
                     s = va_arg(arguments, char*);
@@ -146,6 +153,14 @@ size_t console_printf(uint8_t attribute, char* format, ...) {
                 case 'u':
                     /* Unsigned 32-bit Integer */
                     s = itoa(va_arg(arguments, uint32_t), 10);
+                    c += console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
+                case 'x':
+                case 'X':
+                    /* Unsigned Hexadecimal Integer */
+                    s = itoa(va_arg(arguments, uint32_t), 16);
+                    c += console_write("0x", 2, attribute);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
