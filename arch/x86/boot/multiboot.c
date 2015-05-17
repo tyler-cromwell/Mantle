@@ -89,20 +89,12 @@ void multiboot_dump(void) {
             console_printf(FG_WHITE, "[%d]: ", i);
 
             /* Region Base Address */
-            uint32_t n = CONVERT_UP(mmap[i].base_addr);
-            if (n >= CONVERT_NUM) {
-                n = CONVERT_UP(n);
-                console_printf(FG_WHITE, "%uMB - ", n);
-            }
-            else console_printf(FG_WHITE, "%uKB - ", n);
+            uint32_t n = mmap[i].base_addr;
+            console_printf(FG_WHITE, "%x - ", n);
 
             /* Region Ending Address */
-            n = CONVERT_UP(mmap[i].base_addr + mmap[i].length);
-            if (n >= CONVERT_NUM) {
-                n = CONVERT_UP(n);
-                console_printf(FG_WHITE, "%uMB (", n);
-            }
-            else console_printf(FG_WHITE, "%uKB (", n);
+            n = mmap[i].base_addr + mmap[i].length;
+            console_printf(FG_WHITE, "%x (", n);
 
             /* Region length */
             n = CONVERT_UP(mmap[i].length);
