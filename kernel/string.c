@@ -7,30 +7,39 @@
 
 /*
  * Creates the string representation of a number.
+ * DOES NOT HANDLE NEGATIVE NUMBERS.
  * Argument:
  *   long number: The number to be represented.
  * Returns:
  *   The string representation of number.
  */
-char* itoa(int32_t number, int32_t base) {
-    static char buffer[12] = {0};
-    char* string = buffer + 11;
+char* itoa(uint32_t number, uint32_t base) {
+    static char buffer[11] = {0};
+    char* string = buffer + 10;
+    uint8_t c = 0;
 
-    if (number > 0) {
-        while (number != 0) {
-            *--string = 48 + (number % base);
-            number /= base;
-        }
-    } else if (number < 0) {
-        while (number != 0) {
-            *--string = 48 - (number % base);
-            number /= base;
-        }
-        *--string = '-';
-    } else {
+    /* If number is zero, just stop */
+    if (number == 0) {
         buffer[0] = 48;
         string = buffer;
+        c++;
     }
+    /* Convert, up to a base of 16 */
+    else {
+        while (number != 0) {
+            *--string = "0123456789abcdef"[number % base];
+            number /= base;
+            c++;
+        }
+    }
+
+    /* Print leading zeros */
+    uint8_t d = 0;
+    if (base == 2) d = 32;
+    else if (base == 8) d = 11;
+    else if (base == 16) d = 8;
+    for (; c < d; c++) *--string = 48;
+
     return string;
 }
 
