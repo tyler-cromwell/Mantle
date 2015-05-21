@@ -83,13 +83,13 @@ extern void gdt_load(struct Gdtr);
  * Builds a Global Descriptor Table descriptor and writes it to the given 'index'.
  * The maximum number of entries is 8192.
  * Arguments:
- *   uint32_t index: Index in the GDT to write the entry to.
+ *   uint8_t index: Index in the GDT to write the entry to.
  *   uint32_t base: Descriptor base address.
  *   uint32_t limit: Descriptor limit.
  *   uint8_t access: Access byte.
  *   uint8_t gran: Granularity byte, contains the 4 'flags' and upper 4 'limit' bits.
  */
-static void gdt_write_descriptor(uint32_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
+static void gdt_write_descriptor(uint8_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
     struct GdtDescriptor descriptor = {
         .limit = limit & 0xffff,
         .base_low = base & 0xffff,
