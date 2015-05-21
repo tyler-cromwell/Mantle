@@ -19,6 +19,29 @@
 #ifndef X86_H
 #define X86_H
 
+#include <stdint.h>
+
+/*
+ * Read a byte from an I/O port.
+ * Arguments:
+ *   uint16_t port: The port to read from.
+ */
+static inline void inb(uint16_t port) {
+    uint8_t value;
+    __asm__ volatile ("inb %1, %0": "=a"(value): "Nd"(port));
+    return value;
+}
+
+/*
+ * Write a byte to an I/O port.
+ * Arguments:
+ *   uint16_t port: The port to write to.
+ *   uint8_t value: The value to write.
+ */
+static inline void outb(uint16_t port, uint8_t value) {
+    __asm__ volatile ("outb %0, %1": : "a"(value), "Nd"(port));
+}
+
 extern void cpuid_vendor(char*);
 
 extern void gdt_init(void);
