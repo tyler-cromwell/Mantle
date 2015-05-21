@@ -20,6 +20,7 @@ bits 32
 ; Global routines
 global start
 global gdt_load
+global idt_load
 
 ; External functions
 extern kernel_x86
@@ -44,6 +45,12 @@ load:
     mov fs, ax
     mov gs, ax
     mov ss, ax
+    ret
+
+idt_load:
+    mov edx, [esp+4]
+    lidt [edx]
+    ;sti
     ret
 
 ; Entry point into the kernel binary

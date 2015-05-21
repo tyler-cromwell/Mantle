@@ -19,8 +19,14 @@
 #ifndef X86_H
 #define X86_H
 
+/* CPUID */
 extern void cpuid_vendor(char*);
 
+/* Global Descriptor Table */
 extern void gdt_init(void);
+
+/* Interrupt Descriptor Table */
+extern void idt_set_gate(uint8_t, uint32_t, uint16_t, uint8_t);
+extern void idt_init(void);
 
 #endif
