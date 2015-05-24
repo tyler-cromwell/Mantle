@@ -21,7 +21,7 @@
 #include <stdint.h>
 
 /*
- * Obtains the CPU vendor string using CPUID.
+ * Obtains the CPU vendor string.
  * Argument:
  *   char* id: Pointer to the location to save the vendor id.
  */
@@ -42,4 +42,21 @@ void cpuid_vendor(char* id) {
         id[i+4] = edx >> (i * 8);
         id[i+8] = ecx >> (i * 8);
     }
+}
+
+/*
+ * Obtains the number of processor cores.
+ * Returns:
+ *   The number of cores.
+ */
+uint32_t cpuid_cores(void) {
+    uint32_t ebx = 0;
+
+    /* Pass '0x1' into register A, then run CPUID */
+    __asm__ volatile ("cpuid": : "a" (0x1));
+
+    /* Get the value of register B */
+    __asm__ volatile ("": "=b" (ebx));
+
+    return (ebx >> 16) & 0xff;
 }

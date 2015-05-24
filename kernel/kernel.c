@@ -48,17 +48,24 @@ void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
     /* Initialize the Global Descriptor Table */
     gdt_init();
 
-    /* Get Kernel size and CPU vendor id */
+    /* Get Kernel size */
     uint32_t size = ((uint32_t) &kernel_size) / 1024;
+    console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
+
+    /* Get and print number of cores */
+    console_printf(FG_WHITE, "Cores: %u\n", cpuid_cores());
+
+    /* Get CPU vendor name */
     char id[13] = {0};
     cpuid_vendor(id);
-
-    console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
     console_printf(FG_WHITE, "Vendor_id: ");
-    if (!strncmp(id, VENDOR_INTEL, strlen(id)))
+
+    /* Print CPU vendor name */
+    if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
         console_printf(FG_CYAN_L, "%s\n", id);
-    else if (!strncmp(id, VENDOR_AMD, strlen(id)))
+    } else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
         console_printf(FG_RED_L, "%s\n", id);
+    }
 
     /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {
