@@ -20,7 +20,7 @@ CC = clang
 
 # Respective flags
 CPPFLAGS = -I $(ROOT)/include -I $(ROOT)/arch/include
-CFLAGS = -nostdlib -Wall -Werror -Wno-unused-command-line-argument -pedantic -m32 -O0
+CFLAGS = -nostdlib -Wall -Werror -Wno-unused-function -Wno-unused-command-line-argument -pedantic -m32 -O0
 
 # Debugging options
 CPPFLAGS +=
