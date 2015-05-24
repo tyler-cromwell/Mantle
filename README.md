@@ -31,7 +31,7 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `link.ld` - Simple linker script that determines the physical address the kernel is loaded at during boot.
 - `grub.cfg` - Basic GRUB config file, tells GRUB to use Multiboot to load the kernel.
 - `configure.py` - Python 3 script that updates the following files:
-  - `config.make`, `grub.cfg`, and `version.h`.
+  - `make.conf`, `grub.cfg`, and `version.h`.
 - `ritchie.conf` - Project configuration file, contains various options.
   - `Name`: The project name.
   - `Version`: The version string (i.e. `v0.0`).
@@ -39,7 +39,7 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
   - `Arch`: The architecture to build for (i.e. `x86`).
   - `Image`: The kernel binary image (i.e. `ritchie_debug`).
   - `Device`: The block device to burn the iso file to (i.e. `/dev/sdc`).
-- `config.make` - File containing Makefile variables.
+- `make.conf` - File containing Makefile variables.
   - `ARCH`: The architecture to build for (i.e. `x86`).
   - `IMAGE`: The kernel binary image (i.e. `ritchie_debug`).
   - `DEVICE`: The block device to burn the iso file to (i.e. `/dev/sdc`).

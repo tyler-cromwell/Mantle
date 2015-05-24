@@ -16,7 +16,7 @@
 #  If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 
 # Important variables
-include config.make
+include make.conf
 export ARCH
 
 # Programs for building

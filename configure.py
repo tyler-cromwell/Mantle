@@ -77,9 +77,9 @@ if __name__ == "__main__":
     update(VERSION_H, 'CODENAME', r'CODENAME \".*\"', 'CODENAME \"'+ codename +'\"')
     print('DONE')
 
-    # Update config.make file
-    print('Updating \'config.make\'... ', end='')
-    update('config.make', 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
-    update('config.make', 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image)
-    update('config.make', 'DEVICE', r'DEVICE = .*', 'DEVICE = '+ device)
+    # Update make.conf file
+    print('Updating \'make.conf\'... ', end='')
+    update('make.conf', 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
+    update('make.conf', 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image)
+    update('make.conf', 'DEVICE', r'DEVICE = .*', 'DEVICE = '+ device)
     print('DONE')
