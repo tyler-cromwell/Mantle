@@ -19,9 +19,11 @@
 """
 
 import configparser
+import os
 import re
+import sys
 
-VERSION_H = 'include/kernel/version.h'
+FILES = ['grub.cfg', 'include/kernel/version.h', 'make.conf', 'ritchie.conf']
 
 """
 Replaces the matched contents of a file with the given string.
@@ -34,52 +36,65 @@ Arguments:
 def update(filename, search, pattern, string):
     lines = []
 
-    # Read in the contents
+    """ Read in the contents """
     with open(filename, 'r') as conf:
         lines = conf.readlines()
 
-    # Find the line to edit
+    """ Find the line to edit """
     for n, line in enumerate(open(filename)):
         result = re.search(search, line)
 
-        # Replace the matched pattern
+        """ Replace the matched pattern """
         if result != None:
             new = re.sub(pattern, string, line)
             lines[n] = new
 
-    # Writeback
+    """ Writeback """
     with open(filename, 'w') as conf:
         conf.writelines(lines)
+
+"""
+Simply runs 'git checkout' on the configuration files
+to restore them to their template form.
+
+This is I don't have to type it myself every time.
+"""
+def clean():
+    for f in FILES:
+        os.system('git checkout '+f)
 
 """
 The main function of this script.
 """
 if __name__ == "__main__":
-    config = configparser.ConfigParser()
-    config.read('ritchie.conf')
+    if sys.argv[1] == 'clean':
+        clean()
+    else:
+        config = configparser.ConfigParser()
+        config.read(FILES[3])
 
-    # Read in the options
-    (name, version, codename) = [pair[1] for pair in config.items('Version')]
-    (arch, image, device) = [pair[1] for pair in config.items('Build')]
+        """ Read in the options """
+        (name, version, codename) = [pair[1] for pair in config.items('Version')]
+        (arch, image, device) = [pair[1] for pair in config.items('Build')]
 
-    version_string = "\""+ name +" "+ version +" ("+codename+")\""
+        version_string = "\""+ name +" "+ version +" ("+codename+")\""
 
-    # Update the GRUB configuration file
-    print('Updating \'grub.cfg\'... ', end='')
-    update('grub.cfg', 'menuentry', r'\".*\"', version_string)
-    update('grub.cfg', 'multiboot', r'/boot/.*$', '/boot/'+image)
-    print('DONE')
+        """ Update the GRUB configuration file """
+        print('Updating \''+ FILES[0] +'\'... ', end='')
+        update(FILES[0], 'menuentry', r'\".*\"', version_string)
+        update(FILES[0], 'multiboot', r'/boot/.*$', '/boot/'+image)
+        print('DONE')
 
-    # Update kernel version header file
-    print('Updating \''+ VERSION_H +'\'... ', end='')
-    update(VERSION_H, 'PROJECT', r'PROJECT \".*\"', 'PROJECT \"'+ name +'\"')
-    update(VERSION_H, 'VERSION', r'VERSION \".*\"', 'VERSION \"'+ version +'\"')
-    update(VERSION_H, 'CODENAME', r'CODENAME \".*\"', 'CODENAME \"'+ codename +'\"')
-    print('DONE')
+        """ Update kernel version header file """
+        print('Updating \''+ FILES[1] +'\'... ', end='')
+        update(FILES[1], 'PROJECT', r'PROJECT \".*\"', 'PROJECT \"'+ name +'\"')
+        update(FILES[1], 'VERSION', r'VERSION \".*\"', 'VERSION \"'+ version +'\"')
+        update(FILES[1], 'CODENAME', r'CODENAME \".*\"', 'CODENAME \"'+ codename +'\"')
+        print('DONE')
 
-    # Update make.conf file
-    print('Updating \'make.conf\'... ', end='')
-    update('make.conf', 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
-    update('make.conf', 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image)
-    update('make.conf', 'DEVICE', r'DEVICE = .*', 'DEVICE = '+ device)
-    print('DONE')
+        """ Update make.conf file """
+        print('Updating \''+ FILES[2] +'\'... ', end='')
+        update(FILES[2], 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
+        update(FILES[2], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image)
+        update(FILES[2], 'DEVICE', r'DEVICE = .*', 'DEVICE = '+ device)
+        print('DONE')

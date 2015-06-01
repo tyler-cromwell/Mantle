@@ -32,6 +32,7 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `grub.cfg` - Basic GRUB config file, tells GRUB to use Multiboot to load the kernel.
 - `configure.py` - Python 3 script that updates the following files:
   - `make.conf`, `grub.cfg`, and `version.h`.
+  - Running `./configure.py clean` will run `git checkout` on each file, including `ritchie.conf`.
 - `ritchie.conf` - Project configuration file, contains various options.
   - `Name`: The project name.
   - `Version`: The version string (i.e. `v0.0`).
