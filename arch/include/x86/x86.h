@@ -26,7 +26,7 @@ extern void cpuid_vendor(char*);
 extern void gdt_init(void);
 
 /* Interrupt Descriptor Table */
-extern void idt_set_gate(uint8_t, uint32_t, uint16_t, uint8_t);
 extern void idt_init(void);
+extern void idt_install_isrs(void);
 
 #endif
