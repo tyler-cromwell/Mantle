@@ -83,7 +83,7 @@ void idt_init(void) {
 }
 
 /*
- * Install the __ Interrupt Service Rountines.
+ * Installs the system Interrupt Service Rountines.
  */
 void idt_install_isrs(void) {
     idt_set_gate( 0, (unsigned)  isr0, 0x08, 0x8E); /* Divide by Zero */
@@ -106,7 +106,7 @@ void idt_install_isrs(void) {
 //  idt_set_gate(17, (unsigned) isr17, 0x08, 0x8E); /* ??? */
 //  idt_set_gate(18, (unsigned) isr18, 0x08, 0x8E); /* ??? */
 //  idt_set_gate(19, (unsigned) isr19, 0x08, 0x8E); /* ??? */
-//  idt_set_gate(20, (unsigned) isr20, 0x08, 0x8E); /* Reserved */
+//  idt_set_gate(20, (unsigned) isr20, 0x08, 0x8E); /* If INTEL, virt stuff, else Reserved */
 //  idt_set_gate(21, (unsigned) isr21, 0x08, 0x8E); /* Reserved */
 //  idt_set_gate(22, (unsigned) isr22, 0x08, 0x8E); /* Reserved */
 //  idt_set_gate(23, (unsigned) isr23, 0x08, 0x8E); /* Reserved */
