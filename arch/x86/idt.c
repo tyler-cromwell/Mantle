@@ -101,22 +101,10 @@ void idt_install_isrs(void) {
 //  idt_set_gate(12, (unsigned) isr12, 0x08, 0x8E); /* Stack Fault */
     idt_set_gate(13, (unsigned) isr13, 0x08, 0x8E); /* General Protect Violation */
 //  idt_set_gate(14, (unsigned) isr14, 0x08, 0x8E); /* Page Fault */
-//  idt_set_gate(15, (unsigned) isr15, 0x08, 0x8E); /* Reserved */
 //  idt_set_gate(16, (unsigned) isr16, 0x08, 0x8E); /* ??? */
 //  idt_set_gate(17, (unsigned) isr17, 0x08, 0x8E); /* ??? */
 //  idt_set_gate(18, (unsigned) isr18, 0x08, 0x8E); /* ??? */
 //  idt_set_gate(19, (unsigned) isr19, 0x08, 0x8E); /* ??? */
 //  idt_set_gate(20, (unsigned) isr20, 0x08, 0x8E); /* If INTEL, virt stuff, else Reserved */
-//  idt_set_gate(21, (unsigned) isr21, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(22, (unsigned) isr22, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(23, (unsigned) isr23, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(24, (unsigned) isr24, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(25, (unsigned) isr25, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(26, (unsigned) isr26, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(27, (unsigned) isr27, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(28, (unsigned) isr28, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(29, (unsigned) isr29, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(30, (unsigned) isr30, 0x08, 0x8E); /* Reserved */
-//  idt_set_gate(31, (unsigned) isr31, 0x08, 0x8E); /* Reserved */
     console_printf(FG_WHITE, "Interrupts Installed\n");
 }
