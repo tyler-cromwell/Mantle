@@ -47,6 +47,8 @@ void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
 
     /* Initialize the Global Descriptor Table */
     gdt_init();
+    idt_init();
+    //__asm__ volatile ("sti"); 
 
     /* Get Kernel size and CPU vendor id */
     uint32_t size = ((uint32_t) &kernel_size) / 1024;

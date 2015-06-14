@@ -19,6 +19,33 @@
 #ifndef X86_H
 #define X86_H
 
+#include <stdint.h>
+
+struct registers {
+    uint32_t gs, fs, es, ds;
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    uint32_t int_no, err_code;
+    uint32_t eip, cs, eflags, useresp, ss;
+};
+
+static char *exception_names[] = {
+    "Division By Zero",                 /* isr0 */
+    "Debug",                            /* isr1 */
+//  "Non-maskable Interrupt",           /* isr2 */
+//  "Breakpoint",                       /* isr3 */
+//  "Overflow",                         /* isr4 */
+//  "Bounds Check",                     /* isr5 */
+//  "Invalid Opcode",                   /* isr6 */
+//  "Coprocessor Not Available",        /* isr7 */
+    "Double Fault",                     /* isr8 */
+//  "Coprocessor Segment Overrun",      /* isr9 */
+//  "Invalid TSS",                      /* isr10 */
+//  "Segment Not Present",              /* isr11 */
+//  "Stack Fault",                      /* isr12 */
+    "General Protection Violation",     /* isr13 */
+//  "Page Fault",                       /* isr14 */
+};
+
 /* CPUID */
 extern void cpuid_vendor(char*);
 

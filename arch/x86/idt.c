@@ -23,6 +23,7 @@
 /* Kernel Headers */
 #include <drivers/console.h>
 #include <kernel/mem.h>
+#include <x86/x86.h>
 #include "isr.h"
 
 /* An IDT interrupt gate */
@@ -86,7 +87,7 @@ void idt_init(void) {
  * Installs the system Interrupt Service Rountines.
  */
 void idt_install_isrs(void) {
-    idt_set_gate( 0, (unsigned)  isr0, 0x08, 0x8E); /* Divide by Zero */
+    idt_set_gate( 0, (unsigned)  isr0, 0x08, 0x8E); /* Division by Zero */
     idt_set_gate( 1, (unsigned)  isr1, 0x08, 0x8E); /* Debug */
 //  idt_set_gate( 2, (unsigned)  isr2, 0x08, 0x8E); /* Non-maskable Interrupt */
 //  idt_set_gate( 3, (unsigned)  isr3, 0x08, 0x8E); /* Breakpoint */
@@ -107,4 +108,18 @@ void idt_install_isrs(void) {
 //  idt_set_gate(19, (unsigned) isr19, 0x08, 0x8E); /* ??? */
 //  idt_set_gate(20, (unsigned) isr20, 0x08, 0x8E); /* If INTEL, virt stuff, else Reserved */
     console_printf(FG_WHITE, "Interrupts Installed\n");
+}
+
+/*
+ *
+ */
+void idt_handle_interrupt(struct registers *regs) {
+    console_printf(FG_WHITE, "%s exception occurred!\n\n", exception_names[regs->int_no]);
+    console_printf(FG_WHITE, "eax=%u ebx=%u ecx=%u edx=%u\n",
+                             regs->eax, regs->ebx, regs->ecx, regs->edx);
+    console_printf(FG_WHITE, "cs=%u ds=%u es=%u fs=%u gs=%u ss=%u\n",
+                             regs->cs, regs->ds, regs->es, regs->fs, regs->gs, regs->ss);
+    console_printf(FG_WHITE, "ebp=%u esp=%u edi=%u esi=%u eip=%u\n",
+                             regs->ebp, regs->esp, regs->edi, regs->esi, regs->eip);
+    console_printf(FG_RED, "System Halted!\n");
 }
