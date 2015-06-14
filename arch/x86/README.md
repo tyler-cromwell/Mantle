@@ -9,4 +9,6 @@ This directory contains all x86 specific code.
 #### Files
 - `cpuid.c` - Functions that make use of the CPUID instruction.
 - `idt.c` - Defines the Interrupt Descriptor Table.
+- `isr.asm` - Implements the system Interrupt Service Routines.
+- `isr.h` - Forward declarations for ISRs in C.
 - `gdt.c` - Functions for initializing the Global Descriptor Table.

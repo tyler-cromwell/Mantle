@@ -15,6 +15,12 @@
 ;  along with Ritchie.
 ;  If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 
+;
+; Important Note:
+; This file was heavy referenced from my friends kernel project.
+; <https://github.com/WillDignazio/Foundation>
+;
+
 bits 32
 
 global isr0
