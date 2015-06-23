@@ -24,7 +24,7 @@
 #include <drivers/console.h>
 #include <kernel/mem.h>
 #include <x86/x86.h>
-#include "isr.h"
+#include "isrs.h"
 
 /* An IDT interrupt gate */
 struct IdtGate {
@@ -84,7 +84,7 @@ void idt_init(void) {
 }
 
 /*
- * Installs the system Interrupt Service Rountines.
+ * Installs the system Interrupt Service Routines.
  */
 void idt_install_isrs(void) {
     idt_set_gate( 0, (unsigned)  isr0, 0x08, 0x8E); /* Division by Zero */
@@ -111,7 +111,7 @@ void idt_install_isrs(void) {
 }
 
 /*
- *
+ * Dumps registers for now
  */
 void idt_handle_interrupt(struct registers *regs) {
     console_printf(FG_WHITE, "%s exception occurred!\n\n", exception_names[regs->int_no]);
@@ -121,5 +121,4 @@ void idt_handle_interrupt(struct registers *regs) {
                              regs->cs, regs->ds, regs->es, regs->fs, regs->gs, regs->ss);
     console_printf(FG_WHITE, "ebp=%u esp=%u edi=%u esi=%u eip=%u\n",
                              regs->ebp, regs->esp, regs->edi, regs->esi, regs->eip);
-    console_printf(FG_RED, "System Halted!\n");
 }
