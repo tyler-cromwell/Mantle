@@ -73,8 +73,9 @@ char* itoa(uint32_t number, uint32_t base) {
  */
 int32_t strncmp(const char* s1, const char* s2, size_t n) {
     for (size_t i = 0; i < n && i < strlen(s1); i++) {
-        if ((s1[i] - s2[i]) != 0)
+        if ((s1[i] - s2[i]) != 0) {
             return s1[i] - s2[i];
+        }
     }
     return 0;
 }
@@ -89,8 +90,9 @@ int32_t strncmp(const char* s1, const char* s2, size_t n) {
  *   A pointer to the new string.
  */
 char* strncpy(char* dest, const char* src, size_t n) {
-    for (size_t i = 0; i < n || src[i] == '\0'; i++)
+    for (size_t i = 0; i < n || src[i] == '\0'; i++) {
         dest[i] = src[i];
+    }
     return dest;
 }
 
@@ -118,7 +120,8 @@ size_t strlen(const char* string) {
  */
 size_t strnlen(const char* string, size_t n) {
     size_t length = 0;
-    for (size_t i = 0; string[i] != '\0' && i < n; i++)
+    for (size_t i = 0; string[i] != '\0' && i < n; i++) {
         length++;
+    }
     return length;
 }

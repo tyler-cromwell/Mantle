@@ -93,8 +93,9 @@ void multiboot_dump(void) {
         if (upper >= CONVERT_NUM) {
             upper /= CONVERT_NUM;
             console_printf(FG_WHITE, "Upper Memory: %uMB\n", upper);
+        } else {
+            console_printf(FG_WHITE, "Upper Memory: %uKB\n", upper);
         }
-        else console_printf(FG_WHITE, "Upper Memory: %uKB\n", upper);
     }
 
     /* Dump the Memory Map */
@@ -119,14 +120,16 @@ void multiboot_dump(void) {
             if (n >= CONVERT_NUM) {
                 n = CONVERT_UP(n);
                 console_printf(FG_WHITE, "%uMB, ", n);
+            } else {
+                console_printf(FG_WHITE, "%uKB, ", n);
             }
-            else console_printf(FG_WHITE, "%uKB, ", n);
 
             /* Region type */
-            if (mmap[i].type == MMAP_AVAILABLE)
+            if (mmap[i].type == MMAP_AVAILABLE) {
                 console_printf(FG_WHITE, "Available");
-            else
+            } else {
                 console_printf(FG_GREY, "Reserved");
+            }
 
             console_printf(FG_WHITE, ")\n");
         }
