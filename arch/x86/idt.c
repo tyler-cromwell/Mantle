@@ -106,7 +106,6 @@ void idt_install_isrs(void) {
 //  idt_set_gate(17, (unsigned) isr17, 0x08, 0x8E); /* ??? */
 //  idt_set_gate(18, (unsigned) isr18, 0x08, 0x8E); /* ??? */
 //  idt_set_gate(19, (unsigned) isr19, 0x08, 0x8E); /* ??? */
-//  idt_set_gate(20, (unsigned) isr20, 0x08, 0x8E); /* If INTEL, virt stuff, else Reserved */
     console_printf(FG_WHITE, "Interrupts Installed\n");
 }
 

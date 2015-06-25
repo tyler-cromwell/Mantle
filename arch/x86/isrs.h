@@ -39,6 +39,5 @@ extern void isr13(void);
 //extern void isr17(void);
 //extern void isr18(void);
 //extern void isr19(void);
-//extern void isr20(void);
 
 #endif
