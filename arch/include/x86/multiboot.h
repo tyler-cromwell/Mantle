@@ -16,15 +16,15 @@
    If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 */
 
-#ifndef X86_MULTIBOOT_H
-#define X86_MULTIBOOT_H
-
-#include <stdint.h>
-
 /*
  * Information was referenced from the GNU Multiboot Specification
  * GNU Multiboot 0.6.96 is the supported version, currently.
  */
+
+#ifndef X86_MULTIBOOT_H
+#define X86_MULTIBOOT_H
+
+#include <stdint.h>
 
 #define MULTIBOOT_BOOT_MAGIC    0x2badb002  /* Bootloader magic number */
 #define MULTIBOOT_MEMORY        1 << 0      /* Lower and Upper Memory flag */
