@@ -113,11 +113,5 @@ void idt_install_isrs(void) {
  * Dumps registers for now
  */
 void idt_handle_interrupt(struct registers *regs) {
-    console_printf(FG_WHITE, "%s exception occurred!\n\n", exception_names[regs->int_no]);
-    console_printf(FG_WHITE, "eax=%u ebx=%u ecx=%u edx=%u\n",
-                             regs->eax, regs->ebx, regs->ecx, regs->edx);
-    console_printf(FG_WHITE, "cs=%u ds=%u es=%u fs=%u gs=%u ss=%u\n",
-                             regs->cs, regs->ds, regs->es, regs->fs, regs->gs, regs->ss);
-    console_printf(FG_WHITE, "ebp=%u esp=%u edi=%u esi=%u eip=%u\n",
-                             regs->ebp, regs->esp, regs->edi, regs->esi, regs->eip);
+    console_printf(FG_WHITE, "Caught the %s exception!\n", exception_names[regs->int_no]);
 }
