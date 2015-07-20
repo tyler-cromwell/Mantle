@@ -109,9 +109,6 @@ void idt_install_isrs(void) {
     console_printf(FG_WHITE, "Interrupts Installed\n");
 }
 
-/*
- * Dumps registers for now
- */
 void idt_handle_interrupt(struct registers *regs) {
     console_printf(FG_WHITE, "Caught the %s exception!\n", exception_names[regs->int_no]);
 }

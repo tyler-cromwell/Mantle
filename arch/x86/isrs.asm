@@ -17,7 +17,7 @@
 
 ;
 ; Important Note:
-; This file was heavy referenced from my friends kernel project.
+; This file was heavily referenced from my friends kernel project.
 ; <https://github.com/WillDignazio/Foundation>
 ;
 
