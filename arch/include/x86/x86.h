@@ -76,5 +76,6 @@ extern void gdt_init(void);
 /* Interrupt Descriptor Table */
 extern void idt_init(void);
 extern void idt_install_isrs(void);
+extern void idt_install_irqs(void);
 
 #endif
