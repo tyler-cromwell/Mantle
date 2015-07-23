@@ -12,7 +12,7 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `kernel` - Kernel core.
 
 ## Branches
-- `master` - Mainline branch. Documentation changes, bug fixes, and feature/subsystem merges are committed to this branch.
+- `master` - Mainline branch. Documentation and formatting changes, minor fixes, and feature/subsystem merges are committed to this branch.
 - `<branch>` - All other branches are meant for development of specific features/subsystems (i.e. `multiboot`, `paging`).
 
 ## Coding Convention
