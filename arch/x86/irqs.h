@@ -22,7 +22,6 @@
 /* Forward IRQ function declarations */
 extern void irq0(void);
 extern void irq1(void);
-//extern void irq2(void);
 //extern void irq3(void);
 //extern void irq4(void);
 //extern void irq5(void);

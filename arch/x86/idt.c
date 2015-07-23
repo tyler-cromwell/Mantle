@@ -91,6 +91,10 @@ void idt_init(void) {
 
     console_printf(FG_WHITE, "IDT Initialized\n");
 
+    /* Save masks */
+    uint8_t master_mask = inb(PIC_MASTER_DATA);
+    uint8_t slave_mask = inb(PIC_SLAVE_DATA);
+
     /* PIC Initialization */
     outb(PIC_MASTER_COMMAND, 0x11);
     outb(PIC_SLAVE_COMMAND,  0x11);
@@ -103,13 +107,13 @@ void idt_init(void) {
     outb(PIC_MASTER_DATA, 0x04);
     outb(PIC_SLAVE_DATA,  0x02);
 
-    /**/
+    /* */
     outb(PIC_MASTER_DATA, 0x01);
     outb(PIC_SLAVE_DATA,  0x01);
 
-    /**/
-    outb(PIC_MASTER_DATA, 0x0);
-    outb(PIC_SLAVE_DATA,  0x0);
+    /* Restore masks */
+    outb(PIC_MASTER_DATA, master_mask);
+    outb(PIC_SLAVE_DATA,  slave_mask);
 
     console_printf(FG_WHITE, "PIC Remapped\n");
 }
@@ -146,7 +150,6 @@ void idt_install_isrs(void) {
 void idt_install_irqs(void) {
     idt_set_gate(32, (unsigned)  irq0, 0x08, 0x8e); /* ??? */
     idt_set_gate(33, (unsigned)  irq1, 0x08, 0x8e); /* ??? */
-//  idt_set_gate(34, (unsigned)  irq2, 0x08, 0x8e); /* ??? */
 //  idt_set_gate(35, (unsigned)  irq3, 0x08, 0x8e); /* ??? */
 //  idt_set_gate(36, (unsigned)  irq4, 0x08, 0x8e); /* ??? */
 //  idt_set_gate(37, (unsigned)  irq5, 0x08, 0x8e); /* ??? */
