@@ -141,7 +141,7 @@ void idt_install_isrs(void) {
 //  idt_set_gate(17, (unsigned) isr17, 0x08, 0x8e); /* ??? */
 //  idt_set_gate(18, (unsigned) isr18, 0x08, 0x8e); /* ??? */
 //  idt_set_gate(19, (unsigned) isr19, 0x08, 0x8e); /* ??? */
-    console_printf(FG_WHITE, "Exception handlers installed\n");
+    console_printf(FG_WHITE, "ISRs installed\n");
 }
 
 /*
@@ -163,13 +163,11 @@ void idt_install_irqs(void) {
 //  idt_set_gate(45, (unsigned) irq13, 0x08, 0x8e); /* ??? */
 //  idt_set_gate(46, (unsigned) irq14, 0x08, 0x8e); /* ??? */
     idt_set_gate(47, (unsigned) irq15, 0x08, 0x8e); /* ??? */
-    console_printf(FG_WHITE, "Interrupt request handlers installed\n");
+    console_printf(FG_WHITE, "IRQs installed\n");
 }
 
 void idt_handle_interrupt(struct registers *regs) {
     console_printf(FG_WHITE, "Caught the %s exception!\n", exception_names[regs->int_no]);
 }
 
-void idt_handle_request(struct registers *regs) {
-
-}
+void idt_handle_request(struct registers *regs) {}
