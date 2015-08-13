@@ -67,7 +67,7 @@ def clean():
 The main function of this script.
 """
 if __name__ == "__main__":
-    if sys.argv[1] == 'clean':
+    if len(sys.argv) > 1 and sys.argv[1] == 'clean':
         clean()
     else:
         config = configparser.ConfigParser()
