@@ -28,7 +28,7 @@ global isr1
 global isr8
 global isr13
 
-extern idt_handle_interrupt
+extern idt_handle_isr
 
 isr0:
     cli
@@ -63,7 +63,7 @@ isr_handle:
     mov gs, ax
     mov eax, esp
     push eax
-    mov eax, idt_handle_interrupt
+    mov eax, idt_handle_isr
     call eax
     pop eax
     pop gs

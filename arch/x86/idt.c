@@ -27,12 +27,6 @@
 #include "isrs.h"
 #include "irqs.h"
 
-/* Programmable Interrupt Controller ports */
-#define PIC_MASTER_COMMAND  0x20
-#define PIC_MASTER_DATA     0x21
-#define PIC_SLAVE_COMMAND   0xa0
-#define PIC_SLAVE_DATA      0xa1
-
 /* An IDT interrupt gate */
 struct IdtGate {
     uint16_t offset_low;    /* Lower portion of the offset */
@@ -42,10 +36,29 @@ struct IdtGate {
     uint16_t offset_high;   /* Upper portion of the offset */
 } __attribute__((__packed__));
 
-/* IDTR register */
+/* The IDTR register */
 struct Idtr {
     uint16_t limit; /* The length of the IDT */
     uint32_t base;  /* IDT base address */
+} __attribute__((__packed__));
+
+/* */
+struct SelectorError {
+    uint16_t ext : 1;
+    uint16_t idt : 1;
+    uint16_t ti : 1;
+    uint16_t index : 13;
+    uint16_t reserved;
+} __attribute__((__packed__));
+
+/* */
+struct PageFaultError {
+    uint32_t p : 1;
+    uint32_t rw : 1;
+    uint32_t us : 1;
+    uint32_t rsv : 1;
+    uint32_t id : 1;
+    uint32_t reserved : 27;
 } __attribute__((__packed__));
 
 /* The Interrupt Descriptor Table */
@@ -90,57 +103,33 @@ void idt_init(void) {
     idt_load(idtr);
 
     console_printf(FG_WHITE, "IDT Initialized\n");
-
-    /* Save masks */
-    uint8_t master_mask = inb(PIC_MASTER_DATA);
-    uint8_t slave_mask = inb(PIC_SLAVE_DATA);
-
-    /* PIC Initialization */
-    outb(PIC_MASTER_COMMAND, 0x11);
-    outb(PIC_SLAVE_COMMAND,  0x11);
-
-    /* Remap IRQs 0-15 to INTs 32-47 */
-    outb(PIC_MASTER_DATA, 0x20);
-    outb(PIC_SLAVE_DATA,  0x28);
-
-    /* Tell the master PIC where the slave is */
-    outb(PIC_MASTER_DATA, 0x04);
-    outb(PIC_SLAVE_DATA,  0x02);
-
-    /* */
-    outb(PIC_MASTER_DATA, 0x01);
-    outb(PIC_SLAVE_DATA,  0x01);
-
-    /* Restore masks */
-    outb(PIC_MASTER_DATA, master_mask);
-    outb(PIC_SLAVE_DATA,  slave_mask);
-
-    console_printf(FG_WHITE, "PIC Remapped\n");
 }
 
 /*
  * Installs the system Interrupt Service routines.
+ * isr9 - Coprocessor Segment Overrun - RESERVED
+ * isr 20-29, 31 - RESERVED
  */
 void idt_install_isrs(void) {
-    idt_set_gate( 0, (unsigned)  isr0, 0x08, 0x8e); /* Division by Zero */
-    idt_set_gate( 1, (unsigned)  isr1, 0x08, 0x8e); /* Debug */
+    idt_set_gate( 0, (unsigned)  isr0, 0x08, 0x8e); /* Division by Zero (Fault - Precise) */
+    idt_set_gate( 1, (unsigned)  isr1, 0x08, 0x8e); /* Debug (Fault/Trap - Precise) */
 //  idt_set_gate( 2, (unsigned)  isr2, 0x08, 0x8e); /* Non-maskable Interrupt */
-//  idt_set_gate( 3, (unsigned)  isr3, 0x08, 0x8e); /* Breakpoint */
-//  idt_set_gate( 4, (unsigned)  isr4, 0x08, 0x8e); /* Overflow */
-//  idt_set_gate( 5, (unsigned)  isr5, 0x08, 0x8e); /* Bounds Check */
-//  idt_set_gate( 6, (unsigned)  isr6, 0x08, 0x8e); /* Invalid Opcode */
-//  idt_set_gate( 7, (unsigned)  isr7, 0x08, 0x8e); /* Coprocessor Not Available */
-    idt_set_gate( 8, (unsigned)  isr8, 0x08, 0x8e); /* Double Fault */
-//  idt_set_gate( 9, (unsigned)  isr9, 0x08, 0x8e); /* Coprocessor Segment Overrun */
-//  idt_set_gate(10, (unsigned) isr10, 0x08, 0x8e); /* Invalid TSS */
-//  idt_set_gate(11, (unsigned) isr11, 0x08, 0x8e); /* Segment Not Present */
-//  idt_set_gate(12, (unsigned) isr12, 0x08, 0x8e); /* Stack Fault */
-    idt_set_gate(13, (unsigned) isr13, 0x08, 0x8e); /* General Protect Violation */
-//  idt_set_gate(14, (unsigned) isr14, 0x08, 0x8e); /* Page Fault */
-//  idt_set_gate(16, (unsigned) isr16, 0x08, 0x8e); /* ??? */
-//  idt_set_gate(17, (unsigned) isr17, 0x08, 0x8e); /* ??? */
-//  idt_set_gate(18, (unsigned) isr18, 0x08, 0x8e); /* ??? */
-//  idt_set_gate(19, (unsigned) isr19, 0x08, 0x8e); /* ??? */
+//  idt_set_gate( 3, (unsigned)  isr3, 0x08, 0x8e); /* Breakpoint (Trap - Precise) */
+//  idt_set_gate( 4, (unsigned)  isr4, 0x08, 0x8e); /* Overflow (Trap - Precise) */
+//  idt_set_gate( 5, (unsigned)  isr5, 0x08, 0x8e); /* Bounds Check (Fault - Precise) */
+//  idt_set_gate( 6, (unsigned)  isr6, 0x08, 0x8e); /* Invalid Opcode (Fault - Precise) */
+//  idt_set_gate( 7, (unsigned)  isr7, 0x08, 0x8e); /* Device Not Available (Fault - Precise) */
+    idt_set_gate( 8, (unsigned)  isr8, 0x08, 0x8e); /* Double Fault (Abort - Imprecise) */
+//  idt_set_gate(10, (unsigned) isr10, 0x08, 0x8e); /* Invalid TSS (Fault - Precise) */
+//  idt_set_gate(11, (unsigned) isr11, 0x08, 0x8e); /* Segment Not Present (Fault - Precise) */
+//  idt_set_gate(12, (unsigned) isr12, 0x08, 0x8e); /* Stack Fault (Fault - Precise) */
+    idt_set_gate(13, (unsigned) isr13, 0x08, 0x8e); /* General Protect Violation (Fault - Precise) */
+//  idt_set_gate(14, (unsigned) isr14, 0x08, 0x8e); /* Page Fault (Fault - Precise) */
+//  idt_set_gate(16, (unsigned) isr16, 0x08, 0x8e); /* x87 Floating Point Exception-Pending (Fault - Imprecise) */
+//  idt_set_gate(17, (unsigned) isr17, 0x08, 0x8e); /* Alignment Check (Fault - Precise) */
+//  idt_set_gate(18, (unsigned) isr18, 0x08, 0x8e); /* Machine-Check (Abort - Imprecise) */
+//  idt_set_gate(19, (unsigned) isr19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
+//  idt_set_gate(30, (unsigned) isr19, 0x08, 0x8e); /* Security Exception (- Precise) */
     console_printf(FG_WHITE, "ISRs installed\n");
 }
 
@@ -166,8 +155,5 @@ void idt_install_irqs(void) {
     console_printf(FG_WHITE, "IRQs installed\n");
 }
 
-void idt_handle_interrupt(struct registers *regs) {
-    console_printf(FG_WHITE, "Caught the %s exception!\n", exception_names[regs->int_no]);
-}
-
-void idt_handle_request(struct registers *regs) {}
+void idt_handle_isr(struct registers *regs) {}
+void idt_handle_irq(struct registers *regs) {}

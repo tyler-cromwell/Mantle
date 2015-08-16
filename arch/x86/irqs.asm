@@ -27,7 +27,7 @@ global irq0
 global irq1
 global irq15
 
-extern idt_handle_request
+extern idt_handle_irq
 
 irq0:
     cli
@@ -60,7 +60,7 @@ irq_handle:
     mov gs, ax
     mov eax, esp
     push eax
-    mov eax, idt_handle_request
+    mov eax, idt_handle_irq
     call eax
     pop eax
     pop gs
