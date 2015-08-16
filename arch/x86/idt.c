@@ -24,8 +24,7 @@
 #include <drivers/console.h>
 #include <kernel/mem.h>
 #include <x86/x86.h>
-#include "isrs.h"
-#include "irqs.h"
+#include "interrupts.h"
 
 /* An IDT interrupt gate */
 struct IdtGate {
@@ -106,31 +105,31 @@ void idt_init(void) {
 }
 
 /*
- * Installs the system Interrupt Service routines.
- * isr9 - Coprocessor Segment Overrun - RESERVED
- * isr 20-29, 31 - RESERVED
+ * Installs the system exceptions handlers.
+ * exc9 - Coprocessor Segment Overrun - RESERVED
+ * exc 20-29, 31 - RESERVED
  */
-void idt_install_isrs(void) {
-    idt_set_gate( 0, (unsigned)  isr0, 0x08, 0x8e); /* Division by Zero (Fault - Precise) */
-    idt_set_gate( 1, (unsigned)  isr1, 0x08, 0x8e); /* Debug (Fault/Trap - Precise) */
-//  idt_set_gate( 2, (unsigned)  isr2, 0x08, 0x8e); /* Non-maskable Interrupt */
-//  idt_set_gate( 3, (unsigned)  isr3, 0x08, 0x8e); /* Breakpoint (Trap - Precise) */
-//  idt_set_gate( 4, (unsigned)  isr4, 0x08, 0x8e); /* Overflow (Trap - Precise) */
-//  idt_set_gate( 5, (unsigned)  isr5, 0x08, 0x8e); /* Bounds Check (Fault - Precise) */
-//  idt_set_gate( 6, (unsigned)  isr6, 0x08, 0x8e); /* Invalid Opcode (Fault - Precise) */
-//  idt_set_gate( 7, (unsigned)  isr7, 0x08, 0x8e); /* Device Not Available (Fault - Precise) */
-    idt_set_gate( 8, (unsigned)  isr8, 0x08, 0x8e); /* Double Fault (Abort - Imprecise) */
-//  idt_set_gate(10, (unsigned) isr10, 0x08, 0x8e); /* Invalid TSS (Fault - Precise) */
-//  idt_set_gate(11, (unsigned) isr11, 0x08, 0x8e); /* Segment Not Present (Fault - Precise) */
-//  idt_set_gate(12, (unsigned) isr12, 0x08, 0x8e); /* Stack Fault (Fault - Precise) */
-    idt_set_gate(13, (unsigned) isr13, 0x08, 0x8e); /* General Protect Violation (Fault - Precise) */
-//  idt_set_gate(14, (unsigned) isr14, 0x08, 0x8e); /* Page Fault (Fault - Precise) */
-//  idt_set_gate(16, (unsigned) isr16, 0x08, 0x8e); /* x87 Floating Point Exception-Pending (Fault - Imprecise) */
-//  idt_set_gate(17, (unsigned) isr17, 0x08, 0x8e); /* Alignment Check (Fault - Precise) */
-//  idt_set_gate(18, (unsigned) isr18, 0x08, 0x8e); /* Machine-Check (Abort - Imprecise) */
-//  idt_set_gate(19, (unsigned) isr19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
-//  idt_set_gate(30, (unsigned) isr19, 0x08, 0x8e); /* Security Exception (- Precise) */
-    console_printf(FG_WHITE, "ISRs installed\n");
+void idt_install_exceptions(void) {
+    idt_set_gate( 0, (unsigned)  exc0, 0x08, 0x8e); /* Division by Zero (Fault - Precise) */
+    idt_set_gate( 1, (unsigned)  exc1, 0x08, 0x8e); /* Debug (Fault/Trap - Precise) */
+//  idt_set_gate( 2, (unsigned)  exc2, 0x08, 0x8e); /* Non-maskable Interrupt */
+//  idt_set_gate( 3, (unsigned)  exc3, 0x08, 0x8e); /* Breakpoint (Trap - Precise) */
+//  idt_set_gate( 4, (unsigned)  exc4, 0x08, 0x8e); /* Overflow (Trap - Precise) */
+//  idt_set_gate( 5, (unsigned)  exc5, 0x08, 0x8e); /* Bounds Check (Fault - Precise) */
+//  idt_set_gate( 6, (unsigned)  exc6, 0x08, 0x8e); /* Invalid Opcode (Fault - Precise) */
+//  idt_set_gate( 7, (unsigned)  exc7, 0x08, 0x8e); /* Device Not Available (Fault - Precise) */
+    idt_set_gate( 8, (unsigned)  exc8, 0x08, 0x8e); /* Double Fault (Abort - Imprecise) */
+//  idt_set_gate(10, (unsigned) exc10, 0x08, 0x8e); /* Invalid TSS (Fault - Precise) */
+//  idt_set_gate(11, (unsigned) exc11, 0x08, 0x8e); /* Segment Not Present (Fault - Precise) */
+//  idt_set_gate(12, (unsigned) exc12, 0x08, 0x8e); /* Stack Fault (Fault - Precise) */
+    idt_set_gate(13, (unsigned) exc13, 0x08, 0x8e); /* General Protect Violation (Fault - Precise) */
+//  idt_set_gate(14, (unsigned) exc14, 0x08, 0x8e); /* Page Fault (Fault - Precise) */
+//  idt_set_gate(16, (unsigned) exc16, 0x08, 0x8e); /* x87 Floating Point Exception-Pending (Fault - Imprecise) */
+//  idt_set_gate(17, (unsigned) exc17, 0x08, 0x8e); /* Alignment Check (Fault - Precise) */
+//  idt_set_gate(18, (unsigned) exc18, 0x08, 0x8e); /* Machine Check (Abort - Imprecise) */
+//  idt_set_gate(19, (unsigned) exc19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
+//  idt_set_gate(30, (unsigned) exc30, 0x08, 0x8e); /* Security Exception (- Precise) */
+    console_printf(FG_WHITE, "Exception handlers installed\n");
 }
 
 /*
@@ -152,8 +151,8 @@ void idt_install_irqs(void) {
 //  idt_set_gate(45, (unsigned) irq13, 0x08, 0x8e); /* ??? */
 //  idt_set_gate(46, (unsigned) irq14, 0x08, 0x8e); /* ??? */
     idt_set_gate(47, (unsigned) irq15, 0x08, 0x8e); /* ??? */
-    console_printf(FG_WHITE, "IRQs installed\n");
+    console_printf(FG_WHITE, "Interrupt Request handlers installed\n");
 }
 
-void idt_handle_isr(struct registers *regs) {}
+void idt_handle_exc(struct registers *regs) {}
 void idt_handle_irq(struct registers *regs) {}

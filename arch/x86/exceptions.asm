@@ -23,34 +23,34 @@
 
 bits 32
 
-global isr0
-global isr1
-global isr8
-global isr13
+global exc0
+global exc1
+global exc8
+global exc13
 
-extern idt_handle_isr
+extern idt_handle_exc
 
-isr0:
+exc0:
     cli
     push byte 0
-    jmp isr_handle
+    jmp exc_handle
 
-isr1:
+exc1:
     cli
     push byte 1
-    jmp isr_handle
+    jmp exc_handle
 
-isr8:
+exc8:
     cli
     push byte 8
-    jmp isr_handle
+    jmp exc_handle
 
-isr13:
+exc13:
     cli
     push byte 13
-    jmp isr_handle
+    jmp exc_handle
 
-isr_handle:
+exc_handle:
     pusha
     push ds
     push es
@@ -63,7 +63,7 @@ isr_handle:
     mov gs, ax
     mov eax, esp
     push eax
-    mov eax, idt_handle_isr
+    mov eax, idt_handle_exc
     call eax
     pop eax
     pop gs

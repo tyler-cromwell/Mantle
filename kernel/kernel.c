@@ -47,7 +47,7 @@ void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
 
     gdt_init();
     idt_init();
-    idt_install_isrs();
+    idt_install_exceptions();
     idt_install_irqs();
     //__asm__ volatile ("sti");
 
