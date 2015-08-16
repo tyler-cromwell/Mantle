@@ -19,7 +19,6 @@
 #ifndef X86_ISR_H
 #define X86_ISR_H
 
-/* Forward ISR function declarations */
 extern void isr0(void);
 extern void isr1(void);
 //extern void isr2(void);
@@ -29,7 +28,6 @@ extern void isr1(void);
 //extern void isr6(void);
 //extern void isr7(void);
 extern void isr8(void);
-//extern void isr9(void);
 //extern void isr10(void);
 //extern void isr11(void);
 //extern void isr12(void);
@@ -39,5 +37,6 @@ extern void isr13(void);
 //extern void isr17(void);
 //extern void isr18(void);
 //extern void isr19(void);
+//extern void isr30(void);
 
 #endif

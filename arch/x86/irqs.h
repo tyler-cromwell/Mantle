@@ -19,7 +19,6 @@
 #ifndef X86_IRQ_H
 #define X86_IRQ_H
 
-/* Forward IRQ function declarations */
 extern void irq0(void);
 extern void irq1(void);
 //extern void irq3(void);
