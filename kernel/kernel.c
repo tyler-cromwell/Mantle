@@ -45,7 +45,6 @@ void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_clear();
     console_printf(FG_BLUE_L, STRING"\n");
 
-    /* Initialize the Global Descriptor Table */
     gdt_init();
     idt_init();
     idt_install_isrs();
@@ -59,10 +58,13 @@ void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
 
     console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
     console_printf(FG_WHITE, "Vendor_id: ");
-    if (!strncmp(id, VENDOR_INTEL, strlen(id)))
+
+    if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
         console_printf(FG_CYAN_L, "%s\n", id);
-    else if (!strncmp(id, VENDOR_AMD, strlen(id)))
+    }
+    else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
         console_printf(FG_RED_L, "%s\n", id);
+    }
 
     /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {
