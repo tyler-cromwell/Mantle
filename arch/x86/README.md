@@ -8,4 +8,8 @@ This directory contains all x86 specific code.
 
 #### Files
 - `cpuid.c` - Functions that make use of the CPUID instruction.
-- `gdt.c` - Defines the Global Descriptor Table.
+- `exceptions.asm` - Implements the system Exception handlers.
+- `gdt.c` - Functions for initializing the Global Descriptor Table.
+- `idt.c` - Defines the Interrupt Descriptor Table.
+- `interrupts.h` - Forward declarations for all interrupt handlers in C.
+- `irqs.asm` - Implements the Interrupt Request handlers.

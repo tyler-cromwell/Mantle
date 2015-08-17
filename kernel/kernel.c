@@ -45,8 +45,11 @@ void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
     console_clear();
     console_printf(FG_BLUE_L, STRING"\n");
 
-    /* Initialize the Global Descriptor Table */
     gdt_init();
+    idt_init();
+    idt_install_exceptions();
+    idt_install_irqs();
+    //__asm__ volatile ("sti");
 
     /* Get Kernel size */
     uint32_t size = ((uint32_t) &kernel_size) / 1024;
@@ -63,7 +66,8 @@ void kernel_x86(uint32_t magic, struct MultibootInfo* mbinfo) {
     /* Print CPU vendor name */
     if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
         console_printf(FG_CYAN_L, "%s\n", id);
-    } else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
+    }
+    else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
         console_printf(FG_RED_L, "%s\n", id);
     }
 

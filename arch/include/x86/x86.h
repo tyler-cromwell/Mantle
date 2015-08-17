@@ -21,6 +21,13 @@
 
 #include <stdint.h>
 
+struct registers {
+    uint32_t gs, fs, es, ds;
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    uint32_t int_no, err_code;
+    uint32_t eip, cs, eflags, useresp, ss;
+};
+
 /*
  * Read a byte from an I/O port.
  * Arguments:
@@ -42,9 +49,16 @@ static inline void outb(uint16_t port, uint8_t value) {
     __asm__ volatile ("outb %0, %1": : "a"(value), "Nd"(port));
 }
 
+/* CPUID */
 extern void cpuid_vendor(char*);
 extern uint8_t cpuid_cores(void);
 
+/* Global Descriptor Table */
 extern void gdt_init(void);
+
+/* Interrupt Descriptor Table */
+extern void idt_init(void);
+extern void idt_install_exceptions(void);
+extern void idt_install_irqs(void);
 
 #endif
