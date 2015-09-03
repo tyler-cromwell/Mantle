@@ -1,20 +1,21 @@
-/* Copyright (C) 2015 Tyler Cromwell <tyler@csh.rit.edu>
+/**********************************************************************
+  Copyright (C) 2015 Tyler Cromwell <tyler@csh.rit.edu>
 
-   This file is part of Ritchie.
+  This file is part of Ritchie.
 
-   Ritchie is free software: you can redistribute it and/or modify
-   it under Version 2 of the terms of the GNU General Public License
-   as published by the Free Software Foundation.
+  Ritchie is free software: you can redistribute it and/or modify
+  it under Version 2 of the terms of the GNU General Public License
+  as published by the Free Software Foundation.
 
-   Ritchie is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY of FITNESS FOR A PARTICULAR PURPOSE. See the
-   GNU General Public License for more details.
+  Ritchie is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY of FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with Ritchie.
-   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
-*/
+  You should have received a copy of the GNU General Public License
+  along with Ritchie.
+  If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
+**********************************************************************/
 
 /* C Standard Library Headers,
    these don't need to link against libc */
@@ -36,7 +37,7 @@
 #define BYTES       4000    /* The number of usable bytes in video memory */
 
 /* Pointer to the next "empty" character byte */
-static char* next = VGA_START;
+static char *next = VGA_START;
 
 /*
  * Clears the console by zero-ing the screen buffer.
@@ -69,7 +70,7 @@ void console_set_background(uint8_t attribute) {
  * Writes a string of characters to the console.
  * Will interpret the newline character.
  * Arguments:
- *   char* message:  The message to write.
+ *   char *message:  The message to write.
  *   uint16_t length: The number of bytes to write.
  *   uint8_t attribute: The coloring attribute.
  * Returns:
@@ -77,7 +78,7 @@ void console_set_background(uint8_t attribute) {
  * Side Effect:
  *   Updates the video pointer.
  */
-size_t console_write(char* message, size_t length, uint8_t attribute) {
+size_t console_write(char *message, size_t length, uint8_t attribute) {
     size_t c = 0;
 
     /* Ensure that the number of characters to write does not exceed the maximum */
@@ -122,12 +123,12 @@ size_t console_write(char* message, size_t length, uint8_t attribute) {
  * Printf style function that writes a string of characters to the console.
  * Arguments:
  *   uint8_t attribute: The coloring attribute.
- *   char* format: The format string.
+ *   char *format: The format string.
  *   ... : A variable length list of other arguments.
  * Returns:
  *   The number of characters written.
  */
-size_t console_printf(uint8_t attribute, char* format, ...) {
+size_t console_printf(uint8_t attribute, char *format, ...) {
     size_t c = 0;
     va_list arguments;
     va_start(arguments, format);
@@ -138,8 +139,8 @@ size_t console_printf(uint8_t attribute, char* format, ...) {
             c += console_write(format, 1, attribute);
         } else {
             /* Increment again for tag character */
-            char* tag = format+1;
-            char* s = NULL;
+            char *tag = format+1;
+            char *s = NULL;
             char b = 0;
 
             switch (*tag) {

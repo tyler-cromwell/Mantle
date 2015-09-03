@@ -1,20 +1,21 @@
-/* Copyright (C) 2015 Tyler Cromwell <tyler@csh.rit.edu>
+/**********************************************************************
+  Copyright (C) 2015 Tyler Cromwell <tyler@csh.rit.edu>
 
-   This file is part of Ritchie.
+  This file is part of Ritchie.
 
-   Ritchie is free software: you can redistribute it and/or modify
-   it under Version 2 of the terms of the GNU General Public License
-   as published by the Free Software Foundation.
+  Ritchie is free software: you can redistribute it and/or modify
+  it under Version 2 of the terms of the GNU General Public License
+  as published by the Free Software Foundation.
 
-   Ritchie is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY of FITNESS FOR A PARTICULAR PURPOSE. See the
-   GNU General Public License for more details.
+  Ritchie is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY of FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with Ritchie.
-   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
-*/
+  You should have received a copy of the GNU General Public License
+  along with Ritchie.
+  If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
+**********************************************************************/
 
 /*
  * Information was referenced from the GNU Multiboot Specification
@@ -24,6 +25,8 @@
 #ifndef X86_MULTIBOOT_H
 #define X86_MULTIBOOT_H
 
+/* C Standard Library Headers,
+   these don't need to link against libc */
 #include <stdint.h>
 
 #define MULTIBOOT_BOOT_MAGIC    0x2badb002  /* Bootloader magic number */
@@ -127,10 +130,10 @@ struct MultibootDrive {
     uint8_t   drive_cylinders   : 1;    /* Number of cylinders */
     uint8_t   drive_heads       : 1;    /* Number of heads */
     uint8_t   drive_sectors     : 1;    /* Number of sectors per track */
-    uint16_t* drive_ports;              /* Null terminated array */
+    uint16_t *drive_ports;              /* Null terminated array */
 } __attribute__((__packed__));
 
-void multiboot_init(struct MultibootInfo*);
+void multiboot_init(struct MultibootInfo *mbinfo);
 void multiboot_dump(void);
 
 #endif
