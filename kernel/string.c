@@ -23,6 +23,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
+#include <kernel/mem.h>
 #include <kernel/string.h>
 
 /*
@@ -40,6 +41,7 @@ char* itoa(uint32_t number, uint32_t base) {
 
     /* If number is zero, just stop */
     if (number == 0) {
+        memset(buffer, 0, 11);
         buffer[0] = 48;
         string = buffer;
         c++;

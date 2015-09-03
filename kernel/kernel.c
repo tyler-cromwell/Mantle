@@ -71,6 +71,9 @@ void kernel_x86(uint32_t magic, struct MultibootInfo *mbinfo) {
     else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
         console_printf(FG_RED_L, "%s\n", id);
     }
+    else {
+        console_printf(FG_GREY_L, "%s\n", id);
+    }
 
     /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {

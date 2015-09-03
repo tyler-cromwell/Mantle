@@ -113,7 +113,7 @@ void multiboot_dump(void) {
             console_printf(FG_WHITE, "%x - ", n);
 
             /* Region Ending Address */
-            n = mmap[i].base_addr + mmap[i].length;
+            n = mmap[i].base_addr + mmap[i].length - 1;
             console_printf(FG_WHITE, "%x (", n);
 
             /* Region length */

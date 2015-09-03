@@ -21,6 +21,8 @@
    these do not need to link against libc */
 #include <stdint.h>
 
+#include <drivers/console.h>
+
 /*
  * Obtains the CPU vendor string.
  * Argument:
@@ -33,9 +35,9 @@ void cpuid_vendor(char *id) {
     __asm__("cpuid": : "a" (eax));
 
     /* Get the value of registers B, C, and D */
-    __asm__("": "=b" (ebx));
-    __asm__("": "=c" (ecx));
-    __asm__("": "=d" (edx));
+    __asm__ volatile ("": "=b" (ebx));
+    __asm__ volatile ("": "=c" (ecx));
+    __asm__ volatile ("": "=d" (edx));
     
     /* Get the vendor id of the CPU */
     for (uint8_t i = 0; i < 4; i++) {
