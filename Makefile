@@ -51,11 +51,12 @@ endif
 .PHONY: x86
 x86:
 	$(eval ARCH=x86)
-	$(MAKE) -C arch/x86/
-	$(MAKE) -C arch/x86/boot/
-	$(MAKE) -C drivers/
-	$(MAKE) -C kernel/
-	$(LD) $(LDFLAGS) link.ld -o $(IMAGE) $(ASM_OBJ) $(C_OBJ)
+	@$(MAKE) -C arch/x86/
+	@$(MAKE) -C arch/x86/boot/
+	@$(MAKE) -C drivers/
+	@$(MAKE) -C kernel/
+	@$(LD) $(LDFLAGS) link.ld -o $(IMAGE) $(ASM_OBJ) $(C_OBJ)
+	@echo "  [LD]  $(ASM_OBJ) $(C_OBJ)"
 
 .PHONY: iso
 iso: all
@@ -66,10 +67,6 @@ iso: all
 	cp grub.cfg isodir/boot/grub/grub.cfg
 	grub2-mkrescue -o $(IMAGE).iso isodir
 	rm -rf isodir/
-
-.PHONY: usb
-burn: iso
-	dd if=$(IMAGE).iso of=$(DEVICE)
 
 .PHONY: clean
 clean:

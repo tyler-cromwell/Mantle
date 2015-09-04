@@ -33,12 +33,13 @@ C_OBJ_X86 = $(C_SRC:%.c=%.o)
 
 # Rule for compiling .c files
 %.o: %.c
-	$(CC) $(CPPFLAGS) -D ARCH_X86 $(CFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) -D ARCH_X86 $(CFLAGS) -c $< -o $@
+	@echo "  [CC]  $<  ->  $@"
 
 .PHONY: all
 all:
 ifeq ($(ARCH),x86)
-	$(MAKE) x86
+	@$(MAKE) x86
 endif
 
 .PHONY: x86

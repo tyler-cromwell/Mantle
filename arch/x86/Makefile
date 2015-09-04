@@ -39,11 +39,13 @@ ASM_OBJ = $(ASM_SRC:%.asm=%.o)
 
 # Rule for compiling .c files
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	@echo "  [CC]  $<  ->  $@"
 
 # Rule for compileing .o files
 %.o: %.asm
-	$(AS) $(ASFLAGS) $< -o $@
+	@$(AS) $(ASFLAGS) $< -o $@
+	@echo "  [AS]  $<  ->  $@"
 
 .PHONY: all
 all: $(ASM_OBJ) $(C_OBJ)

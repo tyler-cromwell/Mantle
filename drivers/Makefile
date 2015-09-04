@@ -33,7 +33,8 @@ C_OBJ = $(C_SRC:%.c=%.o)
 
 # Rule for compiling .c files
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	@echo "  [CC]  $<  ->  $@"
 
 .PHONY: all
 all: $(C_OBJ)

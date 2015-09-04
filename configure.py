@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
         """ Read in the options """
         (name, version, codename) = [pair[1] for pair in config.items('Version')]
-        (arch, image, device) = [pair[1] for pair in config.items('Build')]
+        (arch, image) = [pair[1] for pair in config.items('Build')]
 
         version_string = "\""+ name +" "+ version +" ("+codename+")\""
 
@@ -97,5 +97,4 @@ if __name__ == "__main__":
         print('Updating \''+ FILES[2] +'\'... ', end='')
         update(FILES[2], 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
         update(FILES[2], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image)
-        update(FILES[2], 'DEVICE', r'DEVICE = .*', 'DEVICE = '+ device)
         print('DONE')
