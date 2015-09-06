@@ -17,12 +17,9 @@
 #  If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 ########################################################################
 
-# Programs for building
-CC = clang
-
 # Respective flags
 CPPFLAGS = -I $(ROOT)/include -I $(ROOT)/arch/include
-CFLAGS = -nostdlib -Wall -Werror -Wno-unused-function -Wno-unused-command-line-argument -pedantic -m32 -O0
+CFLAGS = $(CFLAGS_COMMON)
 
 # Debugging options
 CPPFLAGS +=

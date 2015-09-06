@@ -19,13 +19,19 @@
 
 # Important variables
 include make.conf
-export ARCH
 
 # Programs for building
+AS = nasm
+CC = clang
 LD = ld
 
 # Respective flags
 LDFLAGS = -m elf_i386 -T
+
+# Common flags
+ASFLAGS_COMMON = -f elf32
+CFLAGS_COMMON = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -nostdlib \
+                -Wall -Werror -Wno-unused-function -Wno-unused-command-line-argument -pedantic -m32 -O0
 
 # Assembly source files
 ASM_SRC = $(shell find . -name *.asm)
@@ -37,6 +43,13 @@ C_OBJ = $(C_SRC:%.c=%.o)
 
 # Root directory
 ROOT = $(shell pwd)
+
+# Exporting symbols
+export ARCH
+export AS
+export CC
+export ASFLAGS_COMMON
+export CFLAGS_COMMON
 export ROOT
 
 .PHONY: all
