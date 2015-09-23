@@ -23,8 +23,18 @@ ENTRY(start)
 SECTIONS {
     . = 0x01000000; /* The address to load the Kernel (16MB in) */
 
-    .text BLOCK(4K) : ALIGN(4K) { *(.text) }
-    .data BLOCK(4K) : ALIGN(4K) { *(.data) }
+    /* Ensure Multiboot info is as the beginning */
+    .multiboot BLOCK(4K) : ALIGN(4K) {
+        *(.multiboot)
+    }
+
+    .text BLOCK(4K) : ALIGN(4K) {
+        *(.text)
+    }
+
+    .data BLOCK(4K) : ALIGN(4K) {
+        *(.data)
+    }
 
     .bss BLOCK(4K) : ALIGN(4K) {
         *(COMMON)

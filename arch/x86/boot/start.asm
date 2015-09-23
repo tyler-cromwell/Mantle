@@ -27,7 +27,7 @@ global idt_load
 ; External functions
 extern kernel_x86
 
-section .text
+section .multiboot
     ; The Multiboot spec
     align 4
     dd 0x1badb002            ; Magic
