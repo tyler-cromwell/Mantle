@@ -23,7 +23,7 @@
 
 /* Kernel Headers */
 #include <drivers/console.h>
-#include <kernel/mem.h>
+#include <kernel/string.h>
 #include <x86/x86.h>
 #include "interrupts.h"
 

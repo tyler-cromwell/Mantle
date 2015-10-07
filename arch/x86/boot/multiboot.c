@@ -23,7 +23,6 @@
 
 /* Kernel Headers */
 #include <drivers/console.h>
-#include <kernel/mem.h>
 #include <kernel/string.h>
 #include <x86/multiboot.h>
 
