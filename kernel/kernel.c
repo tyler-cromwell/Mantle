@@ -34,10 +34,10 @@ extern struct undefined KERNEL_SIZE;
  * The system will halt when/if this function returns.
  * Arguments:
  *   uint64_t magic: A Multiboot bootloaders magic number.
- *   uint64_t mbinfo:
+ *   struct MultibootInfo *mbinfo:
  *       The physical memory address of the Multiboot information struct.
  */
-void kernel_main(uint64_t magic, uint64_t mbinfo) {
+void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
     console_clear();
     console_set_background(BG_GREY);
     console_printf(FG_BLUE, STRING"\n");
@@ -69,10 +69,10 @@ void kernel_main(uint64_t magic, uint64_t mbinfo) {
     console_printf(FG_WHITE, "processors: %u\n", cpuid_cpus());
 
     /* Was the kernel booted by a Multiboot bootloader? */
-//    if (magic == MULTIBOOT_BOOT_MAGIC) {
-//        multiboot_init(mbinfo);
-//        multiboot_dump();
-//    }
+    if (magic == MULTIBOOT_BOOT_MAGIC) {
+        multiboot_init(mbinfo);
+        multiboot_dump();
+    }
 
     console_printf(FG_BLACK | BG_RED, "System halted");
     return;

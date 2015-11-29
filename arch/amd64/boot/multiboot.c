@@ -22,9 +22,9 @@
 #include <stddef.h>
 
 /* Kernel Headers */
+#include <amd64/multiboot.h>
 #include <drivers/console.h>
 #include <kernel/string.h>
-#include <x86/multiboot.h>
 
 /* Macros for converting byte metrics */
 #define CONVERT_NUM 1024
@@ -40,7 +40,7 @@ static struct MultibootMmap *mmap;
 static struct MultibootMmap *kernel_region; /* A pointer to the available mmap region the kerne lis within */
 static struct MultibootMmap kernel = {
     .size = 24,
-    .base_addr = 0x01000000,    /* The address the kernel is loaded at */
+    .base_addr = 0x00100000,    /* The address the kernel is loaded at */
     .length = 16 * 1024 * 1024, /* "Allocated" length for the kernel binary (16MB) */
     .type = 2                   /* This area is reserved */
 };
@@ -55,13 +55,14 @@ void multiboot_init(struct MultibootInfo *mbinfo) {
 
     /* Initialize the Memory Map */
     if (info->flags & MULTIBOOT_MMAP) {
-        mmap = (struct MultibootMmap*) info->mmap_addr;
+        mmap = (struct MultibootMmap*) (uint64_t) info->mmap_addr;
         size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
 
         for (size_t i = 0; i < ents; i++) {
             /* If the kernel region fits in the first available region */
             if (mmap[i].type == MMAP_AVAILABLE &&
                 mmap[i].length >= kernel.length) {
+
                 /* Bookmark for later */
                 kernel_region = mmap + (i * sizeof(struct MultibootMmap));
                 break;
@@ -90,6 +91,7 @@ void multiboot_dump(void) {
         console_printf(FG_WHITE, "Lower Memory: %uKB\n", info->mem_lower);
 
         uint32_t upper = info->mem_upper;
+
         if (upper >= CONVERT_NUM) {
             upper /= CONVERT_NUM;
             console_printf(FG_WHITE, "Upper Memory: %uMB\n", upper);
@@ -128,7 +130,7 @@ void multiboot_dump(void) {
             if (mmap[i].type == MMAP_AVAILABLE) {
                 console_printf(FG_WHITE, "Available");
             } else {
-                console_printf(FG_GREY, "Reserved");
+                console_printf(FG_BLACK, "Reserved");
             }
 
             console_printf(FG_WHITE, ")\n");
