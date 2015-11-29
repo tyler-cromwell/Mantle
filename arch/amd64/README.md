@@ -1,10 +1,10 @@
-# x86
-This directory contains all x86 specific code.
+# AMD64
+This directory contains all AMD64 specific code.
 
 ## Contents
 
 #### Directories
-- `boot` - Contains code needed for booting/starting the Kernel on an x86 machine.
+- `boot` - Contains code needed for booting/starting the Kernel on an AMD64 machine.
 
 #### Files
 - `cpuid.c` - Functions that make use of the CPUID instruction.

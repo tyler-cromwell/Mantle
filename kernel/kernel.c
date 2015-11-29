@@ -18,11 +18,11 @@
 **********************************************************************/
 
 /* Kernel Headers */
+#include <amd64/amd64.h>
+#include <amd64/multiboot.h>
 #include <drivers/console.h>
 #include <kernel/string.h>
 #include <kernel/version.h>
-#include <x86/multiboot.h>
-#include <x86/x86.h>
 
 //#define VENDOR_AMD      "AuthenticAMD"
 //#define VENDOR_INTEL    "GenuineIntel"
