@@ -17,29 +17,55 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* Referenced from osdev.org */
-OUTPUT_FORMAT(elf32-i386)
-ENTRY(start)
+OUTPUT_FORMAT (elf32-i386)
+ENTRY (start)
+
 SECTIONS {
-    . = 0x01000000; /* The address to load the Kernel (16MB in) */
+    KERNEL_VMA = 0x0000000000000000;    /* 0MB */
+    /*KERNEL_VMA = 0x0000000001000000;  /* 16MB */
+    KERNEL_LMA = 0x0000000000100000;    /* 1MB */
+    /*KERNEL_LMA = 0x0000000001000000;  /* 16MB */
 
-    /* Ensure Multiboot info is as the beginning */
-    .multiboot BLOCK(4K) : ALIGN(4K) {
-        *(.multiboot)
+    . = KERNEL_LMA;
+
+    /* Bootstrap code */
+    .boot : {
+        *boot* (.multiboot) /* Mulitboot Header */
+        *boot* (.text)
+        *boot* (.data)
+        *boot* (.bss)
     }
 
-    .text BLOCK(4K) : ALIGN(4K) {
-        *(.text)
+    . += KERNEL_VMA;
+
+    /* Consolidate all text sections */
+    .text : AT(ADDR(.text) - KERNEL_VMA) {
+        *(EXCLUDE_FILE(*boot) .text)
+        *(.rodata*)
+        . = ALIGN(0x1000);
     }
 
-    .data BLOCK(4K) : ALIGN(4K) {
-        *(.data)
+    /* Consolidate all data sections */
+    .data : AT(ADDR(.data) - KERNEL_VMA) {
+        *(EXCLUDE_FILE(*boot) .data)
+        . = ALIGN(0x1000);
     }
 
-    .bss BLOCK(4K) : ALIGN(4K) {
+    .eh_frame : AT(ADDR(.eh_frame) - KERNEL_VMA) {
+        *(.eh_frame)
+        . = ALIGN(0x1000);
+    }
+
+    /* Consolidate all bss sections */
+    .bss : AT(ADDR(.bss) - KERNEL_VMA) {
+        *(EXCLUDE_FILE(*boot) .bss)
         *(COMMON)
-        *(.bss)
+        . = ALIGN(0x1000);
     }
 
-    kernel_size = . - 0x01000000;
+    /DISCARD/ : {
+       *(.comment)
+    }
+
+    kernel_size = . - KERNEL_VMA - KERNEL_LMA;
 }
