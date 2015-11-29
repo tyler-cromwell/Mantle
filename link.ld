@@ -17,8 +17,8 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-OUTPUT_FORMAT (elf32-i386)
-ENTRY (start)
+OUTPUT_FORMAT (elf64-x86-64)
+ENTRY (kernel_boot)
 
 SECTIONS {
     KERNEL_VMA = 0x0000000000000000;    /* 0MB */
@@ -67,5 +67,5 @@ SECTIONS {
        *(.comment)
     }
 
-    kernel_size = . - KERNEL_VMA - KERNEL_LMA;
+    KERNEL_SIZE = . - KERNEL_VMA - KERNEL_LMA;
 }

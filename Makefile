@@ -19,70 +19,56 @@
 
 # Important variables
 include make.conf
+LD_SCRIPT = link.ld
 
 # Programs for building
 AS = nasm
-CC = clang
-LD = ld
+CC = x86_64-elf-gcc
+LD = x86_64-elf-gcc
 
-# Respective flags
-LDFLAGS = -m elf_i386 -T
+INCLUDE = -I ./arch/include/ -I ./include/
 
-# Common flags
-ASFLAGS_COMMON = -f elf32
-CFLAGS_COMMON = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -nostdlib \
-                -Wall -Werror -Wno-unused-function -Wno-unused-command-line-argument -pedantic -m32 -O0
+ASFLAGS = -felf64
+CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse \
+		 -mno-sse2 -std=gnu99 $(INCLUDE)
+LDFLAGS = -ffreestanding -nostdlib -lgcc -z max-page-size=0x1000 \
+		  -T $(LD_SCRIPT) -o $(IMAGE)
 
-# Assembly source files
-ASM_SRC = $(shell find . -name *.asm)
-ASM_OBJ = $(ASM_SRC:%.asm=%.o)
-
-# C source files
-C_SRC = $(shell find . -name *.c)
+C_SRC = $(shell find ./ -name '*.c')
+C_SRC := $(filter-out ./arch/x86/boot/multiboot.c, $(C_SRC))
+C_SRC := $(filter-out ./arch/x86/cpuid.c, $(C_SRC))
+C_SRC := $(filter-out ./arch/x86/gdt.c, $(C_SRC))
+C_SRC := $(filter-out ./arch/x86/idt.c, $(C_SRC))
 C_OBJ = $(C_SRC:%.c=%.o)
 
-# Root directory
-ROOT = $(shell pwd)
+ASM_SRC = $(shell find ./ -name '*.asm')
+ASM_SRC := $(filter-out ./arch/x86/exceptions.asm, $(ASM_SRC))
+ASM_SRC := $(filter-out ./arch/x86/irqs.asm, $(ASM_SRC))
+ASM_OBJ = $(ASM_SRC:%.asm=%.o)
 
-# Exporting symbols
-export ARCH
-export AS
-export CC
-export ASFLAGS_COMMON
-export CFLAGS_COMMON
-export ROOT
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.asm
+	$(AS) $(ASFLAGS) $< -o $@
 
 .PHONY: all
-all:
-ifeq ($(ARCH),x86)
-	$(MAKE) x86
-else
-	$(info *** Please specify an architecture to build for.)
-	$(info *** Perhaps run './configure.py'?)
-endif
-
-.PHONY: x86
-x86:
-	$(eval ARCH=x86)
-	@$(MAKE) -C arch/x86/
-	@$(MAKE) -C arch/x86/boot/
-	@$(MAKE) -C drivers/
-	@$(MAKE) -C kernel/
-	@$(LD) $(LDFLAGS) link.ld -o $(IMAGE) $(ASM_OBJ) $(C_OBJ)
-	@echo "  [LD]  $(ASM_OBJ) $(C_OBJ)"
+all: $(C_OBJ) $(ASM_OBJ)
+	$(LD) $(LDFLAGS) $(C_OBJ) $(ASM_OBJ)
 
 .PHONY: iso
 iso: all
-	mkdir -p isodir
-	mkdir -p isodir/boot
-	cp $(IMAGE) isodir/boot/$(IMAGE)
-	mkdir -p isodir/boot/grub
-	cp grub.cfg isodir/boot/grub/grub.cfg
+	@rm -rf isodir/
+	@mkdir -p isodir
+	@mkdir -p isodir/boot
+	@cp $(IMAGE) isodir/boot/$(IMAGE)
+	@mkdir -p isodir/boot/grub
+	@cp grub.cfg isodir/boot/grub/grub.cfg
 	grub2-mkrescue -o $(IMAGE).iso isodir
-	rm -rf isodir/
 
 .PHONY: clean
 clean:
-	rm -rf $(ASM_OBJ) $(C_OBJ)
-	rm -rf $(IMAGE)
-	rm -rf $(IMAGE).iso
+	@find ./ -name '*.o' | xargs rm -rf
+	@rm -rf $(IMAGE)
+	@rm -rf $(IMAGE).iso
+	@rm -rf isodir/

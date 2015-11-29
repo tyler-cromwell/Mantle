@@ -21,51 +21,50 @@
 #include <drivers/console.h>
 #include <kernel/string.h>
 #include <kernel/version.h>
+#include <x86/multiboot.h>
+#include <x86/x86.h>
 
-#ifdef ARCH_X86
-    #include <x86/multiboot.h>
-    #include <x86/x86.h>
+//#define VENDOR_AMD      "AuthenticAMD"
+//#define VENDOR_INTEL    "GenuineIntel"
 
-    #define VENDOR_INTEL    "GenuineIntel"
-    #define VENDOR_AMD      "AuthenticAMD"
-#endif
+/* Linker Script Symbols */
+extern void *KERNEL_LMA;
+extern void *KERNEL_VMA;
+extern void *KERNEL_SIZE;
 
-/* Linker Script Symbol - Kernel size string */
-extern char *kernel_size;
-
-#ifdef ARCH_X86
 /*
  * The main kernel function; this is where Ritchie begins operation.
  * The system will halt when/if this function returns.
  * Arguments:
- *   uint32_t magic: A Multiboot bootloaders magic number.
- *   struct MultibootInfo* mbinfo:
+ *   uint64_t magic: A Multiboot bootloaders magic number.
+ *   uint64_t mbinfo:
  *       The physical memory address of the Multiboot information struct.
  */
-void kernel_x86(uint32_t magic, struct MultibootInfo *mbinfo) {
+void kernel_main(uint64_t magic, uint64_t *mbinfo) {
     console_clear();
-    console_printf(FG_BLUE_L, STRING"\n");
+    console_set_background(BG_GREY);
+    console_printf(FG_BLUE, STRING"\n");
 
-    gdt_init();
-    idt_init();
-    idt_install_exceptions();
-    idt_install_irqs();
+//    gdt_init();
+//    idt_init();
+//    idt_install_exceptions();
+//    idt_install_irqs();
     //__asm__ volatile ("sti");
 
     /* Get Kernel size */
-    uint32_t size = ((uint32_t) &kernel_size) / 1024;
+    uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
     console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
 
     /* Get and print number of cores */
-    console_printf(FG_WHITE, "Cores: %u\n", cpuid_cores());
+//    console_printf(FG_WHITE, "Cores: %u\n", cpuid_cores());
 
     /* Get CPU vendor name */
-    char id[13] = {0};
+/*    char id[13] = {0};
     cpuid_vendor(id);
     console_printf(FG_WHITE, "Vendor_id: ");
-
+*/
     /* Print CPU vendor name */
-    if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
+/*    if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
         console_printf(FG_CYAN_L, "%s\n", id);
     }
     else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
@@ -74,14 +73,13 @@ void kernel_x86(uint32_t magic, struct MultibootInfo *mbinfo) {
     else {
         console_printf(FG_GREY_L, "%s\n", id);
     }
-
+*/
     /* Was the kernel booted by a Multiboot bootloader? */
-    if (magic == MULTIBOOT_BOOT_MAGIC) {
-        multiboot_init(mbinfo);
-        multiboot_dump();
-    }
+//    if (magic == MULTIBOOT_BOOT_MAGIC) {
+//        multiboot_init(mbinfo);
+//        multiboot_dump();
+//    }
 
     console_printf(FG_RED, "System halted");
     return; /* Halt the system */
 }
-#endif
