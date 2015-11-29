@@ -53,6 +53,7 @@ extern kernel_main
 fail_msg:   db 'Long Mode not supported. Halting!', 0
 fail_msg_len:   equ $ - fail_msg
 
+; Define a Long Mode Global Descriptor Table
 GDT64:
     .Null: equ $ - GDT64
     dw 0x0000, 0x0000

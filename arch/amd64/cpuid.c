@@ -48,11 +48,11 @@ void cpuid_vendor(char *id) {
 }
 
 /*
- * Obtains the number of processor cores.
+ * Obtains the number of processors.
  * Returns:
- *   The number of cores.
+ *   The number of processors.
  */
-uint32_t cpuid_cores(void) {
+uint32_t cpuid_cpus(void) {
     uint32_t ebx = 0;
 
     /* Pass '0x1' into register A, then run CPUID */

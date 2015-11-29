@@ -24,13 +24,10 @@
 #include <kernel/string.h>
 #include <kernel/version.h>
 
-//#define VENDOR_AMD      "AuthenticAMD"
-//#define VENDOR_INTEL    "GenuineIntel"
-
 /* Linker Script Symbols */
-extern void *KERNEL_LMA;
-extern void *KERNEL_VMA;
-extern void *KERNEL_SIZE;
+extern struct undefined KERNEL_LMA;
+extern struct undefined KERNEL_VMA;
+extern struct undefined KERNEL_SIZE;
 
 /*
  * The main kernel function; this is where Ritchie begins operation.
@@ -40,12 +37,11 @@ extern void *KERNEL_SIZE;
  *   uint64_t mbinfo:
  *       The physical memory address of the Multiboot information struct.
  */
-void kernel_main(uint64_t magic, uint64_t *mbinfo) {
+void kernel_main(uint64_t magic, uint64_t mbinfo) {
     console_clear();
     console_set_background(BG_GREY);
     console_printf(FG_BLUE, STRING"\n");
 
-//    gdt_init();
 //    idt_init();
 //    idt_install_exceptions();
 //    idt_install_irqs();
@@ -55,31 +51,29 @@ void kernel_main(uint64_t magic, uint64_t *mbinfo) {
     uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
     console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
 
-    /* Get and print number of cores */
-//    console_printf(FG_WHITE, "Cores: %u\n", cpuid_cores());
-
     /* Get CPU vendor name */
-/*    char id[13] = {0};
+    char id[13] = {0};
     cpuid_vendor(id);
-    console_printf(FG_WHITE, "Vendor_id: ");
-*/
+    console_printf(FG_WHITE, "vendor_id: ");
+
     /* Print CPU vendor name */
-/*    if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
+    if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
         console_printf(FG_CYAN_L, "%s\n", id);
-    }
-    else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
+    } else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
         console_printf(FG_RED_L, "%s\n", id);
-    }
-    else {
+    } else {
         console_printf(FG_GREY_L, "%s\n", id);
     }
-*/
+
+    /* Get and print number of processors */
+    console_printf(FG_WHITE, "processors: %u\n", cpuid_cpus());
+
     /* Was the kernel booted by a Multiboot bootloader? */
 //    if (magic == MULTIBOOT_BOOT_MAGIC) {
 //        multiboot_init(mbinfo);
 //        multiboot_dump();
 //    }
 
-    console_printf(FG_RED, "System halted");
-    return; /* Halt the system */
+    console_printf(FG_BLACK | BG_RED, "System halted");
+    return;
 }

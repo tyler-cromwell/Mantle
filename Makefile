@@ -36,8 +36,6 @@ LDFLAGS = -ffreestanding -nostdlib -lgcc -z max-page-size=0x1000 \
 
 C_SRC = $(shell find ./ -name '*.c')
 C_SRC := $(filter-out ./arch/amd64/boot/multiboot.c, $(C_SRC))
-C_SRC := $(filter-out ./arch/amd64/cpuid.c, $(C_SRC))
-C_SRC := $(filter-out ./arch/amd64/gdt.c, $(C_SRC))
 C_SRC := $(filter-out ./arch/amd64/idt.c, $(C_SRC))
 C_OBJ = $(C_SRC:%.c=%.o)
 

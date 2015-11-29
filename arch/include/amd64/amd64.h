@@ -24,6 +24,9 @@
    these don't need to link against libc */
 #include <stdint.h>
 
+#define VENDOR_AMD      "AuthenticAMD"
+#define VENDOR_INTEL    "GenuineIntel"
+
 struct registers {
     uint32_t gs, fs, es, ds;
     uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
@@ -54,10 +57,7 @@ static inline void outb(uint16_t port, uint8_t value) {
 
 /* CPUID */
 extern void cpuid_vendor(char *id);
-extern uint8_t cpuid_cores(void);
-
-/* Global Descriptor Table */
-extern void gdt_init(void);
+extern uint8_t cpuid_cpus(void);
 
 /* Interrupt Descriptor Table */
 extern void idt_init(void);
