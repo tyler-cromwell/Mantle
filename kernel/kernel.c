@@ -42,10 +42,13 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
     console_set_background(BG_GREY);
     console_printf(FG_BLUE, STRING"\n");
 
-//    idt_init();
-//    idt_install_exceptions();
-//    idt_install_irqs();
-    //__asm__ volatile ("sti");
+    /* Setup interrupt handling */
+    idt_init();
+
+    /* Force Divide by Zero exception */
+    int i = 1;
+    i--;
+    int j = 3 / i;
 
     /* Get Kernel size */
     uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;

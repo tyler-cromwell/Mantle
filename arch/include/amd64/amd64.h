@@ -61,7 +61,5 @@ extern uint8_t cpuid_cpus(void);
 
 /* Interrupt Descriptor Table */
 extern void idt_init(void);
-extern void idt_install_exceptions(void);
-extern void idt_install_irqs(void);
 
 #endif

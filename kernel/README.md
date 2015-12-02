@@ -1,5 +1,5 @@
 # Kernel
-This directory contains core kernel and setup code.
+This directory contains core kernel code.
 
 ## Contents
 - `kernel.c` - The main kernel file.

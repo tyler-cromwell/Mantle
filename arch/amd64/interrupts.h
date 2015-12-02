@@ -24,7 +24,7 @@
 static char *exceptions[] = {
     "Division By Zero",                         /*  exc0 */
     "Debug",                                    /*  exc1 */
-    "Non-maskable Interrupt",                   /*  exc2 */
+    "Non-Maskable Interrupt",                   /*  exc2 */
     "Breakpoint",                               /*  exc3 */
     "Overflow",                                 /*  exc4 */
     "Bounds Check",                             /*  exc5 */
@@ -35,7 +35,7 @@ static char *exceptions[] = {
     "Invalid TSS",                              /* exc10 */
     "Segment Not Present",                      /* exc11 */
     "Stack Fault",                              /* exc12 */
-    "General Protection Violation",             /* exc13 */
+    "General Protection",                       /* exc13 */
     "Page Fault",                               /* exc14 */
     "Reserved",                                 /* exc15 */
     "x87 Floating Point Exception-Pending",     /* exc16 */
@@ -59,39 +59,39 @@ static char *exceptions[] = {
 /* Exceptions */
 extern void exc0(void);
 extern void exc1(void);
-//extern void exc2(void);
-//extern void exc3(void);
-//extern void exc4(void);
-//extern void exc5(void);
-//extern void exc6(void);
-//extern void exc7(void);
+extern void exc2(void);
+extern void exc3(void);
+extern void exc4(void);
+extern void exc5(void);
+extern void exc6(void);
+extern void exc7(void);
 extern void exc8(void);
-//extern void exc10(void);
-//extern void exc11(void);
-//extern void exc12(void);
+extern void exc10(void);
+extern void exc11(void);
+extern void exc12(void);
 extern void exc13(void);
-//extern void exc14(void);
-//extern void exc16(void);
-//extern void exc17(void);
-//extern void exc18(void);
-//extern void exc19(void);
-//extern void exc30(void);
+extern void exc14(void);
+extern void exc16(void);
+extern void exc17(void);
+extern void exc18(void);
+extern void exc19(void);
+extern void exc30(void);
 
 /* Hardware Interrupts */
 extern void irq0(void);
 extern void irq1(void);
-//extern void irq3(void);
-//extern void irq4(void);
-//extern void irq5(void);
-//extern void irq6(void);
-//extern void irq7(void);
-//extern void irq8(void);
-//extern void irq9(void);
-//extern void irq10(void);
-//extern void irq11(void);
-//extern void irq12(void);
-//extern void irq13(void);
-//extern void irq14(void);
+extern void irq3(void);
+extern void irq4(void);
+extern void irq5(void);
+extern void irq6(void);
+extern void irq7(void);
+extern void irq8(void);
+extern void irq9(void);
+extern void irq10(void);
+extern void irq11(void);
+extern void irq12(void);
+extern void irq13(void);
+extern void irq14(void);
 extern void irq15(void);
 
 #endif

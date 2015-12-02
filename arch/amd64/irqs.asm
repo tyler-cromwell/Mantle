@@ -17,58 +17,171 @@
 ;  If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;
-; Important Note:
-; This file was heavily referenced from my friends kernel project.
-; <https://github.com/WillDignazio/Foundation>
-;
-
-bits 32
-
+; Global Symbols
 global irq0
 global irq1
+global irq3
+global irq4
+global irq5
+global irq6
+global irq7
+global irq8
+global irq9
+global irq10
+global irq11
+global irq12
+global irq13
+global irq14
 global irq15
 
-extern idt_handle_irq
+; External Symbols
+extern idt_irq_handler
 
+[section .text]
+
+;
 irq0:
     cli
     push byte 0
     push byte 32
-    jmp irq_handle
+    jmp common_handler
 
+
+; Keyboard?
 irq1:
     cli
     push byte 1
     push byte 33
-    jmp irq_handle
+    jmp common_handler
 
+
+;
+irq3:
+    cli
+    push byte 0
+    push byte 35
+    jmp common_handler
+
+
+;
+irq4:
+    cli
+    push byte 0
+    push byte 36
+    jmp common_handler
+
+
+;
+irq5:
+    cli
+    push byte 0
+    push byte 37
+    jmp common_handler
+
+
+;
+irq6:
+    cli
+    push byte 0
+    push byte 38
+    jmp common_handler
+
+
+;
+irq7:
+    cli
+    push byte 0
+    push byte 39
+    jmp common_handler
+
+
+;
+irq8:
+    cli
+    push byte 0
+    push byte 40
+    jmp common_handler
+
+
+;
+irq9:
+    cli
+    push byte 0
+    push byte 41
+    jmp common_handler
+
+
+;
+irq10:
+    cli
+    push byte 0
+    push byte 42
+    jmp common_handler
+
+
+;
+irq11:
+    cli
+    push byte 0
+    push byte 43
+    jmp common_handler
+
+
+;
+irq12:
+    cli
+    push byte 0
+    push byte 44
+    jmp common_handler
+
+
+;
+irq13:
+    cli
+    push byte 0
+    push byte 45
+    jmp common_handler
+
+
+;
+irq14:
+    cli
+    push byte 0
+    push byte 46
+    jmp common_handler
+
+
+;
 irq15:
     cli
     push byte 0
     push byte 47
-    jmp irq_handle
+    jmp common_handler
 
-irq_handle:
-    pusha
-    push ds
-    push es
-    push fs
-    push gs
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov eax, esp
-    push eax
-    mov eax, idt_handle_irq
-    call eax
-    pop eax
-    pop gs
-    pop fs
-    pop es
-    pop ds
-    popa
-    add esp, 8
-    iret
+
+;
+common_handler:
+    hlt
+    call idt_irq_handler
+;    pusha
+;    push ds
+;    push es
+;    push fs
+;    push gs
+;    mov ax, 0x10
+;    mov ds, ax
+;    mov es, ax
+;    mov fs, ax
+;    mov gs, ax
+;    mov eax, esp
+;    push eax
+;    mov eax, idt_irq_handler
+;    call eax
+;    pop eax
+;    pop gs
+;    pop fs
+;    pop es
+;    pop ds
+;    popa
+;    add esp, 8
+;    iret
