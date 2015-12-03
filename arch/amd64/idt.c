@@ -80,12 +80,12 @@ extern void idt_load(struct Idtr*);
  */
 static void idt_set_gate(uint8_t index, uint64_t base, uint16_t selector, uint8_t type_attr) {
     struct IdtGate gate = {
-        .offset_low = (base & 0x000000000000ffff),
+        .offset_low = (base >> 0) & 0xffff,
         .selector = selector,
         .zero1 = 0,
         .type_attr = type_attr,
-        .offset_middle = (base & 0x00000000ffff0000),
-        .offset_high = (base & 0xffffffff00000000),
+        .offset_middle = (base >> 16) & 0xffff,
+        .offset_high = (base >> 32) & 0xffffffff,
         .zero2 = 0
     };
 
