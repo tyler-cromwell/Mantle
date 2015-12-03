@@ -38,7 +38,7 @@ disable_apic:
 idt_load:
     push rbp
     mov rbp, rsp
-    mov rdx, [rbp+8]
+    mov rdx, rdi
     lidt [rdx]
     pop rbp
     sti

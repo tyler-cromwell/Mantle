@@ -68,7 +68,7 @@ static struct IdtGate idt[256];
 
 /* External - Defined in "amd64.asm" */
 extern void disable_apic(void);
-extern void idt_load(struct Idtr);
+extern void idt_load(struct Idtr*);
 
 /*
  * Creates a new interrupt gate.
@@ -175,7 +175,7 @@ void idt_init(void) {
 
     idt_install_exception_handlers();
     idt_install_irq_handlers();    
-    idt_load(idtr);
+    idt_load(&idtr);
 
     console_printf(FG_WHITE, "IDT Configured\n");
 }
