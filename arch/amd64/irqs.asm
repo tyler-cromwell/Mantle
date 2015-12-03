@@ -18,29 +18,45 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Global Symbols
-global irq0
-global irq1
-global irq3
-global irq4
-global irq5
-global irq6
-global irq7
-global irq8
-global irq9
+global irq00
+global irq01
+;      irq02
+global irq03
+global irq04
+global irq05
+global irq06
+global irq07
+global irq08
+global irq09
 global irq10
 global irq11
 global irq12
 global irq13
 global irq14
 global irq15
+;      irq16
+;      irq17
+;      irq18
+;      irq19
+;      irq20
+;      irq21
+;      irq22
+;      irq23
+;      irq24
+;      irq25
+;      irq26
+;      irq27
+;      irq28
+;      irq29
+;      irq30
+;      irq31
 
 ; External Symbols
 extern idt_irq_handler
 
 [section .text]
 
-;
-irq0:
+irq00:
     cli
     push byte 0
     push byte 32
@@ -48,70 +64,62 @@ irq0:
 
 
 ; Keyboard?
-irq1:
+irq01:
     cli
     push byte 1
     push byte 33
     jmp common_handler
 
 
-;
-irq3:
+irq03:
     cli
     push byte 0
     push byte 35
     jmp common_handler
 
 
-;
-irq4:
+irq04:
     cli
     push byte 0
     push byte 36
     jmp common_handler
 
 
-;
-irq5:
+irq05:
     cli
     push byte 0
     push byte 37
     jmp common_handler
 
 
-;
-irq6:
+irq06:
     cli
     push byte 0
     push byte 38
     jmp common_handler
 
 
-;
-irq7:
+irq07:
     cli
     push byte 0
     push byte 39
     jmp common_handler
 
 
-;
-irq8:
+irq08:
     cli
     push byte 0
     push byte 40
     jmp common_handler
 
 
-;
-irq9:
+irq09:
     cli
     push byte 0
     push byte 41
     jmp common_handler
 
 
-;
 irq10:
     cli
     push byte 0
@@ -119,7 +127,6 @@ irq10:
     jmp common_handler
 
 
-;
 irq11:
     cli
     push byte 0
@@ -127,7 +134,6 @@ irq11:
     jmp common_handler
 
 
-;
 irq12:
     cli
     push byte 0
@@ -135,7 +141,6 @@ irq12:
     jmp common_handler
 
 
-;
 irq13:
     cli
     push byte 0
@@ -143,7 +148,6 @@ irq13:
     jmp common_handler
 
 
-;
 irq14:
     cli
     push byte 0
@@ -151,7 +155,6 @@ irq14:
     jmp common_handler
 
 
-;
 irq15:
     cli
     push byte 0
@@ -159,7 +162,7 @@ irq15:
     jmp common_handler
 
 
-;
+; Common Interrupt handler stub
 common_handler:
     hlt
     call idt_irq_handler

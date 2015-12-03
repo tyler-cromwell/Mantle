@@ -98,25 +98,38 @@ static void idt_set_gate(uint8_t index, uint64_t base, uint16_t selector, uint8_
  * exc 20-29, 31 - RESERVED
  */
 static void idt_install_exception_handlers(void) {
-    idt_set_gate( 0, (uint64_t)  exc0, 0x08, 0x8e); /* Division by Zero (Fault - Precise) */
-    idt_set_gate( 1, (uint64_t)  exc1, 0x08, 0x8e); /* Debug (Fault/Trap - Precise) */
-    idt_set_gate( 2, (uint64_t)  exc2, 0x08, 0x8e); /* Non-maskable Interrupt */
-    idt_set_gate( 3, (uint64_t)  exc3, 0x08, 0x8e); /* Breakpoint (Trap - Precise) */
-    idt_set_gate( 4, (uint64_t)  exc4, 0x08, 0x8e); /* Overflow (Trap - Precise) */
-    idt_set_gate( 5, (uint64_t)  exc5, 0x08, 0x8e); /* Bounds Check (Fault - Precise) */
-    idt_set_gate( 6, (uint64_t)  exc6, 0x08, 0x8e); /* Invalid Opcode (Fault - Precise) */
-    idt_set_gate( 7, (uint64_t)  exc7, 0x08, 0x8e); /* Device Not Available (Fault - Precise) */
-    idt_set_gate( 8, (uint64_t)  exc8, 0x08, 0x8e); /* Double Fault (Abort - Imprecise) */
+    idt_set_gate( 0, (uint64_t) exc00, 0x08, 0x8e); /* Division by Zero (Fault - Precise) */
+    idt_set_gate( 1, (uint64_t) exc01, 0x08, 0x8e); /* Debug (Fault/Trap - Precise) */
+    idt_set_gate( 2, (uint64_t) exc02, 0x08, 0x8e); /* Non-maskable Interrupt */
+    idt_set_gate( 3, (uint64_t) exc03, 0x08, 0x8e); /* Breakpoint (Trap - Precise) */
+    idt_set_gate( 4, (uint64_t) exc04, 0x08, 0x8e); /* Overflow (Trap - Precise) */
+    idt_set_gate( 5, (uint64_t) exc05, 0x08, 0x8e); /* Bounds Check (Fault - Precise) */
+    idt_set_gate( 6, (uint64_t) exc06, 0x08, 0x8e); /* Invalid Opcode (Fault - Precise) */
+    idt_set_gate( 7, (uint64_t) exc07, 0x08, 0x8e); /* Device Not Available (Fault - Precise) */
+    idt_set_gate( 8, (uint64_t) exc08, 0x08, 0x8e); /* Double Fault (Abort - Imprecise) */
+/*  idt_set_gate( 9, (uint64_t) exc09, 0x08, 0x8e); */
     idt_set_gate(10, (uint64_t) exc10, 0x08, 0x8e); /* Invalid TSS (Fault - Precise) */
     idt_set_gate(11, (uint64_t) exc11, 0x08, 0x8e); /* Segment Not Present (Fault - Precise) */
     idt_set_gate(12, (uint64_t) exc12, 0x08, 0x8e); /* Stack Fault (Fault - Precise) */
     idt_set_gate(13, (uint64_t) exc13, 0x08, 0x8e); /* General Protect Violation (Fault - Precise) */
     idt_set_gate(14, (uint64_t) exc14, 0x08, 0x8e); /* Page Fault (Fault - Precise) */
+/*  idt_set_gate(15, (uint64_t) exc15, 0x08, 0x8e); */
     idt_set_gate(16, (uint64_t) exc16, 0x08, 0x8e); /* x87 Floating Point Exception-Pending (Fault - Imprecise) */
     idt_set_gate(17, (uint64_t) exc17, 0x08, 0x8e); /* Alignment Check (Fault - Precise) */
     idt_set_gate(18, (uint64_t) exc18, 0x08, 0x8e); /* Machine Check (Abort - Imprecise) */
     idt_set_gate(19, (uint64_t) exc19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
+/*  idt_set_gate(20, (uint64_t) exc20, 0x08, 0x8e); */
+/*  idt_set_gate(21, (uint64_t) exc21, 0x08, 0x8e); */
+/*  idt_set_gate(22, (uint64_t) exc22, 0x08, 0x8e); */
+/*  idt_set_gate(23, (uint64_t) exc23, 0x08, 0x8e); */
+/*  idt_set_gate(24, (uint64_t) exc24, 0x08, 0x8e); */
+/*  idt_set_gate(25, (uint64_t) exc25, 0x08, 0x8e); */
+/*  idt_set_gate(26, (uint64_t) exc26, 0x08, 0x8e); */
+/*  idt_set_gate(27, (uint64_t) exc27, 0x08, 0x8e); */
+/*  idt_set_gate(28, (uint64_t) exc28, 0x08, 0x8e); */
+/*  idt_set_gate(29, (uint64_t) exc29, 0x08, 0x8e); */
     idt_set_gate(30, (uint64_t) exc30, 0x08, 0x8e); /* Security Exception (- Precise) */
+/*  idt_set_gate(31, (uint64_t) exc31, 0x08, 0x8e); */
     console_printf(FG_WHITE, "Exception handlers installed\n");
 }
 
@@ -124,21 +137,38 @@ static void idt_install_exception_handlers(void) {
  * Installs the Interrupt Request handlers.
  */
 static void idt_install_irq_handlers(void) {
-    idt_set_gate(32, (uint64_t)  irq0, 0x08, 0x8e); /* ??? */
-    idt_set_gate(33, (uint64_t)  irq1, 0x08, 0x8e); /* ??? */
-    idt_set_gate(35, (uint64_t)  irq3, 0x08, 0x8e); /* ??? */
-    idt_set_gate(36, (uint64_t)  irq4, 0x08, 0x8e); /* ??? */
-    idt_set_gate(37, (uint64_t)  irq5, 0x08, 0x8e); /* ??? */
-    idt_set_gate(38, (uint64_t)  irq6, 0x08, 0x8e); /* ??? */
-    idt_set_gate(39, (uint64_t)  irq7, 0x08, 0x8e); /* ??? */
-    idt_set_gate(40, (uint64_t)  irq8, 0x08, 0x8e); /* ??? */
-    idt_set_gate(41, (uint64_t)  irq9, 0x08, 0x8e); /* ??? */
+    idt_set_gate(32, (uint64_t) irq00, 0x08, 0x8e); /* ??? */
+    idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* Keyboard? */
+/*  idt_set_gate(34, (uint64_t) irq02, 0x08, 0x8e); */
+    idt_set_gate(35, (uint64_t) irq03, 0x08, 0x8e); /* ??? */
+    idt_set_gate(36, (uint64_t) irq04, 0x08, 0x8e); /* ??? */
+    idt_set_gate(37, (uint64_t) irq05, 0x08, 0x8e); /* ??? */
+    idt_set_gate(38, (uint64_t) irq06, 0x08, 0x8e); /* ??? */
+    idt_set_gate(39, (uint64_t) irq07, 0x08, 0x8e); /* ??? */
+    idt_set_gate(40, (uint64_t) irq08, 0x08, 0x8e); /* ??? */
+    idt_set_gate(41, (uint64_t) irq09, 0x08, 0x8e); /* ??? */
     idt_set_gate(42, (uint64_t) irq10, 0x08, 0x8e); /* ??? */
     idt_set_gate(43, (uint64_t) irq11, 0x08, 0x8e); /* ??? */
     idt_set_gate(44, (uint64_t) irq12, 0x08, 0x8e); /* ??? */
     idt_set_gate(45, (uint64_t) irq13, 0x08, 0x8e); /* ??? */
     idt_set_gate(46, (uint64_t) irq14, 0x08, 0x8e); /* ??? */
     idt_set_gate(47, (uint64_t) irq15, 0x08, 0x8e); /* ??? */
+/*  idt_set_gate(48, (uint64_t) irq16, 0x08, 0x8e); */
+/*  idt_set_gate(49, (uint64_t) irq17, 0x08, 0x8e); */
+/*  idt_set_gate(50, (uint64_t) irq18, 0x08, 0x8e); */
+/*  idt_set_gate(51, (uint64_t) irq19, 0x08, 0x8e); */
+/*  idt_set_gate(52, (uint64_t) irq20, 0x08, 0x8e); */
+/*  idt_set_gate(53, (uint64_t) irq21, 0x08, 0x8e); */
+/*  idt_set_gate(54, (uint64_t) irq22, 0x08, 0x8e); */
+/*  idt_set_gate(55, (uint64_t) irq23, 0x08, 0x8e); */
+/*  idt_set_gate(56, (uint64_t) irq24, 0x08, 0x8e); */
+/*  idt_set_gate(57, (uint64_t) irq25, 0x08, 0x8e); */
+/*  idt_set_gate(58, (uint64_t) irq26, 0x08, 0x8e); */
+/*  idt_set_gate(59, (uint64_t) irq27, 0x08, 0x8e); */
+/*  idt_set_gate(60, (uint64_t) irq28, 0x08, 0x8e); */
+/*  idt_set_gate(61, (uint64_t) irq29, 0x08, 0x8e); */
+/*  idt_set_gate(62, (uint64_t) irq30, 0x08, 0x8e); */
+/*  idt_set_gate(63, (uint64_t) irq31, 0x08, 0x8e); */
     console_printf(FG_WHITE, "IRQ handlers installed\n");
 }
 

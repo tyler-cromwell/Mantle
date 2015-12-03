@@ -18,25 +18,38 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Global Symbols
-global exc0
-global exc1
-global exc2
-global exc3
-global exc4
-global exc5
-global exc6
-global exc7
-global exc8
+global exc00
+global exc01
+global exc02
+global exc03
+global exc04
+global exc05
+global exc06
+global exc07
+global exc08
+;      exc09
 global exc10
 global exc11
 global exc12
 global exc13
 global exc14
+;      exc15
 global exc16
 global exc17
 global exc18
 global exc19
+;      exc20
+;      exc21
+;      exc22
+;      exc23
+;      exc24
+;      exc25
+;      exc26
+;      exc27
+;      exc28
+;      exc29
 global exc30
+;      exc31
 
 ; External Symbols
 extern idt_exception_handler
@@ -44,7 +57,7 @@ extern idt_exception_handler
 [section .text]
 
 ; Divison By Zero
-exc0:
+exc00:
     cli
     push byte 0     ; Dummy error code
     push byte 0     ; Interrupt vector
@@ -52,51 +65,51 @@ exc0:
 
 
 ; Debug
-exc1:
+exc01:
     cli
     push byte 0     ; Dummy error code
     push byte 1     ; Interrupt vector
     jmp common_handler
 
 
-exc2:
+exc02:
     cli
     push byte 2     ; Interrupt vector
     jmp common_handler
 
 
-exc3:
+exc03:
     cli
     push byte 3     ; Interrupt vector
     jmp common_handler
 
 
-exc4:
+exc04:
     cli
     push byte 4     ; Interrupt vector
     jmp common_handler
 
 
-exc5:
+exc05:
     cli
     push byte 5     ; Interrupt vector
     jmp common_handler
 
 
-exc6:
+exc06:
     cli
     push byte 6     ; Interrupt vector
     jmp common_handler
 
 
-exc7:
+exc07:
     cli
     push byte 7     ; Interrupt vector
     jmp common_handler
 
 
 ; Double Fault
-exc8:
+exc08:
     cli
     push byte 8     ; Interrupt vector
     jmp common_handler
