@@ -30,9 +30,9 @@ extern kernel_main
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [section .multiboot]
     align 4
-    dd 0x1badb002
-    dd 0x03
-    dd -(0x1badb002 + 0x03)
+    dd 0x1badb002           ; Magic number
+    dd 0x03                 ; Flags
+    dd -(0x1badb002 + 0x03) ; Checksum
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
