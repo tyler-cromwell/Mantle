@@ -63,133 +63,133 @@ extern idt_exception_handler
 exc00:
     cli
     push 0  ; (Dummy) Error Code
-    push 0  ; Interrupt vector
+    push 0  ; Interrupt Vector
     jmp common_handler
 
 
 exc01:
     cli
     push 0  ; (Dummy) Error Code
-    push 1  ; Interrupt vector
+    push 1  ; Interrupt Vector
     jmp common_handler
 
 
 exc02:
     cli
     push 0  ; (Dummy) Error Code
-    push 2  ; Interrupt vector
+    push 2  ; Interrupt Vector
     jmp common_handler
 
 
 exc03:
     cli
     push 0  ; (Dummy) Error Code
-    push 3  ; Interrupt vector
+    push 3  ; Interrupt Vector
     jmp common_handler
 
 
 exc04:
     cli
     push 0  ; (Dummy) Error Code
-    push 4  ; Interrupt vector
+    push 4  ; Interrupt Vector
     jmp common_handler
 
 
 exc05:
     cli
     push 0  ; (Dummy) Error Code
-    push 5  ; Interrupt vector
+    push 5  ; Interrupt Vector
     jmp common_handler
 
 
 exc06:
     cli
     push 0  ; (Dummy) Error Code
-    push 6  ; Interrupt vector
+    push 6  ; Interrupt Vector
     jmp common_handler
 
 
 exc07:
     cli
     push 0  ; (Dummy) Error Code
-    push 7  ; Interrupt vector
+    push 7  ; Interrupt Vector
     jmp common_handler
 
 
 exc08:
     cli
     ; Error code is already pushed
-    push 8  ; Interrupt vector
+    push 8  ; Interrupt Vector
     jmp common_handler
 
 
 exc10:
     cli
     ; Error code is already pushed
-    push 10 ; Interrupt vector
+    push 10 ; Interrupt Vector
     jmp common_handler
 
 
 exc11:
     cli
     ; Error code is already pushed
-    push 11 ; Interrupt vector
+    push 11 ; Interrupt Vector
     jmp common_handler
 
 
 exc12:
     cli
     ; Error code is already pushed
-    push 12 ; Interrupt vector
+    push 12 ; Interrupt Vector
     jmp common_handler
 
 
 exc13:
     cli
     ; Error code is already pushed
-    push 13 ; Interrupt vector
+    push 13 ; Interrupt Vector
     jmp common_handler
 
 
 exc14:
     cli
     ; Error code is already pushed
-    push 14 ; Interrupt vector
+    push 14 ; Interrupt Vector
     jmp common_handler
 
 
 exc16:
     cli
     push 0  ; (Dummy) Error Code
-    push 16 ; Interrupt vector
+    push 16 ; Interrupt Vector
     jmp common_handler
 
 
 exc17:
     cli
     ; Error code is already pushed
-    push 17 ; Interrupt vector
+    push 17 ; Interrupt Vector
     jmp common_handler
 
 
 exc18:
     cli
     push 0  ; (Dummy) Error Code
-    push 18 ; Interrupt vector
+    push 18 ; Interrupt Vector
     jmp common_handler
 
 
 exc19:
     cli
     push 0  ; (Dummy) Error Code
-    push 19 ; Interrupt vector
+    push 19 ; Interrupt Vector
     jmp common_handler
 
 
 exc30:
     cli
     ; Error code is already pushed
-    push 30 ; Interrupt vector
+    push 30 ; Interrupt Vector
     jmp common_handler
 
 
@@ -223,7 +223,7 @@ common_handler:
     mov gs, ax
 
     ; Pass arguments then call C handler
-    mov rdi, [rsp+136]  ; Interrupt vector
+    mov rdi, [rsp+136]  ; Interrupt Vector
     call idt_exception_handler
 
     ; Restore data segment

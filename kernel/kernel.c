@@ -44,6 +44,7 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
 
     /* Setup interrupt handling */
     idt_configure();
+    console_printf(FG_WHITE, "\n");
 
     /* Get Kernel size */
     uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
@@ -65,6 +66,7 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
 
     /* Get and print number of processors */
     console_printf(FG_WHITE, "processors: %u\n", cpuid_cpus());
+    console_printf(FG_WHITE, "\n");
 
     /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {
@@ -72,6 +74,7 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
         multiboot_dump();
     }
 
+    while (1);
     console_printf(FG_BLACK | BG_RED, "System halted");
     return;
 }

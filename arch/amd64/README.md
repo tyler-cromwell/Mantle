@@ -5,6 +5,7 @@ This directory contains all AMD64 specific code.
 
 #### Directories
 - `boot` - Contains code needed for booting/starting the Kernel on an AMD64 machine.
+- `drivers` - Contains code for driving hardware found on an AMD64 machine.
 
 #### Files
 - `amd64.asm` - Contains a bunch of misfit assembly code.

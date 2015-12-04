@@ -18,9 +18,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Global Symbols
-global irq00
+global irq00    ; i8253 timer
 global irq01    ; Keyboard?
-;      irq02
+;      irq02    ; Slave PIC
 global irq03
 global irq04
 global irq05
@@ -62,132 +62,167 @@ extern idt_irq_handler
 
 irq00:
     cli
-    push byte 0
-    push byte 32
+    push 0  ; (Dummy) Error Code
+    push 32 ; Interrupt Vector
     jmp common_handler
 
 
 irq01:
     cli
-    push byte 1
-    push byte 33
+    push 0  ; (Dummy) Error Code
+    push 33 ; Interrupt Vector
     jmp common_handler
 
 
 irq03:
     cli
-    push byte 0
-    push byte 35
+    push 0  ; (Dummy) Error Code
+    push 35 ; Interrupt Vector
     jmp common_handler
 
 
 irq04:
     cli
-    push byte 0
-    push byte 36
+    push 0  ; (Dummy) Error Code
+    push 36 ; Interrupt Vector
     jmp common_handler
 
 
 irq05:
     cli
-    push byte 0
-    push byte 37
+    push 0  ; (Dummy) Error Code
+    push 37 ; Interrupt Vector
     jmp common_handler
 
 
 irq06:
     cli
-    push byte 0
-    push byte 38
+    push 0  ; (Dummy) Error Code
+    push 38 ; Interrupt Vector
     jmp common_handler
 
 
 irq07:
     cli
-    push byte 0
-    push byte 39
+    push 0  ; (Dummy) Error Code
+    push 39 ; Interrupt Vector
     jmp common_handler
 
 
 irq08:
     cli
-    push byte 0
-    push byte 40
+    push 0  ; (Dummy) Error Code
+    push 40 ; Interrupt Vector
     jmp common_handler
 
 
 irq09:
     cli
-    push byte 0
-    push byte 41
+    push 0  ; (Dummy) Error Code
+    push 41 ; Interrupt Vector
     jmp common_handler
 
 
 irq10:
     cli
-    push byte 0
-    push byte 42
+    push 0  ; (Dummy) Error Code
+    push 42 ; Interrupt Vector
     jmp common_handler
 
 
 irq11:
     cli
-    push byte 0
-    push byte 43
+    push 0  ; (Dummy) Error Code
+    push 43 ; Interrupt Vector
     jmp common_handler
 
 
 irq12:
     cli
-    push byte 0
-    push byte 44
+    push 0  ; (Dummy) Error Code
+    push 44 ; Interrupt Vector
     jmp common_handler
 
 
 irq13:
     cli
-    push byte 0
-    push byte 45
+    push 0  ; (Dummy) Error Code
+    push 45 ; Interrupt Vector
     jmp common_handler
 
 
 irq14:
     cli
-    push byte 0
-    push byte 46
+    push 0  ; (Dummy) Error Code
+    push 46 ; Interrupt Vector
     jmp common_handler
 
 
 irq15:
     cli
-    push byte 0
-    push byte 47
+    push 0  ; (Dummy) Error Code
+    push 47 ; Interrupt Vector
     jmp common_handler
 
 
 ; Common Interrupt handler stub
 common_handler:
-    hlt
+    ; Save register values
+    push rax
+    push rbx
+    push rcx
+    push rdx
+    push rbp
+    push rsi
+    push rdi
+    push rsp
+    push r8
+    push r9
+    push r10
+    push r11
+    push r12
+    push r13
+    push r14
+    push r15
+
+    ; Save data segment
+    mov rax, ds
+    push rax
+
+    ; Load kernel data segment
+    mov ax, 0x10
+    mov fs, ax
+    mov gs, ax
+
+    ; Pass arguments then call C handler
+    mov rdi, [rsp+136]  ; Interrupt Vector
     call idt_irq_handler
-;    pusha
-;    push ds
-;    push es
-;    push fs
-;    push gs
-;    mov ax, 0x10
-;    mov ds, ax
-;    mov es, ax
-;    mov fs, ax
-;    mov gs, ax
-;    mov eax, esp
-;    push eax
-;    mov eax, idt_irq_handler
-;    call eax
-;    pop eax
-;    pop gs
-;    pop fs
-;    pop es
-;    pop ds
-;    popa
-;    add esp, 8
-;    iret
+
+    ; Restore data segment
+    pop rax
+    mov fs, ax
+    mov gs, ax
+
+    ; Restore register values
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop r11
+    pop r10
+    pop r9
+    pop r8
+    pop rsp
+    pop rdi
+    pop rsi
+    pop rbp
+    pop rdx
+    pop rcx
+    pop rbx
+    pop rax
+
+    ; Cleanup and return
+    add rsp, 16 ; Cleanup Interrupt Vector
+                ; and Error Code
+    sti
+    iretq

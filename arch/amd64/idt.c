@@ -18,11 +18,13 @@
 **********************************************************************/
 
 /* C Standard Library Headers,
-   these don't need link against libc */
+   these don't need to link against libc */
 #include <stdint.h>
 
 /* Kernel Headers */
 #include <amd64/amd64.h>
+#include <amd64/i8253.h>
+#include <amd64/i8259.h>
 #include <drivers/console.h>
 #include <kernel/string.h>
 #include "interrupts.h"
@@ -137,7 +139,7 @@ static void idt_install_exception_handlers(void) {
  * Installs the Interrupt Request handlers.
  */
 static void idt_install_irq_handlers(void) {
-    idt_set_gate(32, (uint64_t) irq00, 0x08, 0x8e); /* ??? */
+    idt_set_gate(32, (uint64_t) irq00, 0x08, 0x8e); /* i8253 timer */
     idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* Keyboard? */
 /*  idt_set_gate(34, (uint64_t) irq02, 0x08, 0x8e); */
     idt_set_gate(35, (uint64_t) irq03, 0x08, 0x8e); /* ??? */
@@ -180,21 +182,11 @@ void idt_configure(void) {
 
     /* Initialize controller (using i8259) */
     disable_apic();
+    i8259_init();
+    i8259_unmask();
 
-    outb(0x20, 0x11);
-    outb(0xa0, 0x11);
-
-    outb(0x21, 0x20);
-    outb(0xa1, 0x28);
-
-    outb(0x21, 0x00);
-    outb(0xa1, 0x00);
-
-    outb(0x21, 0x01);
-    outb(0xa1, 0x01);
-
-    outb(0x21, 0xff);
-    outb(0xa1, 0xff);
+    /* Initialize the i8253 timer */
+    i8253_init(100);
 
     /* Setup Pointer */
     struct Idtr idtr = {
@@ -207,15 +199,19 @@ void idt_configure(void) {
     idt_install_irq_handlers();    
     idt_load(&idtr);
 
-    console_printf(FG_WHITE, "IDT Configured\n");
+    console_printf(FG_WHITE, "IDT setup, interrupts enabled\n");
 }
 
 void idt_exception_handler(uint64_t vector) {
-    console_printf(FG_BROWN_L, "Caught \"%s\" (%u) exception!\n", interrupts[vector], vector);
+    console_printf(FG_BROWN_L, "%s!\n", interrupts[vector]);
 }
 
-void idt_irq_handler(uint32_t *p) {
-    p += (9 * 4);
-    console_printf(FG_BROWN_L, "Interrupt Request %u caught!\n", *p);
-    asm volatile ("hlt");
+void idt_irq_handler(uint64_t vector) {
+    //console_printf(FG_BROWN_L, "Triggered irq%u!\n", vector);
+
+    /* Send reset signal */
+    if (vector >= 40) {
+        outb(I8259_SLAVE_CMD, 0x20);
+    }
+    outb(I8259_MASTER_CMD, 0x20);
 }
