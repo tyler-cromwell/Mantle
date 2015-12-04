@@ -27,13 +27,6 @@
 #define VENDOR_AMD      "AuthenticAMD"
 #define VENDOR_INTEL    "GenuineIntel"
 
-struct registers {
-    uint32_t gs, fs, es, ds;
-    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
-    uint32_t int_no, err_code;
-    uint32_t eip, cs, eflags, useresp, ss;
-};
-
 /*
  * Read a byte from an I/O port.
  * Arguments:
@@ -60,6 +53,6 @@ extern void cpuid_vendor(char *id);
 extern uint8_t cpuid_cpus(void);
 
 /* Interrupt Descriptor Table */
-extern void idt_init(void);
+extern void idt_configure(void);
 
 #endif

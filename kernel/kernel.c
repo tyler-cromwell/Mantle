@@ -43,7 +43,7 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
     console_printf(FG_BLUE, STRING"\n");
 
     /* Setup interrupt handling */
-    idt_init();
+    idt_configure();
 
     /* Force Divide by Zero exception */
     int i = 1;

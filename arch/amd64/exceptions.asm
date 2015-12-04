@@ -59,147 +59,201 @@ extern idt_exception_handler
 ; Divison By Zero
 exc00:
     cli
-    push byte 0     ; Dummy error code
-    push byte 0     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 0  ; Interrupt vector
     jmp common_handler
 
 
 ; Debug
 exc01:
     cli
-    push byte 0     ; Dummy error code
-    push byte 1     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 1  ; Interrupt vector
     jmp common_handler
 
 
 exc02:
     cli
-    push byte 2     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 2  ; Interrupt vector
     jmp common_handler
 
 
 exc03:
     cli
-    push byte 3     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 3  ; Interrupt vector
     jmp common_handler
 
 
 exc04:
     cli
-    push byte 4     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 4  ; Interrupt vector
     jmp common_handler
 
 
 exc05:
     cli
-    push byte 5     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 5  ; Interrupt vector
     jmp common_handler
 
 
 exc06:
     cli
-    push byte 6     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 6  ; Interrupt vector
     jmp common_handler
 
 
 exc07:
     cli
-    push byte 7     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 7  ; Interrupt vector
     jmp common_handler
 
 
 ; Double Fault
 exc08:
     cli
-    push byte 8     ; Interrupt vector
+    ; Error code is already pushed
+    push 8  ; Interrupt vector
     jmp common_handler
 
 
 exc10:
     cli
-    push byte 10    ; Interrupt vector
+    ; Error code is already pushed
+    push 10 ; Interrupt vector
     jmp common_handler
 
 
 exc11:
     cli
-    push byte 11    ; Interrupt vector
+    ; Error code is already pushed
+    push 11 ; Interrupt vector
     jmp common_handler
 
 
 exc12:
     cli
-    push byte 12    ; Interrupt vector
+    ; Error code is already pushed
+    push 12 ; Interrupt vector
     jmp common_handler
 
 
 ; General Protection
 exc13:
     cli
-    push byte 13    ; Interrupt vector
+    ; Error code is already pushed
+    push 13 ; Interrupt vector
     jmp common_handler
 
 
 ; Page Fault
 exc14:
     cli
-    push byte 14    ; Interrupt vector
+    ; Error code is already pushed
+    push 14 ; Interrupt vector
     jmp common_handler
 
 
 exc16:
     cli
-    push byte 16     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 16 ; Interrupt vector
     jmp common_handler
 
 
 exc17:
     cli
-    push byte 17    ; Interrupt vector
+    ; Error code is already pushed
+    push 17 ; Interrupt vector
     jmp common_handler
 
 
 exc18:
     cli
-    push byte 18    ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 18 ; Interrupt vector
     jmp common_handler
 
 
 exc19:
     cli
-    push byte 19     ; Interrupt vector
+    push 0  ; (Dummy) Error Code
+    push 19 ; Interrupt vector
     jmp common_handler
 
 
 exc30:
     cli
-    push byte 30     ; Interrupt vector
+    ; Error code is already pushed
+    push 30 ; Interrupt vector
     jmp common_handler
 
 
 ; Common Interrupt handler stub
 common_handler:
-    hlt
-;    pushad
+    ; Save register values
+    push rax
+    push rbx
+    push rcx
+    push rdx
+    push rbp
+    push rsi
+    push rdi
+    push rsp
+    push r8
+    push r9
+    push r10
+    push r11
+    push r12
+    push r13
+    push r14
+    push r15
 
-;    mov ax, ds
-;    push rax
+    ; Save data segment
+    mov rax, ds
+    push rax
 
-;    mov ax, 0x10
-;    mov ds, ax
-;    mov es, ax
-;    mov fs, ax
-;    mov gs, ax
+    ; Load kernel data segment
+    mov ax, 0x10
+    mov fs, ax
+    mov gs, ax
 
+    ; Pass arguments then call C handler
+    mov rdi, [rsp+136]  ; Interrupt vector
     call idt_exception_handler
 
-;    pop rax
-;    mov ds, ax
-;    mov es, ax
-;    mov fs, ax
-;    mov gs, ax
+    ; Restore data segment
+    pop rax
+    mov fs, ax
+    mov gs, ax
 
-;    popad
-;    add rsp, 16 ;???
-;    sti
+    ; Restore register values
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop r11
+    pop r10
+    pop r9
+    pop r8
+    pop rsp
+    pop rdi
+    pop rsi
+    pop rbp
+    pop rdx
+    pop rcx
+    pop rbx
+    pop rax
+
+    ; Cleanup and return
+    add rsp, 16 ; Cleanup Interrupt Vector
+                ; and Error Code
+    sti
     iretq
+
+    ; Evidently.... this returns to the offending instruction

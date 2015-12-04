@@ -20,8 +20,8 @@
 #ifndef AMD64_INTERRUPTS_H
 #define AMD64_INTERRUPTS_H
 
-/* Name of each internal exception */
-static char *exceptions[] = {
+/* Name of each interrupt */
+static char *interrupts[] = {
     "Division By Zero",                         /* exc00 */
     "Debug",                                    /* exc01 */
     "Non-Maskable Interrupt",                   /* exc02 */

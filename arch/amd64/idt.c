@@ -175,8 +175,10 @@ static void idt_install_irq_handlers(void) {
 /*
  * Installs the Interrupt Descriptor Table.
  */
-void idt_init(void) {
-    /* Initialize interrupt controller */
+void idt_configure(void) {
+    memset((void*) idt, 0, sizeof(struct IdtGate) * 256);
+
+    /* Initialize controller */
     disable_apic();
 
     outb(0x20, 0x11);
@@ -201,8 +203,6 @@ void idt_init(void) {
     };
 
     /* Install handlers */
-    memset((void*) idt, 0, sizeof(struct IdtGate) * 256);
-
     idt_install_exception_handlers();
     idt_install_irq_handlers();    
     idt_load(&idtr);
@@ -210,10 +210,8 @@ void idt_init(void) {
     console_printf(FG_WHITE, "IDT Configured\n");
 }
 
-void idt_exception_handler(uint32_t *p) {
-    p += (9 * 4);
-    console_printf(FG_BROWN_L, "Exception %u caught!\n", *p);
-    asm volatile ("hlt");
+void idt_exception_handler(uint64_t vector) {
+    console_printf(FG_BROWN_L, "Caught \"%s\" (%u) exception!\n", interrupts[vector], vector);
 }
 
 void idt_irq_handler(uint32_t *p) {
