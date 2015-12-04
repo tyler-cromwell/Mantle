@@ -18,26 +18,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Global Symbols
-global exc00
-global exc01
-global exc02
-global exc03
-global exc04
-global exc05
-global exc06
-global exc07
-global exc08
+global exc00    ; Division By Zero
+global exc01    ; Debug
+global exc02    ; Non-Maskable Interrupt
+global exc03    ; Breakpoint
+global exc04    ; Overflow
+global exc05    ; Bounds Check
+global exc06    ; Invalid Opcode
+global exc07    ; Coprocessor Not Available
+global exc08    ; Double Fault
 ;      exc09
-global exc10
-global exc11
-global exc12
-global exc13
-global exc14
+global exc10    ; Invalid TSS
+global exc11    ; Segment Not Present
+global exc12    ; Stack Fault
+global exc13    ; General Protection
+global exc14    ; Page Fault
 ;      exc15
-global exc16
-global exc17
-global exc18
-global exc19
+global exc16    ; x87 Floating Point
+global exc17    ; Alignment Check
+global exc18    ; Machine Check
+global exc19    ; SIMD Floating Point
 ;      exc20
 ;      exc21
 ;      exc22
@@ -48,15 +48,18 @@ global exc19
 ;      exc27
 ;      exc28
 ;      exc29
-global exc30
+global exc30    ; Security
 ;      exc31
 
 ; External Symbols
 extern idt_exception_handler
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Text Section
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [section .text]
 
-; Divison By Zero
 exc00:
     cli
     push 0  ; (Dummy) Error Code
@@ -64,7 +67,6 @@ exc00:
     jmp common_handler
 
 
-; Debug
 exc01:
     cli
     push 0  ; (Dummy) Error Code
@@ -114,7 +116,6 @@ exc07:
     jmp common_handler
 
 
-; Double Fault
 exc08:
     cli
     ; Error code is already pushed
@@ -143,7 +144,6 @@ exc12:
     jmp common_handler
 
 
-; General Protection
 exc13:
     cli
     ; Error code is already pushed
@@ -151,7 +151,6 @@ exc13:
     jmp common_handler
 
 
-; Page Fault
 exc14:
     cli
     ; Error code is already pushed

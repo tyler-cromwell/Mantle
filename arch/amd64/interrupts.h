@@ -22,38 +22,38 @@
 
 /* Name of each interrupt */
 static char *interrupts[] = {
-    "Division By Zero",                         /* exc00 */
-    "Debug",                                    /* exc01 */
-    "Non-Maskable Interrupt",                   /* exc02 */
-    "Breakpoint",                               /* exc03 */
-    "Overflow",                                 /* exc04 */
-    "Bounds Check",                             /* exc05 */
-    "Invalid Opcode",                           /* exc06 */
-    "Coprocessor Not Available",                /* exc07 */
-    "Double Fault",                             /* exc08 */
-    "Reserved",                                 /* exc09 */
-    "Invalid TSS",                              /* exc10 */
-    "Segment Not Present",                      /* exc11 */
-    "Stack Fault",                              /* exc12 */
-    "General Protection",                       /* exc13 */
-    "Page Fault",                               /* exc14 */
-    "Reserved",                                 /* exc15 */
-    "x87 Floating Point Exception-Pending",     /* exc16 */
-    "Alignment Check",                          /* exc17 */
-    "Machine Check",                            /* exc18 */
-    "SIMD Floating-Point",                      /* exc19 */
-    "Reserved",                                 /* exc20 */
-    "Reserved",                                 /* exc21 */
-    "Reserved",                                 /* exc22 */
-    "Reserved",                                 /* exc23 */
-    "Reserved",                                 /* exc24 */
-    "Reserved",                                 /* exc25 */
-    "Reserved",                                 /* exc26 */
-    "Reserved",                                 /* exc27 */
-    "Reserved",                                 /* exc28 */
-    "Reserved",                                 /* exc29 */
-    "Security Exception",                       /* exc30 */
-    "Reserved",                                 /* exc31 */
+    "Division By Zero",             /* exc00 */
+    "Debug",                        /* exc01 */
+    "Non-Maskable Interrupt",       /* exc02 */
+    "Breakpoint",                   /* exc03 */
+    "Overflow",                     /* exc04 */
+    "Bounds Check",                 /* exc05 */
+    "Invalid Opcode",               /* exc06 */
+    "Coprocessor Not Available",    /* exc07 */
+    "Double Fault",                 /* exc08 */
+    "Reserved",                     /* exc09 */
+    "Invalid TSS",                  /* exc10 */
+    "Segment Not Present",          /* exc11 */
+    "Stack Fault",                  /* exc12 */
+    "General Protection",           /* exc13 */
+    "Page Fault",                   /* exc14 */
+    "Reserved",                     /* exc15 */
+    "x87 Floating Point",           /* exc16 */
+    "Alignment Check",              /* exc17 */
+    "Machine Check",                /* exc18 */
+    "SIMD Floating Point",          /* exc19 */
+    "Reserved",                     /* exc20 */
+    "Reserved",                     /* exc21 */
+    "Reserved",                     /* exc22 */
+    "Reserved",                     /* exc23 */
+    "Reserved",                     /* exc24 */
+    "Reserved",                     /* exc25 */
+    "Reserved",                     /* exc26 */
+    "Reserved",                     /* exc27 */
+    "Reserved",                     /* exc28 */
+    "Reserved",                     /* exc29 */
+    "Security",                     /* exc30 */
+    "Reserved",                     /* exc31 */
 };
 
 

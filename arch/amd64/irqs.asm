@@ -19,7 +19,7 @@
 
 ; Global Symbols
 global irq00
-global irq01
+global irq01    ; Keyboard?
 ;      irq02
 global irq03
 global irq04
@@ -54,6 +54,10 @@ global irq15
 ; External Symbols
 extern idt_irq_handler
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Text Section
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [section .text]
 
 irq00:
@@ -63,7 +67,6 @@ irq00:
     jmp common_handler
 
 
-; Keyboard?
 irq01:
     cli
     push byte 1
