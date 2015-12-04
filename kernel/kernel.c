@@ -45,11 +45,6 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
     /* Setup interrupt handling */
     idt_configure();
 
-    /* Force Divide by Zero exception */
-    int i = 1;
-    i--;
-    int j = 3 / i;
-
     /* Get Kernel size */
     uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
     console_printf(FG_WHITE, "Kernel size: %uKB\n", size);

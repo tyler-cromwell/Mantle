@@ -111,10 +111,10 @@ static void idt_install_exception_handlers(void) {
     idt_set_gate(10, (uint64_t) exc10, 0x08, 0x8e); /* Invalid TSS (Fault - Precise) */
     idt_set_gate(11, (uint64_t) exc11, 0x08, 0x8e); /* Segment Not Present (Fault - Precise) */
     idt_set_gate(12, (uint64_t) exc12, 0x08, 0x8e); /* Stack Fault (Fault - Precise) */
-    idt_set_gate(13, (uint64_t) exc13, 0x08, 0x8e); /* General Protect Violation (Fault - Precise) */
+    idt_set_gate(13, (uint64_t) exc13, 0x08, 0x8e); /* General Protect (Fault - Precise) */
     idt_set_gate(14, (uint64_t) exc14, 0x08, 0x8e); /* Page Fault (Fault - Precise) */
 /*  idt_set_gate(15, (uint64_t) exc15, 0x08, 0x8e); */
-    idt_set_gate(16, (uint64_t) exc16, 0x08, 0x8e); /* x87 Floating Point Exception-Pending (Fault - Imprecise) */
+    idt_set_gate(16, (uint64_t) exc16, 0x08, 0x8e); /* x87 Floating Point (Fault - Imprecise) */
     idt_set_gate(17, (uint64_t) exc17, 0x08, 0x8e); /* Alignment Check (Fault - Precise) */
     idt_set_gate(18, (uint64_t) exc18, 0x08, 0x8e); /* Machine Check (Abort - Imprecise) */
     idt_set_gate(19, (uint64_t) exc19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
@@ -128,7 +128,7 @@ static void idt_install_exception_handlers(void) {
 /*  idt_set_gate(27, (uint64_t) exc27, 0x08, 0x8e); */
 /*  idt_set_gate(28, (uint64_t) exc28, 0x08, 0x8e); */
 /*  idt_set_gate(29, (uint64_t) exc29, 0x08, 0x8e); */
-    idt_set_gate(30, (uint64_t) exc30, 0x08, 0x8e); /* Security Exception (- Precise) */
+    idt_set_gate(30, (uint64_t) exc30, 0x08, 0x8e); /* Security (- Precise) */
 /*  idt_set_gate(31, (uint64_t) exc31, 0x08, 0x8e); */
     console_printf(FG_WHITE, "Exception handlers installed\n");
 }
@@ -178,7 +178,7 @@ static void idt_install_irq_handlers(void) {
 void idt_configure(void) {
     memset((void*) idt, 0, sizeof(struct IdtGate) * 256);
 
-    /* Initialize controller */
+    /* Initialize controller (using i8259) */
     disable_apic();
 
     outb(0x20, 0x11);

@@ -252,7 +252,7 @@ common_handler:
     ; Cleanup and return
     add rsp, 16 ; Cleanup Interrupt Vector
                 ; and Error Code
-    sti
-    iretq
 
-    ; Evidently.... this returns to the offending instruction
+    hlt ; Temporary
+    ;sti
+    ;iretq
