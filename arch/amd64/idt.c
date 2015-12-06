@@ -199,7 +199,7 @@ void idt_configure(void) {
     idt_install_irq_handlers();    
     idt_load(&idtr);
 
-    console_printf(FG_WHITE, "IDT setup, interrupts enabled\n");
+    console_printf(FG_WHITE, "IDT setup, interrupts enabled\n\n");
 }
 
 void idt_exception_handler(uint64_t vector) {
@@ -207,8 +207,6 @@ void idt_exception_handler(uint64_t vector) {
 }
 
 void idt_irq_handler(uint64_t vector) {
-    //console_printf(FG_BROWN_L, "Triggered irq%u!\n", vector);
-
     /* Send reset signal */
     if (vector >= 40) {
         outb(I8259_SLAVE_CMD, 0x20);

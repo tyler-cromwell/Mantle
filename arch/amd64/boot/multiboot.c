@@ -102,7 +102,7 @@ void multiboot_dump(void) {
 
     /* Dump the Memory Map */
     if (info->flags & MULTIBOOT_MMAP) {
-        console_printf(FG_WHITE, "Memory Map:\n");
+        console_printf(FG_WHITE, "\nMemory Map:\n");
 
         size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
 
