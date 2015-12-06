@@ -17,33 +17,34 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Header,
+/* C Standard Library Headers,
    these do not need to link against libc */
 #include <stdint.h>
 
+/* Kernel Headers */
 #include <drivers/console.h>
 
 /*
  * Obtains the CPU vendor string.
  * Argument:
- *   char* id: Pointer to the location to save the vendor id.
+ *   char *id: Pointer to the location to save the vendor id.
  */
 void cpuid_vendor(char *id) {
-    uint32_t eax = 0, ebx = 0, ecx = 0, edx = 0;
+    uint64_t rax = 0, rbx = 0, rcx = 0, rdx = 0;
 
     /* Pass 'eax' into register A, then run CPUID */
-    __asm__("cpuid": : "a" (eax));
+    __asm__("cpuid": : "a" (rax));
 
     /* Get the value of registers B, C, and D */
-    __asm__ volatile ("": "=b" (ebx));
-    __asm__ volatile ("": "=c" (ecx));
-    __asm__ volatile ("": "=d" (edx));
+    __asm__ volatile ("": "=b" (rbx));
+    __asm__ volatile ("": "=c" (rcx));
+    __asm__ volatile ("": "=d" (rdx));
     
     /* Get the vendor id of the CPU */
     for (uint8_t i = 0; i < 4; i++) {
-        id[i+0] = ebx >> (i * 8);
-        id[i+4] = edx >> (i * 8);
-        id[i+8] = ecx >> (i * 8);
+        id[i+0] = rbx >> (i * 8);
+        id[i+4] = rdx >> (i * 8);
+        id[i+8] = rcx >> (i * 8);
     }
 }
 
@@ -52,14 +53,14 @@ void cpuid_vendor(char *id) {
  * Returns:
  *   The number of processors.
  */
-uint32_t cpuid_cpus(void) {
-    uint32_t ebx = 0;
+uint64_t cpuid_cpus(void) {
+    uint64_t rbx = 0;
 
     /* Pass '0x1' into register A, then run CPUID */
     __asm__ volatile ("cpuid": : "a" (0x1));
 
     /* Get the value of register B */
-    __asm__ volatile ("": "=b" (ebx));
+    __asm__ volatile ("": "=b" (rbx));
 
-    return (ebx >> 16) & 0xff;
+    return (rbx >> 16) & 0xff;
 }
