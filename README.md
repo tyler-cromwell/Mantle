@@ -1,7 +1,8 @@
 # Ritchie
 
 ## What is Ritchie?
-Ritchie is a hobbyist Operating System Kernel I am working on to learn more about different CPU architectures (currently x86/amd64), Operating System concepts, and to get more C/Assembly programming practice.<br/>
+Ritchie is a hobbyist Operating System Kernel I am working on to learn more about different CPU architectures (currently x86/amd64), Operating System concepts, and to get more C/Assembly programming practice.
+I also hope that this project will serve as a good learning reference for others interested in OS development.<br/>
 <br/>
 This project is named in honor of the late, great [Dennis Ritchie][dmr].
 
@@ -22,23 +23,23 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
    - Double underscore prefix for functions or function-like macros that should not be called directly (`__console_write`).
 
 ## Toolchain
-- `Makefile` - This [GNU] Makefile is used to build the kernel and test it.
+- `Makefile` - [GNU] Makefile used to build the kernel.
   - `[g]make` - Builds the kernel image file.
   - `[g]make iso` - Builds an iso image with GRUB as the bootloader.
   - `[g]make clean` - Deletes all object files and the kernel image/iso file(s).
-- `link.ld` - Simple linker script that determines the physical address the kernel is loaded at during boot.
-- `grub.cfg` - Basic GRUB config file, tells GRUB to use Multiboot to load the kernel.
+- `link.ld` - Linker script that organizes the binary layout.
+- `grub.cfg` - Basic GRUB config file.
 - `configure.py` - Python 3 script that updates the following files:
   - `make.conf`, `grub.cfg`, and `version.h`.
   - Running `./configure.py clean` will run `git checkout` on each file, including `ritchie.conf`.
 - `ritchie.conf` - Project configuration file, contains various options.
   - `Name`: The project name.
-  - `Version`: The version string (i.e. `v0.0`).
-  - `Codename`: The codename (i.e. `Make Moves Son`).
+  - `Version`: The version string.
+  - `Codename`: The codename.
   - `Arch`: The architecture to build for (i.e. `x86`).
   - `Image`: The kernel binary image (i.e. `ritchie_debug`).
-- `make.conf` - File containing Makefile variables.
-  - `ARCH`: The architecture to build for (i.e. `x86`).
-  - `IMAGE`: The kernel binary image (i.e. `ritchie_debug`).
+- `make.conf` - File containing Makefile variables (populated by `configure.py`).
+  - `ARCH`: The architecture to build.
+  - `IMAGE`: The kernel binary image.
 
 [dmr]: http://en.wikipedia.org/wiki/Dennis_Ritchie
