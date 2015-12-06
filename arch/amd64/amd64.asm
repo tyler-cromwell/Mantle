@@ -34,12 +34,8 @@ disable_apic:
     wrmsr
     ret
 
-; Install the IDT
+; Installs the IDT
 idt_load:
-    push rbp
-    mov rbp, rsp
-    mov rdx, rdi
-    lidt [rdx]
-    pop rbp
+    lidt [rdi]
     sti
     ret
