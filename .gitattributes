@@ -1,3 +1,4 @@
-arch/include/x86/x86.h linguist-language=C
-arch/x86/interrupts.h linguist-language=C
+arch/amd64/interrupts.h linguist-language=C
+arch/include/amd64/amd64.h linguist-language=C
+arch/include/amd64/i8253.h linguist-language=C
 include/kernel/version.h linguist-language=C
