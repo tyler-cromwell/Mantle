@@ -37,7 +37,6 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
   - `Version`: The version string.
   - `Codename`: The codename.
   - `Arch`: The architecture to build for (i.e. `x86`).
-  - `Image`: The kernel binary image (i.e. `ritchie_debug`).
 - `make.conf` - File containing Makefile variables (populated by `configure.py`).
   - `ARCH`: The architecture to build.
   - `IMAGE`: The kernel binary image.
