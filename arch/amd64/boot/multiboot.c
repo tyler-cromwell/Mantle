@@ -107,11 +107,9 @@ void multiboot_dump(void) {
         size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
 
         for (size_t i = 0; i < ents; i++) {
-            console_printf(FG_WHITE, "[%d]: ", i);
-
             /* Region Base Address */
             uint32_t n = mmap[i].base_addr;
-            console_printf(FG_WHITE, "%x - ", n);
+            console_printf(FG_WHITE, "[%u]: %x - ", i, n);
 
             /* Region Ending Address */
             n = mmap[i].base_addr + mmap[i].length - 1;
