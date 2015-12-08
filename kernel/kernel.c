@@ -40,7 +40,7 @@ extern struct undefined KERNEL_SIZE;
 void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
     console_clear();
     console_set_background(BG_GREY);
-    console_printf(FG_BLUE_L, STRING"\n");
+    console_printf(FG_BLUE, STRING"\n");
 
     /* Setup interrupt handling */
     idt_configure();

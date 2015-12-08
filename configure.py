@@ -87,9 +87,14 @@ if __name__ == "__main__":
         """ Get current branch name """
         branch = subprocess.getoutput('git rev-parse --abbrev-ref HEAD')
 
+        if branch == 'master':
+            branch = ''
+        else:
+            branch = '-'+ branch
+
         """ Construct version and binary image strings """
-        version_string = "\""+ name +" "+ version +" ("+codename+")\""
-        image_string = name.lower() +"-v"+ release +"-"+ branch
+        version_string = "\""+ name +" "+ version + branch +" ("+codename+")\""
+        image_string = name.lower() +"-v"+ release + branch
 
         """ Update the GRUB configuration file """
         print('Updating \''+ FILES[0] +'\'... ', end='')
@@ -100,7 +105,7 @@ if __name__ == "__main__":
         """ Update kernel version header file """
         print('Updating \''+ FILES[1] +'\'... ', end='')
         update(FILES[1], 'PROJECT', r'PROJECT \".*\"', 'PROJECT \"'+ name +'\"')
-        update(FILES[1], 'VERSION', r'VERSION \".*\"', 'VERSION \"'+ version +'\"')
+        update(FILES[1], 'VERSION', r'VERSION \".*\"', 'VERSION \"'+ version + branch +'\"')
         update(FILES[1], 'CODENAME', r'CODENAME \".*\"', 'CODENAME \"'+ codename +'\"')
         print('DONE')
 
