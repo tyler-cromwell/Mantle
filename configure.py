@@ -120,3 +120,7 @@ if __name__ == "__main__":
         update(FILES[2], 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
         update(FILES[2], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
         print('DONE')
+
+    else:
+        print('Architectures:', ARCHES)
+        print('Subcommands:', ['clean'])
