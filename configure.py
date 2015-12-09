@@ -25,7 +25,8 @@ import re
 import subprocess
 import sys
 
-FILES = ['grub.cfg', 'include/kernel/version.h', 'make.conf', 'ritchie.conf']
+FILES = ['grub.cfg', 'include/kernel/version.h', 'make.conf']
+ARCHES = ['amd64']
 
 """
 Replaces the matched contents of a file with the given string.
@@ -71,15 +72,20 @@ def clean():
 The main function of this script.
 """
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == 'clean':
+    if len(sys.argv) <= 1:
+        print('usage: ./configure.py [arch | cmd]')
+        sys.exit()
+
+    elif sys.argv[1] == 'clean':
         clean()
-    else:
+
+    elif sys.argv[1] in ARCHES:
+        arch = sys.argv[1]
         config = configparser.ConfigParser()
         config.read(FILES[3])
 
         """ Read in the options """
         (name, version, codename) = [pair[1] for pair in config.items('Version')]
-        (arch, ) = [pair[1] for pair in config.items('Build')]
 
         """ Get latest release tag """
         release = subprocess.getoutput('git describe --tags --abbrev=0')

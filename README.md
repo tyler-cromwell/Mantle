@@ -31,12 +31,11 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `grub.cfg` - Basic GRUB config file.
 - `configure.py` - Python 3 script that updates the following files:
   - `make.conf`, `grub.cfg`, and `version.h`.
-  - Running `./configure.py clean` will run `git checkout` on each file, including `ritchie.conf`.
+  - Running `./configure.py clean` will run `git checkout` on each file.
 - `ritchie.conf` - Project configuration file, contains various options.
   - `Name`: The project name.
   - `Version`: The version string.
   - `Codename`: The codename.
-  - `Arch`: The architecture to build for (i.e. `x86`).
 - `make.conf` - File containing Makefile variables (populated by `configure.py`).
   - `ARCH`: The architecture to build.
   - `IMAGE`: The kernel binary image.
