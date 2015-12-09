@@ -18,9 +18,9 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 
 ## Coding Convention
 - All uppercase for Macros and Constants with underscores for spaces (i.e. `FG_WHITE`).
-- Camelcase for Structs and Typedefs (i.e. `GdtDescriptor`).
-- All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`, `gdt_init`).
-   - Double underscore prefix for functions or function-like macros that should not be called directly (`__console_write`).
+- Camelcase for Structs and Struct Typedefs (i.e. `IdtDescriptor`).
+- All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`).
+   - Double underscore prefix for function-like macros that should not be called directly (`__console_write`).
 
 ## Toolchain
 - `Makefile` - [GNU] Makefile used to build the kernel.
