@@ -224,6 +224,7 @@ common_handler:
 
     ; Pass arguments then call C handler
     mov rdi, [rsp+136]  ; Interrupt Vector
+    mov rsi, [rsp+144]  ; Error Code
     call idt_exception_handler
 
     ; Restore data segment

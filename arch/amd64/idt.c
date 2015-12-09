@@ -202,8 +202,19 @@ void idt_configure(void) {
     console_printf(FG_WHITE, "IDT setup, interrupts enabled\n\n");
 }
 
-void idt_exception_handler(uint64_t vector) {
+void idt_exception_handler(uint64_t vector, uint64_t error) {
     console_printf(FG_BROWN_L, "%s!\n", interrupts[vector]);
+
+    /* If Page Fault */
+    if (vector == 14) {
+        struct PageFaultError pfe = {0};
+        memcpy(&pfe, &error, sizeof(uint16_t));
+    }
+    /* If Error Code */
+    else if (error > 0) {
+        struct SelectorError se = {0};
+        memcpy(&se, &error, sizeof(uint32_t));
+    }
 }
 
 void idt_irq_handler(uint64_t vector) {

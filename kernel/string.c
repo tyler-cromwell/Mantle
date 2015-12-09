@@ -35,7 +35,7 @@
  */
 char* itoa(uint32_t number, uint32_t base) {
     static char buffer[11] = {0};
-    char* string = buffer + 10;
+    char *string = buffer + 10;
     uint8_t c = 0;
 
     /* If number is zero, just stop */
@@ -91,7 +91,7 @@ void *memcpy(void *dest, const void *src, size_t n) {
  *   A pointer to the destination buffer.
  */
 void *memset(void *dest, int c, size_t n) {
-    uint8_t* buf = dest;
+    uint8_t *buf = dest;
     for (size_t i = 0; i < n; i++) {
         buf[i] = (uint8_t) c;
     }
