@@ -32,5 +32,7 @@ extern int32_t strncmp(const char *s1, const char *s2, size_t n);
 extern char* strncpy(char *dest, const char *src, size_t n);
 extern size_t strlen(const char *string);
 extern size_t strnlen(const char *string, size_t n);
+extern void strlower(char *string);
+extern void strupper(char *string);
 
 #endif

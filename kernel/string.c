@@ -167,3 +167,39 @@ size_t strnlen(const char *string, size_t n) {
     }
     return length;
 }
+
+/*
+ * Converts the alphabetical characters
+ * in a string to lowercase.
+ * Argument:
+ *   char *string: The string to be modified.
+ */
+void strlower(char *string) {
+    char *s = string;
+    size_t n = strlen(string);
+
+    /* Iterate until NULL byte or string length */
+    for (size_t i = 0; i < n && *s != '\0'; i++, s++) {
+        if (*s >= 'A' && *s <= 'Z') {
+            *s = *s + 32;
+        }
+    }
+}
+
+/*
+ * Converts the alphabetical characters
+ * in a string to uppercase.
+ * Argument:
+ *   char *string: The string to be modified.
+ */
+void strupper(char *string) {
+    char *s = string;
+    size_t n = strlen(string);
+
+    /* Iterate until NULL byte or string length */
+    for (size_t i = 0; i < n && *s != '\0'; i++, s++) {
+        if (*s >= 'a' && *s <= 'z') {
+            *s = *s - 32;
+        }
+    }
+}

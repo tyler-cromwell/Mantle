@@ -85,7 +85,7 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
         if (next >= VGA_END) {
             /* Shift the next pointer up one row */
             next -= LINE_BYTES;
-            char* start = VGA_START;
+            char *start = VGA_START;
 
             /* Scroll everything up one row */
             for (uint16_t i = LINE_BYTES; i < BYTES; i++) {
@@ -175,9 +175,16 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
                     format++;
                     break;
                 case 'x':
-                case 'X':
-                    /* Unsigned Hexadecimal Integer */
+                    /* Unsigned Hexadecimal Integer (lowercase) */
                     s = itoa(va_arg(arguments, uint32_t), 16);
+                    c += console_write("0x", 2, attribute);
+                    c += console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
+                case 'X':
+                    /* Unsigned Hexadecimal Integer (uppercase) */
+                    s = itoa(va_arg(arguments, uint32_t), 16);
+                    strupper(s);
                     c += console_write("0x", 2, attribute);
                     c += console_write(s, strlen(s), attribute);
                     format++;
