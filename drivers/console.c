@@ -196,6 +196,12 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
+                case '%':
+                    /* Percent sign */
+                    b = '%';
+                    c += console_write(&b, 1, attribute);
+                    format++;
+                    break;
                 default:
                     c += console_write(format, 1, attribute);
             }
