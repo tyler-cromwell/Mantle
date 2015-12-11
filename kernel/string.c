@@ -27,30 +27,36 @@
 
 /*
  * Creates the string representation of a number.
- * DOES NOT HANDLE NEGATIVE NUMBERS.
+ * CURRENTLY ONLY 32-bit numbers.
  * Argument:
- *   long number: The number to be represented.
+ *   int32_t number: The number to be represented.
+ *   uint8_t base: The base to convert to.
  * Returns:
  *   The string representation of number.
  */
-char* itoa(uint32_t number, uint32_t base) {
-    static char buffer[11] = {0};
-    char *string = buffer + 10;
+char* itoa(int32_t number, uint8_t base) {
+    static char buffer[12] = {0};
+    char *string = buffer + 11;
+    int32_t n = number;
     uint8_t c = 0;
 
     /* If number is zero, just stop */
-    if (number == 0) {
-        memset(buffer, 0, 11);
-        buffer[0] = 48;
+    if (n == 0) {
+        memset(buffer, 0, 12);
+        buffer[0] = '0';
         string = buffer;
         c++;
     }
     /* Convert, up to a base of 16 */
     else {
-        while (number != 0) {
-            *--string = "0123456789abcdef"[number % base];
-            number /= base;
+        while (n != 0) {
+            *--string = "fedcba9876543210123456789abcdef"[15 + n % base];
+            n /= base;
             c++;
+        }
+
+        if (number < 0 && base == 10) {
+            *--string = '-';
         }
     }
 
@@ -59,7 +65,7 @@ char* itoa(uint32_t number, uint32_t base) {
     if (base == 2) d = 32;
     else if (base == 8) d = 11;
     else if (base == 16) d = 8;
-    for (; c < d; c++) *--string = 48;
+    for (; c < d; c++) *--string = '0';
 
     return string;
 }

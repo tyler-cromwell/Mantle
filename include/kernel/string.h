@@ -25,7 +25,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-extern char* itoa(uint32_t number, uint32_t base);
+extern char* itoa(int32_t number, uint8_t base);
 extern void* memcpy(void *dest, const void *src, size_t n);
 extern void* memset(void *dest, int c, size_t n);
 extern int32_t strncmp(const char *s1, const char *s2, size_t n);
