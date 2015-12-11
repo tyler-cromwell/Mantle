@@ -65,7 +65,9 @@ This is I don't have to type it myself every time.
 """
 def clean():
     for f in FILES:
+        print('Resetting \''+ f +'\'... ', end='')
         os.system('git checkout '+f)
+        print('DONE')
 
 
 """
