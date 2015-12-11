@@ -150,6 +150,7 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
                     format++;
                     break;
                 case 'd':
+                case 'i':
                     /* Signed 32-bit Integer */
                     s = itoa(va_arg(arguments, int32_t), 10);
                     c += console_write(s, strlen(s), attribute);
@@ -159,6 +160,12 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
                     /* Unsigned Octal Integer */
                     s = itoa(va_arg(arguments, uint32_t), 8);
                     c += console_write("0o", 2, attribute);
+                    c += console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
+                case 'p':
+                    /* Pointer address */
+                    s = itoa(va_arg(arguments, uint32_t), 16);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
