@@ -50,7 +50,7 @@ static inline void outb(uint16_t port, uint8_t value) {
 
 /* CPUID */
 extern void cpuid_vendor(char *id);
-extern uint8_t cpuid_cpus(void);
+extern uint32_t cpuid_cpus(void);
 
 /* Interrupt Descriptor Table */
 extern void idt_configure(void);
