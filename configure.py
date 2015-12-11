@@ -25,7 +25,7 @@ import re
 import subprocess
 import sys
 
-FILES = ['grub.cfg', 'include/kernel/version.h', 'make.conf']
+FILES = ['grub.cfg', 'include/kernel/version.h', 'make.conf', 'ritchie.conf']
 ARCHES = ['amd64']
 
 """
