@@ -93,8 +93,10 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
                 start[j] = start[i];
             }
 
-            /* Clear the bottom line */
-            memset(next, 0, LINE_BYTES);
+            /* Clear the bottom line and preserve color */
+            for (uint16_t i = 0; i < LINE_BYTES; i += CHAR_WIDTH) {
+                next[i] = '\0';
+            }
         }
 
         /* Interpret the newline character */
