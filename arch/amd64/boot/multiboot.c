@@ -109,11 +109,15 @@ void multiboot_dump(void) {
         for (size_t i = 0; i < ents; i++) {
             /* Region Base Address */
             uint32_t n = mmap[i].base_addr;
-            console_printf(FG_WHITE, "[%u]: %x - ", i, n);
+            char addr[9] = {0};
+
+            memcpy(addr, itoa(n, 16, 1), 8);
+            console_printf(FG_WHITE, "[%u]: 0x%s - ", i, addr);
 
             /* Region Ending Address */
             n = mmap[i].base_addr + mmap[i].length - 1;
-            console_printf(FG_WHITE, "%x (", n);
+            memcpy(addr, itoa(n, 16, 1), 8);
+            console_printf(FG_WHITE, "0x%s (", addr);
 
             /* Region length */
             n = CONVERT_UP(mmap[i].length);

@@ -31,20 +31,21 @@
  * Argument:
  *   int32_t number: The number to be represented.
  *   uint8_t base: The base to convert to.
+ *   uint8_t pad: Option for printing leading zeros
  * Returns:
  *   The string representation of number.
  */
-char* itoa(int32_t number, uint8_t base) {
+char* itoa(int32_t number, uint8_t base, uint8_t pad) {
     static char buffer[12] = {0};
     char *string = buffer + 11;
     int32_t n = number;
     uint8_t c = 0;
 
+    memset(buffer, 0, 12);
+
     /* If number is zero, just stop */
     if (n == 0) {
-        memset(buffer, 0, 12);
-        buffer[0] = '0';
-        string = buffer;
+        *--string = '0';
         c++;
     }
     /* Convert, up to a base of 16 */
@@ -61,11 +62,16 @@ char* itoa(int32_t number, uint8_t base) {
     }
 
     /* Print leading zeros */
-    uint8_t d = 0;
-    if (base == 2) d = 32;
-    else if (base == 8) d = 11;
-    else if (base == 16) d = 8;
-    for (; c < d; c++) *--string = '0';
+    if (pad) {
+        uint8_t d = 0;
+        if (base == 2) d = 32;
+        else if (base == 8) d = 11;
+        else if (base == 16) d = 8;
+
+        for (; c < d && string != buffer; c++) {
+            *--string = '0';
+        }
+    }
 
     return string;
 }
