@@ -26,8 +26,8 @@
 /* Kernel Headers */
 #include <kernel/string.h>
 
-#define VGA_START   (char*) 0xb8000 /* The starting address for video memory */
-#define VGA_END     (char*) 0xb8fa0 /* The ending address for video memory */
+#define CONSOLE_START   (char*) 0xb8000 /* The starting address for video memory */
+#define CONSOLE_END     (char*) 0xb8fa0 /* The ending address for video memory */
 
 #define CHAR_WIDTH  2       /* The number of bytes used per character */
 #define LINES       25      /* The number of lines on the screen */
@@ -36,7 +36,7 @@
 #define BYTES       4000    /* The number of usable bytes in video memory */
 
 /* Pointer to the next "empty" character byte */
-static char *next = VGA_START;
+static char *next = CONSOLE_START;
 
 /*
  * Clears the console by zero-ing the screen buffer.
@@ -44,8 +44,8 @@ static char *next = VGA_START;
  *   Resets the video pointer.
  */
 void console_clear(void) {
-    next = VGA_START;
-    memset(VGA_START, 0, BYTES);
+    next = CONSOLE_START;
+    memset(CONSOLE_START, 0, BYTES);
 }
 
 /*
@@ -54,7 +54,7 @@ void console_clear(void) {
  *   uint8_t attribute: The color attribute.
  */
 void console_set_background(uint8_t attribute) {
-    next = VGA_START;
+    next = CONSOLE_START;
     uint16_t offset = 0;
 
     while (offset < BYTES) {
@@ -82,10 +82,10 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
 
     /* Ensure that the number of characters to write does not exceed the maximum */
     while (message[c] != '\0' && c < length) {
-        if (next >= VGA_END) {
+        if (next >= CONSOLE_END) {
             /* Shift the next pointer up one row */
             next -= LINE_BYTES;
-            char *start = VGA_START;
+            char *start = CONSOLE_START;
 
             /* Scroll everything up one row */
             for (uint16_t i = LINE_BYTES; i < BYTES; i++) {
@@ -101,7 +101,7 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
 
         /* Interpret the newline character */
         if (message[c] == '\n') {
-            uint16_t remaining = LINE_CHARS - (((next - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
+            uint16_t remaining = LINE_CHARS - (((next - CONSOLE_START) % LINE_BYTES) / CHAR_WIDTH);
 
             /* Write blank characters for rest of the line */
             for (uint8_t i = 0; i < remaining; i++) {
