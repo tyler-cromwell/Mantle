@@ -30,7 +30,7 @@
 #define KEYBOARD_DATA   0x60
 
 /* US QWERTY keyboard map */
-uint8_t keyboard_map[128] = {
+static uint8_t keyboard_map[128] = {
     0,      /* <NOTHING> */
     27,     /* Escape */
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
