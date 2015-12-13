@@ -82,7 +82,7 @@ void keyboard_handler(void) {
         char letter = keyboard_map[keycode];
 
         /* Only printable characters */
-        if ((keycode >= 0x02 && keycode <= 0x0d) ||
+        if ((keycode >= 0x02 && keycode <= 0x0e) ||
             (keycode >= 0x10 && keycode <= 0x1c) ||
             (keycode >= 0x1e && keycode <= 0x29) ||
             (keycode >= 0x2b && keycode <= 0x35) ||
