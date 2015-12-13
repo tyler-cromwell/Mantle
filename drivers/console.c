@@ -125,7 +125,6 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
         if (message[c] == '\n') {
             uint16_t remaining = LINE_CHARS - (((next - CONSOLE_START) % LINE_BYTES) / CHAR_WIDTH);
 
-            /* Write blank characters for rest of the line */
             for (uint8_t i = 0; i < remaining; i++) {
                 *next = '\0';
                 next += CHAR_WIDTH;
@@ -139,6 +138,15 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
             if (next >= second && *previous != '\0') {
                  next -= CHAR_WIDTH;
                  *next = '\0';
+            }
+        }
+        /* Interpret the carriage return character */
+        else if (message[c] == '\r') {
+            uint16_t line = next - CONSOLE_START;
+
+            for (uint8_t r = line % LINE_BYTES; r > 0; r -= CHAR_WIDTH) {
+                next -= CHAR_WIDTH;
+                *next = '\0';
             }
         }
         /* Write everything else */

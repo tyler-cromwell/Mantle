@@ -63,8 +63,7 @@ static uint8_t keyboard_map[128] = {
     0,      /* Keypad - 0 / Insert */
     0,      /* Keypad - Period (.) / Delete */
     0, 0, 0,    /* <NOTHING> */
-    0,      /* F11 Key */
-    0,      /* F12 Key */
+    0, 0,   /* F11 - F12 Key */
     0,      /* All other keys are undefined */
 };
 
