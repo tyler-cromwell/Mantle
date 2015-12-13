@@ -89,7 +89,7 @@ void console_set_background(uint8_t attribute) {
 
 /*
  * Writes a string of characters to the console.
- * Will interpret the newline character.
+ * Interprets the newline, backspace, and carriage return.
  * Arguments:
  *   char *message:  The message to write.
  *   uint16_t length: The number of bytes to write.
@@ -121,7 +121,7 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
             }
         }
 
-        /* Interpret the newline character */
+        /* Interpret Newline */
         if (message[c] == '\n') {
             uint16_t remaining = LINE_CHARS - (((next - CONSOLE_START) % LINE_BYTES) / CHAR_WIDTH);
 
@@ -130,7 +130,7 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
                 next += CHAR_WIDTH;
             }
         }
-        /* Interpret the backspace character */
+        /* Interpret Backspace */
         else if (message[c] == '\b') {
             char *second = CONSOLE_START + CHAR_WIDTH;
             char *previous = next - CHAR_WIDTH;
@@ -140,7 +140,7 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
                  *next = '\0';
             }
         }
-        /* Interpret the carriage return character */
+        /* Interpret Carriage Return */
         else if (message[c] == '\r') {
             uint16_t line = next - CONSOLE_START;
 
