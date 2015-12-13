@@ -29,6 +29,8 @@
 #define KEYBOARD_CMD    0x64
 #define KEYBOARD_DATA   0x60
 
+static uint16_t backspaces = 0;
+
 /* US QWERTY keyboard map */
 static uint8_t keyboard_map[128] = {
     0,      /* <NOTHING> */
@@ -81,12 +83,18 @@ void keyboard_handler(void) {
         char letter = keyboard_map[keycode];
 
         /* Only printable characters */
-        if ((keycode >= 0x02 && keycode <= 0x0e) ||
+        if ((keycode >= 0x02 && keycode <= 0x0d) ||
             (keycode >= 0x10 && keycode <= 0x1c) ||
             (keycode >= 0x1e && keycode <= 0x29) ||
             (keycode >= 0x2b && keycode <= 0x35) ||
             keycode == 0x39) {
+
             console_printf(FG_BROWN_L, "%c", letter);
+            backspaces++;
+        }
+        else if (keycode == 0x0e && backspaces >= 1) {
+            console_printf(FG_BROWN_L, "%c", letter);
+            backspaces--;
         }
     }
 }
