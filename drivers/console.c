@@ -24,6 +24,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
+#include <amd64/amd64.h>
 #include <kernel/string.h>
 
 #define CONSOLE_START   (char*) 0xb8000 /* The starting address for video memory */
@@ -39,6 +40,24 @@
 static char *next = CONSOLE_START;
 
 /*
+ * Moves cursor to the location of the
+ * next available character.
+ * Argument:
+ *   uint8_t attribute: The color attribute.
+ */
+static void move_cursor(uint8_t attribute) {
+    uint16_t pos = (next - CONSOLE_START) / 2;
+
+    outb(0x3d4, 0x0f);
+    outb(0x3d5, (uint8_t) ((pos >> 0) & 0xff));
+
+    outb(0x3d4, 0x0e);
+    outb(0x3d5, (uint8_t) ((pos >> 8) & 0xff));
+
+    *(next+1) = *(next+1) | attribute;
+}
+
+/*
  * Clears the console by zero-ing the screen buffer.
  * Side Effect:
  *   Resets the video pointer.
@@ -46,6 +65,7 @@ static char *next = CONSOLE_START;
 void console_clear(void) {
     next = CONSOLE_START;
     memset(CONSOLE_START, 0, BYTES);
+    move_cursor(0x00);
 }
 
 /*
@@ -63,6 +83,8 @@ void console_set_background(uint8_t attribute) {
         }
         offset += CHAR_WIDTH;
     }
+
+    move_cursor(attribute);
 }
 
 /*
@@ -111,12 +133,13 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
         }
         else {
             *next = message[c];
-            *(next+1) = *(next+1) | attribute;
+            *(next+1) = (*(next+1) & 0xf0) | attribute;
             next += CHAR_WIDTH;
         }
         c++;
     }
 
+    move_cursor(attribute);
     return c;
 }
 
