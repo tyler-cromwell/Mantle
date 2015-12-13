@@ -140,7 +140,7 @@ static void idt_install_exception_handlers(void) {
  */
 static void idt_install_irq_handlers(void) {
     idt_set_gate(32, (uint64_t) irq00, 0x08, 0x8e); /* i8253 timer */
-    idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* Keyboard? */
+    idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* Keyboard */
 /*  idt_set_gate(34, (uint64_t) irq02, 0x08, 0x8e); */
     idt_set_gate(35, (uint64_t) irq03, 0x08, 0x8e); /* ??? */
     idt_set_gate(36, (uint64_t) irq04, 0x08, 0x8e); /* ??? */
@@ -223,4 +223,9 @@ void idt_irq_handler(uint64_t vector) {
         outb(I8259_SLAVE_CMD, 0x20);
     }
     outb(I8259_MASTER_CMD, 0x20);
+
+    /* Determine specific handler */
+    switch (vector) {
+        case 33: keyboard_handler(); break;
+    }
 }

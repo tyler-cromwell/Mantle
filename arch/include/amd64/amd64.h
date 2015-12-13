@@ -55,4 +55,6 @@ extern uint32_t cpuid_cpus(void);
 /* Interrupt Descriptor Table */
 extern void idt_configure(void);
 
+/* Keyboard */
+extern void keyboard_handler(void);
 #endif
