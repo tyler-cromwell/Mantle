@@ -20,6 +20,10 @@
 #ifndef AMD64_I8259_H
 #define AMD64_I8259_H
 
+/* C Standard Library Headers,
+   these don't need to link against libc */
+#include <stdint.h>
+
 /* Master PIC */
 #define I8259_MASTER_CMD    0x20
 #define I8259_MASTER_DATA   0x21
@@ -28,7 +32,12 @@
 #define I8259_SLAVE_CMD     0xA0
 #define I8259_SLAVE_DATA    0xA1
 
+/* Device IRQ numbers */
+#define I8259_IRQ_KEYBOARD  0x01
+
 extern void i8259_init(void);
+extern void i8259_set_mask(uint8_t irq);
+extern void i8259_clear_mask(uint8_t irq);
 extern void i8259_mask(void);
 extern void i8259_unmask(void);
 
