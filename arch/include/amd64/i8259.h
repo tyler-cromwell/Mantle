@@ -33,6 +33,7 @@
 #define I8259_SLAVE_DATA    0xA1
 
 /* Device IRQ numbers */
+#define I8259_IRQ_TIMER     0x00
 #define I8259_IRQ_KEYBOARD  0x01
 
 extern void i8259_init(void);
