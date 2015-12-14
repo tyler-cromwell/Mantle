@@ -133,9 +133,8 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
         /* Interpret Backspace */
         else if (message[c] == '\b') {
             char *second = CONSOLE_START + CHAR_WIDTH;
-            char *previous = next - CHAR_WIDTH;
 
-            if (next >= second && *previous != '\0') {
+            if (next >= second) {
                  next -= CHAR_WIDTH;
                  *next = '\0';
             }
