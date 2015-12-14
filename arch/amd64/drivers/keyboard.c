@@ -29,8 +29,6 @@
 #define KEYBOARD_CMD    0x64
 #define KEYBOARD_DATA   0x60
 
-static uint16_t backspaces = 0;
-
 /* US QWERTY keyboard map */
 static uint8_t keyboard_map[128] = {
     0,      /* <NOTHING> */
@@ -69,6 +67,12 @@ static uint8_t keyboard_map[128] = {
     0,      /* All other keys are undefined */
 };
 
+/* Amount of allowable backspaces */
+static uint16_t backspaces = 0;
+
+/* Most recent key pressed */
+char keyboard_key = -1;
+
 /*
  * Handler function for the Keyboard IRQ.
  */
@@ -77,24 +81,27 @@ void keyboard_handler(void) {
 
     if (status & 0x01) {
         char keycode = inb(KEYBOARD_DATA);
-
         if (keycode < 0) return;
 
         char letter = keyboard_map[keycode];
 
         /* Only printable characters */
         if ((keycode >= 0x02 && keycode <= 0x0d) ||
-            (keycode >= 0x10 && keycode <= 0x1c) ||
+            (keycode >= 0x10 && keycode <= 0x1d) ||
             (keycode >= 0x1e && keycode <= 0x29) ||
             (keycode >= 0x2b && keycode <= 0x35) ||
-            keycode == 0x39) {
-
-            console_printf(FG_BROWN_L, "%c", letter);
+             keycode == 0x39) {
             backspaces++;
         }
+        /* Handle Enter */
+        else if (keycode == 0x1c) {
+            backspaces = 0;
+        }
+        /* Handle Backspace */
         else if (keycode == 0x0e && backspaces >= 1) {
-            console_printf(FG_BROWN_L, "%c", letter);
             backspaces--;
         }
+
+        keyboard_key = letter;
     }
 }
