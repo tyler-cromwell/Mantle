@@ -102,6 +102,9 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
         else if (!strncmp(input, "multiboot", strlen(input))) {
             multiboot(magic, mbinfo);
         }
+        else if (!strncmp(input, "clear", strlen(input))) {
+            console_clear();
+        }
         else {
             console_printf(FG_WHITE, "%s\n", input);
         }
