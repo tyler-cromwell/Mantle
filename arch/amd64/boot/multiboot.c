@@ -77,7 +77,7 @@ void multiboot_init(struct MultibootInfo *mbinfo) {
 void multiboot_dump(void) {
     /* Dump the Bootloader name */
     if (info->flags & MULTIBOOT_BOOTLOADER) {
-        console_printf(FG_WHITE, "Booted via: ");
+        console_printf(FG_WHITE, "Bootloader: ");
         console_printf(FG_BROWN, "%s\n", info->boot_loader_name);
     }
 
@@ -112,7 +112,11 @@ void multiboot_dump(void) {
             char addr[9] = {0};
 
             memcpy(addr, itoa(n, 16, 1), 8);
-            console_printf(FG_WHITE, "[%u]: 0x%s - ", i, addr);
+            if (ents >= 10 && i < 10) {
+                console_printf(FG_WHITE, "[ %u]: 0x%s - ", i, addr);
+            } else {
+                console_printf(FG_WHITE, "[%u]: 0x%s - ", i, addr);
+            }
 
             /* Region Ending Address */
             n = mmap[i].base_addr + mmap[i].length - 1;
@@ -132,7 +136,7 @@ void multiboot_dump(void) {
             if (mmap[i].type == MMAP_AVAILABLE) {
                 console_printf(FG_WHITE, "Available");
             } else {
-                console_printf(FG_BLACK, "Reserved");
+                console_printf(FG_GREY, "Reserved");
             }
 
             console_printf(FG_WHITE, ")\n");

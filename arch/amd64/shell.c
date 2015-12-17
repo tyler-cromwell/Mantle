@@ -20,13 +20,13 @@
 /* Kernel Headers */
 #include <amd64/i8259.h>
 #include <drivers/console.h>
+#include <kernel/string.h>
 
-/* External - Defined in "keyboard.c" */
-extern char keyboard_key;
+/* External - functions / variables */
+extern char keyboard_getchar(void); /* Defined in "keyboard.c" */
 
+/* Internal variables */
 static char command[16] = {0};
-static char *next = command;
-static char *end = command + 15;
 
 /*
  * Basic text input function.
@@ -36,29 +36,36 @@ static char *end = command + 15;
  *   a pointer to the command buffer.
  */
 char* shell_readline(char *prompt) {
+    char *next = command;
+    char *end = command + 15;
+    uint8_t backspaces = 0;
+
     console_printf(FG_WHITE, "%s", prompt);
+    memset(command, '\0', 16);
     i8259_clear_mask(I8259_IRQ_KEYBOARD);   /* Enable keyboard */
 
     while (1) {
+        char letter = keyboard_getchar();
+
         /* Handle Newline */
-        if (keyboard_key == '\n') {
-            console_printf(FG_WHITE, "%c", keyboard_key);
-            keyboard_key = -1;
+        if (letter == '\n') {
+            backspaces = 0;
+            console_printf(FG_WHITE, "%c", letter);
             break;
         }
         /* Handle Backspace */
-        else if (keyboard_key == '\b' && next != command) {
+        else if (letter == '\b' && next != command) {
+            backspaces--;
             next--;
             *next = '\0';
-            console_printf(FG_WHITE, "%c", keyboard_key);
-            keyboard_key = -1;
+            console_printf(FG_WHITE, "%c", letter);
         }
         /* Handle printable characters */
-        else if (keyboard_key >= 32 && keyboard_key <= 126 && next != end) {
-            *next = keyboard_key;
+        else if (letter >= 32 && letter <= 126 && next != end) {
+            backspaces++;
+            *next = letter;
             *next++;
-            console_printf(FG_WHITE, "%c", keyboard_key);
-            keyboard_key = -1;
+            console_printf(FG_WHITE, "%c", letter);
         }
     }
 

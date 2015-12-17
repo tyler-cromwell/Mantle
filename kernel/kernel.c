@@ -29,26 +29,21 @@ extern struct undefined KERNEL_LMA;
 extern struct undefined KERNEL_VMA;
 extern struct undefined KERNEL_SIZE;
 
+extern char* shell_readline(char *prompt);
+
 /*
- * The main kernel function; this is where Ritchie begins operation.
- * The system will halt when/if this function returns.
- * Arguments:
- *   uint64_t magic: A Multiboot bootloaders magic number.
- *   struct MultibootInfo *mbinfo:
- *       The physical memory address of the Multiboot information struct.
+ * Dump information about the Kernel binary.
  */
-void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
-    console_clear();
-    console_set_background(BG_GREY);
-    console_printf(FG_BLUE, STRING"\n");
-
-    /* Setup interrupt handling */
-    idt_configure();
-
+void kinfo(void) {
     /* Get Kernel size */
     uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
     console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
+}
 
+/*
+ * Dump information about the Processor.
+ */
+void cpuinfo(void) {
     /* Get CPU vendor name */
     char id[13] = {0};
     cpuid_vendor(id);
@@ -64,15 +59,55 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
     }
 
     /* Get and print number of processors */
-    console_printf(FG_WHITE, "processors: %u\n\n", cpuid_cpus());
+    console_printf(FG_WHITE, "processors: %u\n", cpuid_cpus());
+}
 
+/*
+ * Dump Multiboot information.
+ */
+void multiboot(uint64_t magic, struct MultibootInfo *mbinfo) {
     /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {
         multiboot_init(mbinfo);
         multiboot_dump();
     }
+}
 
-    while (1);
-    console_printf(FG_BLACK | BG_RED, "System halted");
+/*
+ * The main kernel function; this is where Ritchie begins operation.
+ * The system will halt when/if this function returns.
+ * Arguments:
+ *   uint64_t magic: A Multiboot bootloaders magic number.
+ *   struct MultibootInfo *mbinfo:
+ *       The physical memory address of the Multiboot information struct.
+ */
+void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
+    console_clear();
+    console_printf(FG_BLUE, STRING"\n");
+
+    /* Setup interrupt handling */
+    idt_configure();
+
+    /* Wait for commands */
+    while (1) {
+        char *input = shell_readline("> ");
+
+        /* Interpret input */
+        if (!strncmp(input, "kinfo", strlen(input))) {
+            kinfo();
+        }
+        else if (!strncmp(input, "cpuinfo", strlen(input))) {
+            cpuinfo();
+        }
+        else if (!strncmp(input, "multiboot", strlen(input))) {
+            multiboot(magic, mbinfo);
+        }
+        else {
+            console_printf(FG_WHITE, "%s\n", input);
+        }
+    }
+
+    while (1) {}
+    console_printf(BG_RED, "System halted");
     return;
 }

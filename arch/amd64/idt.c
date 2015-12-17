@@ -226,6 +226,7 @@ void idt_irq_handler(uint64_t vector) {
 
     /* Determine specific handler */
     switch (vector) {
-        case 33: keyboard_handler(); break;
+        case 32: break;
+        case 33: break;
     }
 }

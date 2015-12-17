@@ -67,41 +67,30 @@ static uint8_t keyboard_map[128] = {
     0,      /* All other keys are undefined */
 };
 
-/* Amount of allowable backspaces */
-static uint16_t backspaces = 0;
-
-/* Most recent key pressed */
-char keyboard_key = -1;
-
 /*
- * Handler function for the Keyboard IRQ.
+ * Basic keyboard input function.
  */
-void keyboard_handler(void) {
+char keyboard_getchar(void) {
     uint8_t status = inb(KEYBOARD_CMD);
 
     if (status & 0x01) {
         char keycode = inb(KEYBOARD_DATA);
-        if (keycode < 0) return;
+
+        if (keycode < 0) {
+            return -1;
+        }
 
         char letter = keyboard_map[keycode];
 
         /* Only printable characters */
-        if ((keycode >= 0x02 && keycode <= 0x0d) ||
-            (keycode >= 0x10 && keycode <= 0x1d) ||
+        if ((keycode >= 0x02 && keycode <= 0x0e) ||
+            (keycode >= 0x10 && keycode <= 0x1c) ||
             (keycode >= 0x1e && keycode <= 0x29) ||
             (keycode >= 0x2b && keycode <= 0x35) ||
              keycode == 0x39) {
-            backspaces++;
+            return letter;
         }
-        /* Handle Enter */
-        else if (keycode == 0x1c) {
-            backspaces = 0;
-        }
-        /* Handle Backspace */
-        else if (keycode == 0x0e && backspaces >= 1) {
-            backspaces--;
-        }
-
-        keyboard_key = letter;
     }
+
+    return -1;
 }
