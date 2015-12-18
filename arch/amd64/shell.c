@@ -18,9 +18,14 @@
 **********************************************************************/
 
 /* Kernel Headers */
+#include <amd64/amd64.h>
 #include <amd64/i8259.h>
+#include <amd64/multiboot.h>
 #include <drivers/console.h>
 #include <kernel/string.h>
+
+/* Linker Script Symbols */
+extern struct undefined KERNEL_SIZE;
 
 /* External - functions / variables */
 extern char keyboard_getchar(void); /* Defined in "keyboard.c" */
@@ -71,4 +76,46 @@ char* shell_readline(char *prompt) {
 
     i8259_set_mask(I8259_IRQ_KEYBOARD); /* Disable keyboard */
     return input;
+}
+
+/*
+ * Dump information about the Kernel binary.
+ */
+void shell_cmd_kinfo(void) {
+    /* Get Kernel size */
+    uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
+    console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
+}
+
+/*
+ * Dump information about the Processor.
+ */
+void shell_cmd_cpuinfo(void) {
+    /* Get CPU vendor name */
+    char id[13] = {0};
+    cpuid_vendor(id);
+    console_printf(FG_WHITE, "vendor_id: ");
+
+    /* Print CPU vendor name */
+    if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
+        console_printf(FG_CYAN_L, "%s\n", id);
+    } else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
+        console_printf(FG_RED_L, "%s\n", id);
+    } else {
+        console_printf(FG_GREY_L, "%s\n", id);
+    }
+
+    /* Get and print number of processors */
+    console_printf(FG_WHITE, "processors: %u\n", cpuid_cpus());
+}
+
+/*
+ * Dump Multiboot information.
+ */
+void shell_cmd_multiboot(uint64_t magic, struct MultibootInfo *mbinfo) {
+    /* Was the kernel booted by a Multiboot bootloader? */
+    if (magic == MULTIBOOT_BOOT_MAGIC) {
+        multiboot_init(mbinfo);
+        multiboot_dump();
+    }
 }

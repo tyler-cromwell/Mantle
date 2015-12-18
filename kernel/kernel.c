@@ -20,6 +20,7 @@
 /* Kernel Headers */
 #include <amd64/amd64.h>
 #include <amd64/multiboot.h>
+#include <amd64/shell.h>
 #include <drivers/console.h>
 #include <kernel/string.h>
 #include <kernel/version.h>
@@ -28,50 +29,6 @@
 extern struct undefined KERNEL_LMA;
 extern struct undefined KERNEL_VMA;
 extern struct undefined KERNEL_SIZE;
-
-extern char* shell_readline(char *prompt);
-
-/*
- * Dump information about the Kernel binary.
- */
-void kinfo(void) {
-    /* Get Kernel size */
-    uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
-    console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
-}
-
-/*
- * Dump information about the Processor.
- */
-void cpuinfo(void) {
-    /* Get CPU vendor name */
-    char id[13] = {0};
-    cpuid_vendor(id);
-    console_printf(FG_WHITE, "vendor_id: ");
-
-    /* Print CPU vendor name */
-    if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
-        console_printf(FG_CYAN_L, "%s\n", id);
-    } else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
-        console_printf(FG_RED_L, "%s\n", id);
-    } else {
-        console_printf(FG_GREY_L, "%s\n", id);
-    }
-
-    /* Get and print number of processors */
-    console_printf(FG_WHITE, "processors: %u\n", cpuid_cpus());
-}
-
-/*
- * Dump Multiboot information.
- */
-void multiboot(uint64_t magic, struct MultibootInfo *mbinfo) {
-    /* Was the kernel booted by a Multiboot bootloader? */
-    if (magic == MULTIBOOT_BOOT_MAGIC) {
-        multiboot_init(mbinfo);
-        multiboot_dump();
-    }
-}
 
 /*
  * The main kernel function; this is where Ritchie begins operation.
@@ -94,13 +51,13 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
 
         /* Interpret input */
         if (strlcmp(input, "kinfo") > 0) {
-            kinfo();
+            shell_cmd_kinfo();
         }
         else if (strlcmp(input, "cpuinfo") > 0) {
-            cpuinfo();
+            shell_cmd_cpuinfo();
         }
         else if (strlcmp(input, "multiboot") > 0) {
-            multiboot(magic, mbinfo);
+            shell_cmd_multiboot(magic, mbinfo);
         }
         else if (strlcmp(input, "clear") > 0) {
             console_clear();
