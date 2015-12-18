@@ -26,22 +26,22 @@
 extern char keyboard_getchar(void); /* Defined in "keyboard.c" */
 
 /* Internal variables */
-static char command[16] = {0};
+static char input[16] = {0};
 
 /*
  * Basic text input function.
  * Argument:
  *   char *prompt: the prompt to display.
  * Returns:
- *   a pointer to the command buffer.
+ *   a pointer to the input buffer.
  */
 char* shell_readline(char *prompt) {
-    char *next = command;
-    char *end = command + 15;
+    char *next = input;
+    char *end = input + 15;
     uint8_t backspaces = 0;
 
     console_printf(FG_WHITE, "%s", prompt);
-    memset(command, '\0', 16);
+    memset(input, '\0', 16);
     i8259_clear_mask(I8259_IRQ_KEYBOARD);   /* Enable keyboard */
 
     while (1) {
@@ -54,7 +54,7 @@ char* shell_readline(char *prompt) {
             break;
         }
         /* Handle Backspace */
-        else if (letter == '\b' && next != command) {
+        else if (letter == '\b' && next != input) {
             backspaces--;
             next--;
             *next = '\0';
@@ -70,5 +70,5 @@ char* shell_readline(char *prompt) {
     }
 
     i8259_set_mask(I8259_IRQ_KEYBOARD); /* Disable keyboard */
-    return command;
+    return input;
 }
