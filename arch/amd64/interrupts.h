@@ -58,72 +58,72 @@ static char *interrupts[] = {
 
 
 /* Exceptions */
-extern void exc00(void);
-extern void exc01(void);
-extern void exc02(void);
-extern void exc03(void);
-extern void exc04(void);
-extern void exc05(void);
-extern void exc06(void);
-extern void exc07(void);
-extern void exc08(void);
-/*          exc09     */
-extern void exc10(void);
-extern void exc11(void);
-extern void exc12(void);
-extern void exc13(void);
-extern void exc14(void);
-/*          exc15     */
-extern void exc16(void);
-extern void exc17(void);
-extern void exc18(void);
-extern void exc19(void);
-/*          exc20     */
-/*          exc21     */
-/*          exc22     */
-/*          exc23     */
-/*          exc24     */
-/*          exc25     */
-/*          exc26     */
-/*          exc27     */
-/*          exc28     */
-/*          exc29     */
-extern void exc30(void);
-/*          exc31     */
+void exc00(void);
+void exc01(void);
+void exc02(void);
+void exc03(void);
+void exc04(void);
+void exc05(void);
+void exc06(void);
+void exc07(void);
+void exc08(void);
+/*   exc09     */
+void exc10(void);
+void exc11(void);
+void exc12(void);
+void exc13(void);
+void exc14(void);
+/*   exc15     */
+void exc16(void);
+void exc17(void);
+void exc18(void);
+void exc19(void);
+/*   exc20     */
+/*   exc21     */
+/*   exc22     */
+/*   exc23     */
+/*   exc24     */
+/*   exc25     */
+/*   exc26     */
+/*   exc27     */
+/*   exc28     */
+/*   exc29     */
+void exc30(void);
+/*   exc31     */
 
 
 /* Hardware Interrupts */
-extern void irq00(void);
-extern void irq01(void);
-/*          irq02     */
-extern void irq03(void);
-extern void irq04(void);
-extern void irq05(void);
-extern void irq06(void);
-extern void irq07(void);
-extern void irq08(void);
-extern void irq09(void);
-extern void irq10(void);
-extern void irq11(void);
-extern void irq12(void);
-extern void irq13(void);
-extern void irq14(void);
-extern void irq15(void);
-/*          irq16     */
-/*          irq17     */
-/*          irq18     */
-/*          irq19     */
-/*          irq20     */
-/*          irq21     */
-/*          irq22     */
-/*          irq23     */
-/*          irq24     */
-/*          irq25     */
-/*          irq26     */
-/*          irq27     */
-/*          irq28     */
-/*          irq29     */
-/*          irq30     */
-/*          irq31     */
+void irq00(void);
+void irq01(void);
+/*   irq02     */
+void irq03(void);
+void irq04(void);
+void irq05(void);
+void irq06(void);
+void irq07(void);
+void irq08(void);
+void irq09(void);
+void irq10(void);
+void irq11(void);
+void irq12(void);
+void irq13(void);
+void irq14(void);
+void irq15(void);
+/*   irq16     */
+/*   irq17     */
+/*   irq18     */
+/*   irq19     */
+/*   irq20     */
+/*   irq21     */
+/*   irq22     */
+/*   irq23     */
+/*   irq24     */
+/*   irq25     */
+/*   irq26     */
+/*   irq27     */
+/*   irq28     */
+/*   irq29     */
+/*   irq30     */
+/*   irq31     */
 
 #endif

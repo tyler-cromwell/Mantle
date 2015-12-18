@@ -69,8 +69,8 @@ struct PageFaultError {
 static struct IdtGate idt[256];
 
 /* External - Defined in "amd64.asm" */
-extern void disable_apic(void);
-extern void idt_load(struct Idtr*);
+void disable_apic(void);
+void idt_load(struct Idtr*);
 
 /*
  * Creates a new interrupt gate.
@@ -140,7 +140,7 @@ static void idt_install_exception_handlers(void) {
  */
 static void idt_install_irq_handlers(void) {
     idt_set_gate(32, (uint64_t) irq00, 0x08, 0x8e); /* i8253 timer */
-    idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* Keyboard? */
+    idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* Keyboard */
 /*  idt_set_gate(34, (uint64_t) irq02, 0x08, 0x8e); */
     idt_set_gate(35, (uint64_t) irq03, 0x08, 0x8e); /* ??? */
     idt_set_gate(36, (uint64_t) irq04, 0x08, 0x8e); /* ??? */
@@ -202,8 +202,19 @@ void idt_configure(void) {
     console_printf(FG_WHITE, "IDT setup, interrupts enabled\n\n");
 }
 
-void idt_exception_handler(uint64_t vector) {
+void idt_exception_handler(uint64_t vector, uint64_t error) {
     console_printf(FG_BROWN_L, "%s!\n", interrupts[vector]);
+
+    /* If Page Fault */
+    if (vector == 14) {
+        struct PageFaultError pfe = {0};
+        memcpy(&pfe, &error, sizeof(uint16_t));
+    }
+    /* If Error Code */
+    else if (error > 0) {
+        struct SelectorError se = {0};
+        memcpy(&se, &error, sizeof(uint32_t));
+    }
 }
 
 void idt_irq_handler(uint64_t vector) {
@@ -212,4 +223,10 @@ void idt_irq_handler(uint64_t vector) {
         outb(I8259_SLAVE_CMD, 0x20);
     }
     outb(I8259_MASTER_CMD, 0x20);
+
+    /* Determine specific handler */
+    switch (vector) {
+        case 32: break;
+        case 33: break;
+    }
 }

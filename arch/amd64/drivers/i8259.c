@@ -17,6 +17,10 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
+/* C Standard Library Headers,
+   these don't need to link against libc */
+#include <stdint.h>
+
 /* Kernel Headers */
 #include <amd64/amd64.h>
 
@@ -48,17 +52,44 @@ void i8259_init(void) {
     /* Mask all interrupts */
     outb(MASTER_DATA, 0xff);
     outb(SLAVE_DATA,  0xff);
-    return;
+}
+
+void i8259_set_mask(uint8_t irq) {
+    uint16_t port;
+    uint8_t value;
+
+    if (irq < 8) {
+        port = MASTER_DATA;
+    } else {
+        port = SLAVE_DATA;
+        irq -= 8;
+    }
+
+    value = inb(port) | (1 << irq);
+    outb(port, value);
+}
+
+void i8259_clear_mask(uint8_t irq) {
+    uint16_t port;
+    uint8_t value;
+
+    if (irq < 8) {
+        port = MASTER_DATA;
+    } else {
+        port = SLAVE_DATA;
+        irq -= 8;
+    }
+
+    value = inb(port) & ~(1 << irq);
+    outb(port, value);
 }
 
 void i8259_mask(void) {
     outb(MASTER_DATA, 0xff);
     outb(SLAVE_DATA,  0xff);
-    return;
 }
 
 void i8259_unmask(void) {
     outb(MASTER_DATA, 0x00);
     outb(SLAVE_DATA,  0x00);
-    return;
 }

@@ -22,9 +22,11 @@
 import configparser
 import os
 import re
+import subprocess
 import sys
 
 FILES = ['grub.cfg', 'include/kernel/version.h', 'make.conf', 'ritchie.conf']
+ARCHES = ['amd64']
 
 """
 Replaces the matched contents of a file with the given string.
@@ -54,6 +56,7 @@ def update(filename, search, pattern, string):
     with open(filename, 'w') as conf:
         conf.writelines(lines)
 
+
 """
 Simply runs 'git checkout' on the configuration files
 to restore them to their template form.
@@ -62,39 +65,64 @@ This is I don't have to type it myself every time.
 """
 def clean():
     for f in FILES:
+        print('Resetting \''+ f +'\'... ', end='')
         os.system('git checkout '+f)
+        print('DONE')
+
 
 """
 The main function of this script.
 """
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == 'clean':
+    if len(sys.argv) <= 1:
+        print('usage: ./configure.py [arch | cmd]')
+        sys.exit()
+
+    elif sys.argv[1] == 'clean':
         clean()
-    else:
+
+    elif sys.argv[1] in ARCHES:
+        arch = sys.argv[1]
         config = configparser.ConfigParser()
         config.read(FILES[3])
 
         """ Read in the options """
         (name, version, codename) = [pair[1] for pair in config.items('Version')]
-        (arch, image) = [pair[1] for pair in config.items('Build')]
 
-        version_string = "\""+ name +" "+ version +" ("+codename+")\""
+        """ Get latest release tag """
+        release = subprocess.getoutput('git describe --tags --abbrev=0')
+
+        """ Get current branch name """
+        branch = subprocess.getoutput('git rev-parse --abbrev-ref HEAD')
+
+        if branch == 'master':
+            branch = ''
+        else:
+            branch = '-'+ branch
+
+        """ Construct version and binary image strings """
+        version_string = "\""+ name +" "+ version + branch +" ("+codename+")\""
+        image_string = name.lower() +"-v"+ release + branch
 
         """ Update the GRUB configuration file """
         print('Updating \''+ FILES[0] +'\'... ', end='')
         update(FILES[0], 'menuentry', r'\".*\"', version_string)
-        update(FILES[0], 'multiboot', r'/boot/.*$', '/boot/'+image)
+        update(FILES[0], 'multiboot', r'/boot/.*$', '/boot/'+image_string)
         print('DONE')
 
         """ Update kernel version header file """
         print('Updating \''+ FILES[1] +'\'... ', end='')
         update(FILES[1], 'PROJECT', r'PROJECT \".*\"', 'PROJECT \"'+ name +'\"')
-        update(FILES[1], 'VERSION', r'VERSION \".*\"', 'VERSION \"'+ version +'\"')
+        update(FILES[1], 'VERSION', r'VERSION \".*\"', 'VERSION \"'+ version + branch +'\"')
         update(FILES[1], 'CODENAME', r'CODENAME \".*\"', 'CODENAME \"'+ codename +'\"')
         print('DONE')
 
         """ Update make.conf file """
         print('Updating \''+ FILES[2] +'\'... ', end='')
         update(FILES[2], 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
-        update(FILES[2], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image)
+        update(FILES[2], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
         print('DONE')
+
+    else:
+        print('Architectures:', ARCHES)
+        print('Subcommands:', ['clean'])

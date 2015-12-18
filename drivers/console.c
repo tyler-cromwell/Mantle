@@ -24,10 +24,11 @@
 #include <stdint.h>
 
 /* Kernel Headers */
+#include <amd64/amd64.h>
 #include <kernel/string.h>
 
-#define VGA_START   (char*) 0xb8000 /* The starting address for video memory */
-#define VGA_END     (char*) 0xb8fa0 /* The ending address for video memory */
+#define CONSOLE_START   (char*) 0xb8000 /* The starting address for video memory */
+#define CONSOLE_END     (char*) 0xb8fa0 /* The ending address for video memory */
 
 #define CHAR_WIDTH  2       /* The number of bytes used per character */
 #define LINES       25      /* The number of lines on the screen */
@@ -36,7 +37,25 @@
 #define BYTES       4000    /* The number of usable bytes in video memory */
 
 /* Pointer to the next "empty" character byte */
-static char *next = VGA_START;
+static char *next = CONSOLE_START;
+
+/*
+ * Moves cursor to the location of the
+ * next available character.
+ * Argument:
+ *   uint8_t attribute: The color attribute.
+ */
+static void move_cursor(uint8_t attribute) {
+    uint16_t pos = (next - CONSOLE_START) / 2;
+
+    outb(0x3d4, 0x0f);
+    outb(0x3d5, (uint8_t) ((pos >> 0) & 0xff));
+
+    outb(0x3d4, 0x0e);
+    outb(0x3d5, (uint8_t) ((pos >> 8) & 0xff));
+
+    *(next+1) = *(next+1) | attribute;
+}
 
 /*
  * Clears the console by zero-ing the screen buffer.
@@ -44,8 +63,9 @@ static char *next = VGA_START;
  *   Resets the video pointer.
  */
 void console_clear(void) {
-    next = VGA_START;
-    memset(VGA_START, 0, BYTES);
+    next = CONSOLE_START;
+    memset(CONSOLE_START, 0, BYTES);
+    move_cursor(0x00);
 }
 
 /*
@@ -54,7 +74,7 @@ void console_clear(void) {
  *   uint8_t attribute: The color attribute.
  */
 void console_set_background(uint8_t attribute) {
-    next = VGA_START;
+    next = CONSOLE_START;
     uint16_t offset = 0;
 
     while (offset < BYTES) {
@@ -63,11 +83,13 @@ void console_set_background(uint8_t attribute) {
         }
         offset += CHAR_WIDTH;
     }
+
+    move_cursor(attribute);
 }
 
 /*
  * Writes a string of characters to the console.
- * Will interpret the newline character.
+ * Interprets the newline, backspace, and carriage return.
  * Arguments:
  *   char *message:  The message to write.
  *   uint16_t length: The number of bytes to write.
@@ -82,10 +104,10 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
 
     /* Ensure that the number of characters to write does not exceed the maximum */
     while (message[c] != '\0' && c < length) {
-        if (next >= VGA_END) {
+        if (next >= CONSOLE_END) {
             /* Shift the next pointer up one row */
             next -= LINE_BYTES;
-            char* start = VGA_START;
+            char *start = CONSOLE_START;
 
             /* Scroll everything up one row */
             for (uint16_t i = LINE_BYTES; i < BYTES; i++) {
@@ -93,28 +115,49 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
                 start[j] = start[i];
             }
 
-            /* Clear the bottom line */
-            memset(next, 0, LINE_BYTES);
+            /* Clear the bottom line and preserve color */
+            for (uint16_t i = 0; i < LINE_BYTES; i += CHAR_WIDTH) {
+                next[i] = '\0';
+            }
         }
 
-        /* Interpret the newline character */
+        /* Interpret Newline */
         if (message[c] == '\n') {
-            uint16_t remaining = LINE_CHARS - (((next - VGA_START) % LINE_BYTES) / CHAR_WIDTH);
+            uint16_t remaining = LINE_CHARS - (((next - CONSOLE_START) % LINE_BYTES) / CHAR_WIDTH);
 
-            /* Write blank characters for rest of the line */
             for (uint8_t i = 0; i < remaining; i++) {
                 *next = '\0';
                 next += CHAR_WIDTH;
             }
         }
+        /* Interpret Backspace */
+        else if (message[c] == '\b') {
+            char *second = CONSOLE_START + CHAR_WIDTH;
+
+            if (next >= second) {
+                 next -= CHAR_WIDTH;
+                 *next = '\0';
+            }
+        }
+        /* Interpret Carriage Return */
+        else if (message[c] == '\r') {
+            uint16_t line = next - CONSOLE_START;
+
+            for (uint8_t r = line % LINE_BYTES; r > 0; r -= CHAR_WIDTH) {
+                next -= CHAR_WIDTH;
+                *next = '\0';
+            }
+        }
+        /* Write everything else */
         else {
             *next = message[c];
-            *(next+1) = *(next+1) | attribute;
+            *(next+1) = (*(next+1) & 0xf0) | attribute;
             next += CHAR_WIDTH;
         }
         c++;
     }
 
+    move_cursor(attribute);
     return c;
 }
 
@@ -150,15 +193,22 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
                     format++;
                     break;
                 case 'd':
+                case 'i':
                     /* Signed 32-bit Integer */
-                    s = itoa(va_arg(arguments, int32_t), 10);
+                    s = itoa(va_arg(arguments, int32_t), 10, 0);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
                 case 'o':
                     /* Unsigned Octal Integer */
-                    s = itoa(va_arg(arguments, uint32_t), 8);
+                    s = itoa(va_arg(arguments, uint32_t), 8, 0);
                     c += console_write("0o", 2, attribute);
+                    c += console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
+                case 'p':
+                    /* Pointer address */
+                    s = itoa(va_arg(arguments, uint32_t), 16, 0);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
@@ -170,16 +220,29 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
                     break;
                 case 'u':
                     /* Unsigned 32-bit Integer */
-                    s = itoa(va_arg(arguments, uint32_t), 10);
+                    s = itoa(va_arg(arguments, uint32_t), 10, 0);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
                 case 'x':
-                case 'X':
-                    /* Unsigned Hexadecimal Integer */
-                    s = itoa(va_arg(arguments, uint32_t), 16);
+                    /* Unsigned Hexadecimal Integer (lowercase) */
+                    s = itoa(va_arg(arguments, uint32_t), 16, 0);
                     c += console_write("0x", 2, attribute);
                     c += console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
+                case 'X':
+                    /* Unsigned Hexadecimal Integer (uppercase) */
+                    s = itoa(va_arg(arguments, uint32_t), 16, 0);
+                    strupper(s);
+                    c += console_write("0x", 2, attribute);
+                    c += console_write(s, strlen(s), attribute);
+                    format++;
+                    break;
+                case '%':
+                    /* Percent sign */
+                    b = '%';
+                    c += console_write(&b, 1, attribute);
                     format++;
                     break;
                 default:

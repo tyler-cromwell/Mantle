@@ -30,21 +30,20 @@
  *   char *id: Pointer to the location to save the vendor id.
  */
 void cpuid_vendor(char *id) {
-    uint64_t rax = 0, rbx = 0, rcx = 0, rdx = 0;
+    uint32_t register eax asm("eax") = 0, ebx asm("ebx") = 0;
+    uint32_t register ecx asm("ecx") = 0, edx asm("edx") = 0;
 
-    /* Pass 'eax' into register A, then run CPUID */
-    __asm__("cpuid": : "a" (rax));
+    asm volatile (
+        "cpuid"
+        : "=b" (ebx), "=c" (ecx), "=d" (edx)
+        : "a" (eax)
+    );
 
-    /* Get the value of registers B, C, and D */
-    __asm__ volatile ("": "=b" (rbx));
-    __asm__ volatile ("": "=c" (rcx));
-    __asm__ volatile ("": "=d" (rdx));
-    
-    /* Get the vendor id of the CPU */
+    /* Get the vendor_id of the CPU */
     for (uint8_t i = 0; i < 4; i++) {
-        id[i+0] = rbx >> (i * 8);
-        id[i+4] = rdx >> (i * 8);
-        id[i+8] = rcx >> (i * 8);
+        id[i+0] = ebx >> (i * 8);
+        id[i+4] = edx >> (i * 8);
+        id[i+8] = ecx >> (i * 8);
     }
 }
 
@@ -53,14 +52,15 @@ void cpuid_vendor(char *id) {
  * Returns:
  *   The number of processors.
  */
-uint64_t cpuid_cpus(void) {
-    uint64_t rbx = 0;
+uint32_t cpuid_cpus(void) {
+    uint32_t register eax asm("eax") = 1, ebx asm("ebx") = 0;
 
-    /* Pass '0x1' into register A, then run CPUID */
-    __asm__ volatile ("cpuid": : "a" (0x1));
+    asm volatile (
+        "cpuid"
+        : "=b" (ebx)
+        : "a" (eax)
+        : "ecx", "edx"
+    );
 
-    /* Get the value of register B */
-    __asm__ volatile ("": "=b" (rbx));
-
-    return (rbx >> 16) & 0xff;
+    return (ebx >> 16) & 0xff;
 }

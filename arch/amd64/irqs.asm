@@ -19,7 +19,7 @@
 
 ; Global Symbols
 global irq00    ; i8253 timer
-global irq01    ; Keyboard?
+global irq01    ; Keyboard
 ;      irq02    ; Slave PIC
 global irq03
 global irq04

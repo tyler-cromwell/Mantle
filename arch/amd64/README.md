@@ -14,3 +14,4 @@ This directory contains all AMD64 specific code.
 - `idt.c` - Defines a 64-bit Interrupt Descriptor Table.
 - `interrupts.h` - Forward declarations for all interrupt handlers in C.
 - `irqs.asm` - Implements the Interrupt Request handlers.
+- `shell.c` - Implements a CLI shell.

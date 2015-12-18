@@ -19,9 +19,9 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 
 ## Coding Convention
 - All uppercase for Macros and Constants with underscores for spaces (i.e. `FG_WHITE`).
-- Camelcase for Structs and Typedefs (i.e. `GdtDescriptor`).
-- All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`, `gdt_init`).
-   - Double underscore prefix for functions or function-like macros that should not be called directly (`__console_write`).
+- Camelcase for Structs and Struct Typedefs (i.e. `IdtDescriptor`).
+- All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`).
+   - Double underscore prefix for function-like macros that should not be called directly (`__console_write`).
 
 ## Toolchain
 - `Makefile` - [GNU] Makefile used to build the kernel.
@@ -32,13 +32,11 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `grub.cfg` - Basic GRUB config file.
 - `configure.py` - Python 3 script that updates the following files:
   - `make.conf`, `grub.cfg`, and `version.h`.
-  - Running `./configure.py clean` will run `git checkout` on each file, including `ritchie.conf`.
+  - Running `./configure.py clean` will run `git checkout` on each file.
 - `ritchie.conf` - Project configuration file, contains various options.
   - `Name`: The project name.
   - `Version`: The version string.
   - `Codename`: The codename.
-  - `Arch`: The architecture to build for (i.e. `x86`).
-  - `Image`: The kernel binary image (i.e. `ritchie_debug`).
 - `make.conf` - File containing Makefile variables (populated by `configure.py`).
   - `ARCH`: The architecture to build.
   - `IMAGE`: The kernel binary image.

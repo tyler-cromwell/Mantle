@@ -27,39 +27,51 @@
 
 /*
  * Creates the string representation of a number.
- * DOES NOT HANDLE NEGATIVE NUMBERS.
+ * CURRENTLY ONLY 32-bit numbers.
  * Argument:
- *   long number: The number to be represented.
+ *   int32_t number: The number to be represented.
+ *   uint8_t base: The base to convert to.
+ *   uint8_t pad: Option for printing leading zeros
  * Returns:
  *   The string representation of number.
  */
-char* itoa(uint32_t number, uint32_t base) {
-    static char buffer[11] = {0};
-    char* string = buffer + 10;
+char* itoa(int32_t number, uint8_t base, uint8_t pad) {
+    static char buffer[12] = {0};
+    char *string = buffer + 11;
+    int32_t n = number;
     uint8_t c = 0;
 
+    memset(buffer, 0, 12);
+
     /* If number is zero, just stop */
-    if (number == 0) {
-        memset(buffer, 0, 11);
-        buffer[0] = 48;
-        string = buffer;
+    if (n == 0) {
+        *--string = '0';
         c++;
     }
     /* Convert, up to a base of 16 */
     else {
-        while (number != 0) {
-            *--string = "0123456789abcdef"[number % base];
-            number /= base;
+        while (n != 0) {
+            *--string = "fedcba9876543210123456789abcdef"[15 + n % base];
+            n /= base;
             c++;
+        }
+
+        if (number < 0 && base == 10) {
+            *--string = '-';
         }
     }
 
     /* Print leading zeros */
-    uint8_t d = 0;
-    if (base == 2) d = 32;
-    else if (base == 8) d = 11;
-    else if (base == 16) d = 8;
-    for (; c < d; c++) *--string = 48;
+    if (pad) {
+        uint8_t d = 0;
+        if (base == 2) d = 32;
+        else if (base == 8) d = 11;
+        else if (base == 16) d = 8;
+
+        for (; c < d && string != buffer; c++) {
+            *--string = '0';
+        }
+    }
 
     return string;
 }
@@ -91,7 +103,7 @@ void *memcpy(void *dest, const void *src, size_t n) {
  *   A pointer to the destination buffer.
  */
 void *memset(void *dest, int c, size_t n) {
-    uint8_t* buf = dest;
+    uint8_t *buf = dest;
     for (size_t i = 0; i < n; i++) {
         buf[i] = (uint8_t) c;
     }
@@ -99,7 +111,49 @@ void *memset(void *dest, int c, size_t n) {
 }
 
 /*
- * Checks if 2 strings are the same. Returns 0 if they are equal.
+ * Compares the contents of 2 strings, taking length into account.
+ * Mostly a wrapper for strncmp.
+ * Arguments:
+ *   const char *s1: The first string.
+ *   const char *s2: The second string.
+ * Returns:
+ *   A status/error code:
+ *     1 if equal, 0 if unequal
+ *     -1 if s1 is NULL, -2 if s2 is
+ *     -3 if s1 has 0 length, -4 if s2 does
+ */
+int8_t strlcmp(const char *s1, const char *s2) {
+    /* If a string is NULL, return an error */
+    if (s1 == NULL) {
+        return -1;
+    }
+    else if (s2 == NULL) {
+        return -2;
+    }
+
+    /* Get lengths */
+    size_t sl1 = strlen(s1);
+    size_t sl2 = strlen(s2);
+    size_t l = 0;
+
+    /* Stop if a string has 0 length */
+    if (sl1 == 0) {
+        return -3;
+    }
+    else if (sl2 == 0) {
+        return -4;
+    }
+
+    /* Compare length before content */
+    if (sl1 == sl2) {
+        return !strncmp(s1, s2, sl1);
+    } else {
+        return 0;
+    }
+}
+
+/*
+ * Compares the contents of 2 strings. Returns 0 if they are equal.
  * If they are not equal, returns the first character in s1 that is different.
  * Arguments:
  *   const char *s1: The first string.
@@ -108,7 +162,7 @@ void *memset(void *dest, int c, size_t n) {
  * Returns (see above)
  */
 int32_t strncmp(const char *s1, const char *s2, size_t n) {
-    for (size_t i = 0; i < n && i < strlen(s1); i++) {
+    for (size_t i = 0; i < n; i++) {
         if ((s1[i] - s2[i]) != 0) {
             return s1[i] - s2[i];
         }
@@ -160,4 +214,40 @@ size_t strnlen(const char *string, size_t n) {
         length++;
     }
     return length;
+}
+
+/*
+ * Converts the alphabetical characters
+ * in a string to lowercase.
+ * Argument:
+ *   char *string: The string to be modified.
+ */
+void strlower(char *string) {
+    char *s = string;
+    size_t n = strlen(string);
+
+    /* Iterate until NULL byte or string length */
+    for (size_t i = 0; i < n && *s != '\0'; i++, s++) {
+        if (*s >= 'A' && *s <= 'Z') {
+            *s = *s + 32;
+        }
+    }
+}
+
+/*
+ * Converts the alphabetical characters
+ * in a string to uppercase.
+ * Argument:
+ *   char *string: The string to be modified.
+ */
+void strupper(char *string) {
+    char *s = string;
+    size_t n = strlen(string);
+
+    /* Iterate until NULL byte or string length */
+    for (size_t i = 0; i < n && *s != '\0'; i++, s++) {
+        if (*s >= 'a' && *s <= 'z') {
+            *s = *s - 32;
+        }
+    }
 }
