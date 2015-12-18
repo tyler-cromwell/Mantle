@@ -26,6 +26,7 @@
 
 /* Kernel Headers */
 #include <amd64/amd64.h>
+#include <amd64/multiboot.h>
 
 /* Macro Constants */
 #define SHELL_BUFSIZ    16

@@ -20,6 +20,7 @@
 /* Kernel Headers */
 #include <amd64/amd64.h>
 #include <amd64/i8259.h>
+#include <amd64/shell.h>
 #include <amd64/multiboot.h>
 #include <drivers/console.h>
 #include <kernel/string.h>
@@ -32,7 +33,7 @@ extern struct undefined KERNEL_SIZE;
 extern char keyboard_getchar(void); /* Defined in "keyboard.c" */
 
 /* Internal variables */
-static char input[16] = {0};
+static char input[SHELL_BUFSIZ] = {0};
 
 /*
  * Basic text input function.
@@ -47,7 +48,7 @@ char* shell_readline(char *prompt) {
     uint8_t backspaces = 0;
 
     console_printf(FG_WHITE, "%s", prompt);
-    memset(input, '\0', 16);
+    memset(input, '\0', SHELL_BUFSIZ);
     i8259_clear_mask(I8259_IRQ_KEYBOARD);   /* Enable keyboard */
 
     while (1) {
