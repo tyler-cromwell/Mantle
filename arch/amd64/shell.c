@@ -111,6 +111,9 @@ void shell_cmd_cpuinfo(void) {
 
 /*
  * Dump Multiboot information.
+ * Arguments:
+ *   uint64_t magic: Bootloader magic number.
+ *   struct MultibootInfo *mbinfo: Pointer to the Multiboot information.
  */
 void shell_cmd_multiboot(uint64_t magic, struct MultibootInfo *mbinfo) {
     /* Was the kernel booted by a Multiboot bootloader? */
