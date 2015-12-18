@@ -49,12 +49,12 @@ static inline void outb(uint16_t port, uint8_t value) {
 }
 
 /* CPUID */
-extern void cpuid_vendor(char *id);
-extern uint32_t cpuid_cpus(void);
+void cpuid_vendor(char *id);
+uint32_t cpuid_cpus(void);
 
 /* Interrupt Descriptor Table */
-extern void idt_configure(void);
+void idt_configure(void);
 
 /* Keyboard */
-extern void keyboard_handler(void);
+void keyboard_handler(void);
 #endif

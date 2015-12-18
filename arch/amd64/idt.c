@@ -69,8 +69,8 @@ struct PageFaultError {
 static struct IdtGate idt[256];
 
 /* External - Defined in "amd64.asm" */
-extern void disable_apic(void);
-extern void idt_load(struct Idtr*);
+void disable_apic(void);
+void idt_load(struct Idtr*);
 
 /*
  * Creates a new interrupt gate.

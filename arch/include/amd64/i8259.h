@@ -36,10 +36,10 @@
 #define I8259_IRQ_TIMER     0x00
 #define I8259_IRQ_KEYBOARD  0x01
 
-extern void i8259_init(void);
-extern void i8259_set_mask(uint8_t irq);
-extern void i8259_clear_mask(uint8_t irq);
-extern void i8259_mask(void);
-extern void i8259_unmask(void);
+void i8259_init(void);
+void i8259_set_mask(uint8_t irq);
+void i8259_clear_mask(uint8_t irq);
+void i8259_mask(void);
+void i8259_unmask(void);
 
 #endif

@@ -22,6 +22,6 @@
 
 #include <stdint.h>
 
-extern void i8253_init(uint8_t);
+void i8253_init(uint8_t);
 
 #endif
