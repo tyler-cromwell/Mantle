@@ -25,11 +25,6 @@
 #include <kernel/string.h>
 #include <kernel/version.h>
 
-/* Linker Script Symbols */
-extern struct undefined KERNEL_LMA;
-extern struct undefined KERNEL_VMA;
-extern struct undefined KERNEL_SIZE;
-
 /*
  * The main kernel function; this is where Ritchie begins operation.
  * The system will halt when/if this function returns.
@@ -66,7 +61,7 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
             console_printf(FG_WHITE, "Unkown command \"%s\"\n", input);
         }
 
-        memset(input, '\0', 16);
+        memset(input, '\0', SHELL_BUFSIZ);
     }
 
     while (1) {}

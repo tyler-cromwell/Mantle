@@ -25,6 +25,7 @@
 #include <kernel/string.h>
 
 /* Linker Script Symbols */
+extern struct undefined KERNEL_LMA;
 extern struct undefined KERNEL_SIZE;
 
 /* External - functions / variables */
@@ -84,7 +85,8 @@ char* shell_readline(char *prompt) {
 void shell_cmd_kinfo(void) {
     /* Get Kernel size */
     uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
-    console_printf(FG_WHITE, "Kernel size: %uKB\n", size);
+    console_printf(FG_WHITE, "Size in memory: %uKB\n", size);
+    console_printf(FG_WHITE, "Physical address: %x\n", &KERNEL_LMA);
 }
 
 /*

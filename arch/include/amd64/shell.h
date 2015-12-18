@@ -27,9 +27,13 @@
 /* Kernel Headers */
 #include <amd64/amd64.h>
 
-extern char* shell_readline(char *prompt);
-extern void shell_cmd_kinfo(void);
-extern void shell_cmd_cpuinfo(void);
-extern void shell_cmd_multiboot(uint64_t magic, struct MultibootInfo *mbinfo);
+/* Macro Constants */
+#define SHELL_BUFSIZ    16
+
+/* Function Prototypes */
+char* shell_readline(char *prompt);
+void shell_cmd_kinfo(void);
+void shell_cmd_cpuinfo(void);
+void shell_cmd_multiboot(uint64_t magic, struct MultibootInfo *mbinfo);
 
 #endif
