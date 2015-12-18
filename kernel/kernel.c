@@ -83,7 +83,7 @@ void multiboot(uint64_t magic, struct MultibootInfo *mbinfo) {
  */
 void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
     console_clear();
-    console_printf(FG_BLUE, STRING"\n");
+    console_printf(FG_BLUE_L, STRING"\n");
 
     /* Setup interrupt handling */
     idt_configure();
@@ -93,21 +93,23 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
         char *input = shell_readline("> ");
 
         /* Interpret input */
-        if (!strncmp(input, "kinfo", strlen(input))) {
+        if (strlcmp(input, "kinfo") > 0) {
             kinfo();
         }
-        else if (!strncmp(input, "cpuinfo", strlen(input))) {
+        else if (strlcmp(input, "cpuinfo") > 0) {
             cpuinfo();
         }
-        else if (!strncmp(input, "multiboot", strlen(input))) {
+        else if (strlcmp(input, "multiboot") > 0) {
             multiboot(magic, mbinfo);
         }
-        else if (!strncmp(input, "clear", strlen(input))) {
+        else if (strlcmp(input, "clear") > 0) {
             console_clear();
         }
-        else {
-            console_printf(FG_WHITE, "%s\n", input);
+        else if (strlen(input) > 0) {
+            console_printf(FG_WHITE, "Unkown command \"%s\"\n", input);
         }
+
+        memset(input, '\0', 16);
     }
 
     while (1) {}
