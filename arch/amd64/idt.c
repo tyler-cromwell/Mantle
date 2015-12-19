@@ -141,7 +141,7 @@ static void idt_install_exception_handlers(void) {
 static void idt_install_irq_handlers(void) {
     idt_set_gate(32, (uint64_t) irq00, 0x08, 0x8e); /* i8253 timer */
     idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* Keyboard */
-/*  idt_set_gate(34, (uint64_t) irq02, 0x08, 0x8e); */
+/*  idt_set_gate(34, (uint64_t) irq02, 0x08, 0x8e);    Slave PIC */
     idt_set_gate(35, (uint64_t) irq03, 0x08, 0x8e); /* ??? */
     idt_set_gate(36, (uint64_t) irq04, 0x08, 0x8e); /* ??? */
     idt_set_gate(37, (uint64_t) irq05, 0x08, 0x8e); /* ??? */
@@ -155,22 +155,6 @@ static void idt_install_irq_handlers(void) {
     idt_set_gate(45, (uint64_t) irq13, 0x08, 0x8e); /* ??? */
     idt_set_gate(46, (uint64_t) irq14, 0x08, 0x8e); /* ??? */
     idt_set_gate(47, (uint64_t) irq15, 0x08, 0x8e); /* ??? */
-/*  idt_set_gate(48, (uint64_t) irq16, 0x08, 0x8e); */
-/*  idt_set_gate(49, (uint64_t) irq17, 0x08, 0x8e); */
-/*  idt_set_gate(50, (uint64_t) irq18, 0x08, 0x8e); */
-/*  idt_set_gate(51, (uint64_t) irq19, 0x08, 0x8e); */
-/*  idt_set_gate(52, (uint64_t) irq20, 0x08, 0x8e); */
-/*  idt_set_gate(53, (uint64_t) irq21, 0x08, 0x8e); */
-/*  idt_set_gate(54, (uint64_t) irq22, 0x08, 0x8e); */
-/*  idt_set_gate(55, (uint64_t) irq23, 0x08, 0x8e); */
-/*  idt_set_gate(56, (uint64_t) irq24, 0x08, 0x8e); */
-/*  idt_set_gate(57, (uint64_t) irq25, 0x08, 0x8e); */
-/*  idt_set_gate(58, (uint64_t) irq26, 0x08, 0x8e); */
-/*  idt_set_gate(59, (uint64_t) irq27, 0x08, 0x8e); */
-/*  idt_set_gate(60, (uint64_t) irq28, 0x08, 0x8e); */
-/*  idt_set_gate(61, (uint64_t) irq29, 0x08, 0x8e); */
-/*  idt_set_gate(62, (uint64_t) irq30, 0x08, 0x8e); */
-/*  idt_set_gate(63, (uint64_t) irq31, 0x08, 0x8e); */
     console_printf(FG_WHITE, "IRQ handlers installed\n");
 }
 

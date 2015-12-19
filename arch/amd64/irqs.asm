@@ -34,22 +34,6 @@ global irq12
 global irq13
 global irq14
 global irq15
-;      irq16
-;      irq17
-;      irq18
-;      irq19
-;      irq20
-;      irq21
-;      irq22
-;      irq23
-;      irq24
-;      irq25
-;      irq26
-;      irq27
-;      irq28
-;      irq29
-;      irq30
-;      irq31
 
 ; External Symbols
 extern idt_irq_handler
