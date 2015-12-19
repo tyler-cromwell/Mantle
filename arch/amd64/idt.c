@@ -71,8 +71,22 @@ struct PageFaultError {
 static struct IdtGate idt[256];
 
 /* External functions */
-void disable_apic(void);        /* Defined in "amd64.asm" */
 void keyboard_handler(void);    /* Defined in "keyboard.c" */
+
+/*
+ * Disables the APIC.
+ */
+static void disable_apic(void) {
+    uint32_t register ecx asm("ecx") = 0x0000001b;
+
+    asm volatile (
+        ".intel_syntax noprefix\n\t"
+        "rdmsr\n\t"
+        "and eax, (0 << 11)\n\t"
+        "wrmsr\n\t"
+        ".att_syntax prefix\n\t"
+    );
+}
 
 /*
  * Installs the given IDT pointer.

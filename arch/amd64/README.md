@@ -8,7 +8,6 @@ This directory contains all AMD64 specific code.
 - `drivers` - Contains code for driving hardware found on an AMD64 machine.
 
 #### Files
-- `amd64.asm` - Contains a bunch of misfit assembly code.
 - `cpuid.c` - Functions that make use of the CPUID instruction.
 - `exceptions.asm` - Implements the system Exception handlers.
 - `idt.c` - Defines a 64-bit Interrupt Descriptor Table.
