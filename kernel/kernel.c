@@ -61,6 +61,7 @@ void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
             console_printf(FG_WHITE, "Unkown command \"%s\"\n", input);
         }
 
+        /* Reset input buffer */
         memset(input, '\0', SHELL_BUFSIZ);
     }
 

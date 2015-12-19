@@ -29,7 +29,7 @@
 extern struct undefined KERNEL_LMA;
 extern struct undefined KERNEL_SIZE;
 
-/* External - functions / variables */
+/* External functions / variables */
 extern char keyboard_getchar(void); /* Defined in "keyboard.c" */
 
 /* Internal variables */
@@ -38,7 +38,7 @@ static char input[SHELL_BUFSIZ] = {0};
 /*
  * Basic text input function.
  * Argument:
- *   char *prompt: the prompt to display.
+ *   char *prompt: The prompt to display.
  * Returns:
  *   a pointer to the input buffer.
  */

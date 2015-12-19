@@ -24,6 +24,7 @@
    these don't need to link against libc */
 #include <stdint.h>
 
+/* CPUID Vendor names */
 #define VENDOR_AMD      "AuthenticAMD"
 #define VENDOR_INTEL    "GenuineIntel"
 
@@ -31,6 +32,8 @@
  * Read a byte from an I/O port.
  * Arguments:
  *   uint16_t port: The port to read from.
+ * Returns:
+ *   the byte read from the port.
  */
 static inline uint8_t inb(uint16_t port) {
     uint8_t value;
