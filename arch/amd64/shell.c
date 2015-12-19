@@ -44,7 +44,7 @@ static char input[SHELL_BUFSIZ] = {0};
  */
 char* shell_readline(char *prompt) {
     char *next = input;
-    char *end = input + 15;
+    char *end = input + SHELL_BUFSIZ - 1;
     uint8_t backspaces = 0;
 
     console_printf(FG_WHITE, "%s", prompt);

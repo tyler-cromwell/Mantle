@@ -68,9 +68,10 @@ struct PageFaultError {
 /* The Interrupt Descriptor Table */
 static struct IdtGate idt[256];
 
-/* External - Defined in "amd64.asm" */
-void disable_apic(void);
-void idt_load(struct Idtr*);
+/* External functions */
+void disable_apic(void);        /* Defined in "amd64.asm" */
+void idt_load(struct Idtr*);    /* Defined in "amd64.asm" */
+void keyboard_handler(void);    /* Defined in "keyboard.c" */
 
 /*
  * Creates a new interrupt gate.
@@ -211,6 +212,6 @@ void idt_irq_handler(uint64_t vector) {
     /* Determine specific handler */
     switch (vector) {
         case 32: break;
-        case 33: break;
+        case 33: keyboard_handler(); break;
     }
 }

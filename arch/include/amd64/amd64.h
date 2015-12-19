@@ -54,7 +54,4 @@ uint32_t cpuid_cpus(void);
 
 /* Interrupt Descriptor Table */
 void idt_configure(void);
-
-/* Keyboard */
-void keyboard_handler(void);
 #endif
