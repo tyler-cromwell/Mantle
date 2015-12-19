@@ -20,6 +20,7 @@
 /* C Standard Library Headers,
    these don't need to link against libc */
 #include <stddef.h>
+#include <stdint.h>
 
 /* Kernel Headers */
 #include <amd64/multiboot.h>

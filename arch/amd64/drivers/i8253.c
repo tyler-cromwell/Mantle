@@ -18,7 +18,7 @@
 **********************************************************************/
 
 /* C Standard Library Headers,
-   these don't need to link against libc a*/
+   these don't need to link against libc */
 #include <stdint.h>
 
 /* Kernel Headers */

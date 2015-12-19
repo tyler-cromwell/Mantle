@@ -27,6 +27,8 @@
 #include <amd64/i8259.h>
 #include <drivers/console.h>
 #include <kernel/string.h>
+
+/* Local Kernel Headers */
 #include "interrupts.h"
 
 /* An IDT interrupt gate */
@@ -46,7 +48,7 @@ struct Idtr {
     uint64_t base;  /* IDT base address */
 } __attribute__((__packed__));
 
-/* */
+/* Selector Error code */
 struct SelectorError {
     uint16_t ext : 1;
     uint16_t idt : 1;
@@ -55,7 +57,7 @@ struct SelectorError {
     uint16_t reserved;
 } __attribute__((__packed__));
 
-/* */
+/* Page Fault Error code */
 struct PageFaultError {
     uint32_t p : 1;
     uint32_t rw : 1;
@@ -110,29 +112,16 @@ static void idt_install_exception_handlers(void) {
     idt_set_gate( 6, (uint64_t) exc06, 0x08, 0x8e); /* Invalid Opcode (Fault - Precise) */
     idt_set_gate( 7, (uint64_t) exc07, 0x08, 0x8e); /* Device Not Available (Fault - Precise) */
     idt_set_gate( 8, (uint64_t) exc08, 0x08, 0x8e); /* Double Fault (Abort - Imprecise) */
-/*  idt_set_gate( 9, (uint64_t) exc09, 0x08, 0x8e); */
     idt_set_gate(10, (uint64_t) exc10, 0x08, 0x8e); /* Invalid TSS (Fault - Precise) */
     idt_set_gate(11, (uint64_t) exc11, 0x08, 0x8e); /* Segment Not Present (Fault - Precise) */
     idt_set_gate(12, (uint64_t) exc12, 0x08, 0x8e); /* Stack Fault (Fault - Precise) */
     idt_set_gate(13, (uint64_t) exc13, 0x08, 0x8e); /* General Protect (Fault - Precise) */
     idt_set_gate(14, (uint64_t) exc14, 0x08, 0x8e); /* Page Fault (Fault - Precise) */
-/*  idt_set_gate(15, (uint64_t) exc15, 0x08, 0x8e); */
     idt_set_gate(16, (uint64_t) exc16, 0x08, 0x8e); /* x87 Floating Point (Fault - Imprecise) */
     idt_set_gate(17, (uint64_t) exc17, 0x08, 0x8e); /* Alignment Check (Fault - Precise) */
     idt_set_gate(18, (uint64_t) exc18, 0x08, 0x8e); /* Machine Check (Abort - Imprecise) */
     idt_set_gate(19, (uint64_t) exc19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
-/*  idt_set_gate(20, (uint64_t) exc20, 0x08, 0x8e); */
-/*  idt_set_gate(21, (uint64_t) exc21, 0x08, 0x8e); */
-/*  idt_set_gate(22, (uint64_t) exc22, 0x08, 0x8e); */
-/*  idt_set_gate(23, (uint64_t) exc23, 0x08, 0x8e); */
-/*  idt_set_gate(24, (uint64_t) exc24, 0x08, 0x8e); */
-/*  idt_set_gate(25, (uint64_t) exc25, 0x08, 0x8e); */
-/*  idt_set_gate(26, (uint64_t) exc26, 0x08, 0x8e); */
-/*  idt_set_gate(27, (uint64_t) exc27, 0x08, 0x8e); */
-/*  idt_set_gate(28, (uint64_t) exc28, 0x08, 0x8e); */
-/*  idt_set_gate(29, (uint64_t) exc29, 0x08, 0x8e); */
     idt_set_gate(30, (uint64_t) exc30, 0x08, 0x8e); /* Security (- Precise) */
-/*  idt_set_gate(31, (uint64_t) exc31, 0x08, 0x8e); */
     console_printf(FG_WHITE, "Exception handlers installed\n");
 }
 
@@ -140,22 +129,21 @@ static void idt_install_exception_handlers(void) {
  * Installs the Interrupt Request handlers.
  */
 static void idt_install_irq_handlers(void) {
-    idt_set_gate(32, (uint64_t) irq00, 0x08, 0x8e); /* i8253 timer */
-    idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* Keyboard */
-/*  idt_set_gate(34, (uint64_t) irq02, 0x08, 0x8e);    Slave PIC */
-    idt_set_gate(35, (uint64_t) irq03, 0x08, 0x8e); /* ??? */
-    idt_set_gate(36, (uint64_t) irq04, 0x08, 0x8e); /* ??? */
-    idt_set_gate(37, (uint64_t) irq05, 0x08, 0x8e); /* ??? */
-    idt_set_gate(38, (uint64_t) irq06, 0x08, 0x8e); /* ??? */
-    idt_set_gate(39, (uint64_t) irq07, 0x08, 0x8e); /* ??? */
-    idt_set_gate(40, (uint64_t) irq08, 0x08, 0x8e); /* ??? */
-    idt_set_gate(41, (uint64_t) irq09, 0x08, 0x8e); /* ??? */
-    idt_set_gate(42, (uint64_t) irq10, 0x08, 0x8e); /* ??? */
-    idt_set_gate(43, (uint64_t) irq11, 0x08, 0x8e); /* ??? */
-    idt_set_gate(44, (uint64_t) irq12, 0x08, 0x8e); /* ??? */
-    idt_set_gate(45, (uint64_t) irq13, 0x08, 0x8e); /* ??? */
-    idt_set_gate(46, (uint64_t) irq14, 0x08, 0x8e); /* ??? */
-    idt_set_gate(47, (uint64_t) irq15, 0x08, 0x8e); /* ??? */
+    idt_set_gate(32, (uint64_t) irq00, 0x08, 0x8e); /* i8253 PIT */
+    idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* PS/2 Keyboard */
+    idt_set_gate(35, (uint64_t) irq03, 0x08, 0x8e); /* COM2 */
+    idt_set_gate(36, (uint64_t) irq04, 0x08, 0x8e); /* COM1 */
+    idt_set_gate(37, (uint64_t) irq05, 0x08, 0x8e); /* LPT2 */
+    idt_set_gate(38, (uint64_t) irq06, 0x08, 0x8e); /* Floppy Disk */
+    idt_set_gate(39, (uint64_t) irq07, 0x08, 0x8e); /* LPT1 */
+    idt_set_gate(40, (uint64_t) irq08, 0x08, 0x8e); /* CMOS RTC */
+    idt_set_gate(41, (uint64_t) irq09, 0x08, 0x8e); /* Free for peripherals */
+    idt_set_gate(42, (uint64_t) irq10, 0x08, 0x8e); /* Free for peripherals */
+    idt_set_gate(43, (uint64_t) irq11, 0x08, 0x8e); /* Free for peripherals */
+    idt_set_gate(44, (uint64_t) irq12, 0x08, 0x8e); /* PS/2 Mouse */
+    idt_set_gate(45, (uint64_t) irq13, 0x08, 0x8e); /* FPU / Coprocessor / Inter-processors */
+    idt_set_gate(46, (uint64_t) irq14, 0x08, 0x8e); /* Primary ATA HDD */
+    idt_set_gate(47, (uint64_t) irq15, 0x08, 0x8e); /* Secondary ATA HDD */
     console_printf(FG_WHITE, "IRQ handlers installed\n");
 }
 
@@ -187,6 +175,9 @@ void idt_configure(void) {
     console_printf(FG_WHITE, "IDT setup, interrupts enabled\n\n");
 }
 
+/*
+ * Common (C level) Interrupt handler.
+ */
 void idt_exception_handler(uint64_t vector, uint64_t error) {
     console_printf(FG_BROWN_L, "%s!\n", interrupts[vector]);
 
@@ -202,6 +193,9 @@ void idt_exception_handler(uint64_t vector, uint64_t error) {
     }
 }
 
+/*
+ * Common (C level) IRQ handler.
+ */
 void idt_irq_handler(uint64_t vector) {
     /* Send reset signal */
     if (vector >= 40) {
