@@ -19,7 +19,6 @@
 
 ; Global Symbols
 global disable_apic
-global idt_load
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Text Section
@@ -32,10 +31,4 @@ disable_apic:
     rdmsr
     and eax, (0 << 11)
     wrmsr
-    ret
-
-; Installs the IDT
-idt_load:
-    lidt [rdi]
-    sti
     ret

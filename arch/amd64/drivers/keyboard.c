@@ -71,6 +71,8 @@ static char next = -1;
 
 /*
  * Basic PS/2 keyboard IRQ handler.
+ *
+ * Only called in "idt.c"
  */
 void keyboard_handler(void) {
     uint8_t status = inb(KEYBOARD_STATUS);

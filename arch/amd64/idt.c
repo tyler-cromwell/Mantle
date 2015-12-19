@@ -31,7 +31,7 @@
 /* Local Kernel Headers */
 #include "interrupts.h"
 
-/* An IDT interrupt gate */
+/* A Long Mode IDT interrupt gate */
 struct IdtGate {
     uint16_t offset_low;    /* Lower portion of the offset */
     uint16_t selector;      /* Interrupt selector */
@@ -42,7 +42,7 @@ struct IdtGate {
     uint32_t zero2;         /* Always zero */
 } __attribute__((__packed__));
 
-/* The IDTR register */
+/* The Long Mode IDTR register */
 struct Idtr {
     uint16_t limit; /* The length of the IDT */
     uint64_t base;  /* IDT base address */
@@ -72,8 +72,21 @@ static struct IdtGate idt[256];
 
 /* External functions */
 void disable_apic(void);        /* Defined in "amd64.asm" */
-void idt_load(struct Idtr*);    /* Defined in "amd64.asm" */
 void keyboard_handler(void);    /* Defined in "keyboard.c" */
+
+/*
+ * Installs the given IDT pointer.
+ * Argument:
+ *   struct Idtr *idtr: A struct representing the IDTR.
+ */
+static void idt_load(struct Idtr *idtr) {
+    asm volatile (
+        ".intel_syntax noprefix\n\t"
+        "lidt [rdi]\n\t"
+        "sti\n\t"
+        ".att_syntax prefix\n\t"
+    );
+}
 
 /*
  * Creates a new interrupt gate.
