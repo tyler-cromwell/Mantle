@@ -18,7 +18,7 @@
 **********************************************************************/
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
+#include <amd64/cpuid.h>
 #include <amd64/i8259.h>
 #include <amd64/shell.h>
 #include <amd64/multiboot.h>
