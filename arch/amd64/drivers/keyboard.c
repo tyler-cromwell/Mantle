@@ -22,7 +22,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
+#include <amd64/asm.h>
 
 /* Keyboard ports */
 #define KEYBOARD_DATA   0x60

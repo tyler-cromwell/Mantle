@@ -17,8 +17,8 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-#ifndef AMD64_H
-#define AMD64_H
+#ifndef AMD64_ASM_H
+#define AMD64_ASM_H
 
 /* C Standard Library Headers,
    these don't need to link against libc */

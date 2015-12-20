@@ -2,7 +2,7 @@
 Contains header files for the AMD64 architecture.
 
 ## Contents
-- `amd64.h` - General AMD64 header file, contains some misfit code.
+- `asm.h` - C level functions for certain ASM instructions.
 - `cpuid.h` - CPUID function headings and macros.
 - `i8253.h` - Header for the Intel 8253 Programmable Interval Timer.
 - `i8259.h` - Header for the Intel 8259 Programmable Interrupt Controller (legacy).

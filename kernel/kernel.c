@@ -18,7 +18,6 @@
 **********************************************************************/
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
 #include <amd64/multiboot.h>
 #include <amd64/shell.h>
 #include <drivers/console.h>

@@ -22,7 +22,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
+#include <amd64/asm.h>
 
 /*
  * Initializes the Intel 8253

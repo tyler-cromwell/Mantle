@@ -22,7 +22,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
+#include <amd64/asm.h>
 
 /* Master PIC */
 #define MASTER_CMD  0x20

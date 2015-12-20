@@ -22,7 +22,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
+#include <amd64/asm.h>
 #include <amd64/i8253.h>
 #include <amd64/i8259.h>
 #include <drivers/console.h>
