@@ -25,6 +25,9 @@
 #include <kernel/string.h>
 #include <kernel/version.h>
 
+/* External */
+void idt_configure(void);   /* Defined in "idt.c" */
+
 /*
  * The main kernel function; this is where Ritchie begins operation.
  * The system will halt when/if this function returns.

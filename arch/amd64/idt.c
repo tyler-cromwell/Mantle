@@ -176,6 +176,8 @@ static void idt_install_irq_handlers(void) {
 
 /*
  * Installs the Interrupt Descriptor Table.
+ *
+ * Only called in "kernel.c"
  */
 void idt_configure(void) {
     memset((void*) idt, 0, sizeof(struct IdtGate) * 256);
