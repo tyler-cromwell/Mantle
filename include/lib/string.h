@@ -17,30 +17,24 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-#ifndef AMD64_I8259_H
-#define AMD64_I8259_H
+#ifndef KERNEL_STRING_H
+#define KERNEL_STRING_H
 
 /* C Standard Library Headers,
    these don't need to link against libc */
+#include <stddef.h>
 #include <stdint.h>
 
-/* Master PIC */
-#define I8259_MASTER_CMD    0x20
-#define I8259_MASTER_DATA   0x21
-
-/* Slave PIC */
-#define I8259_SLAVE_CMD     0xA0
-#define I8259_SLAVE_DATA    0xA1
-
-/* Device IRQ numbers */
-#define I8259_IRQ_TIMER     0x00
-#define I8259_IRQ_KEYBOARD  0x01
-
 /* Function prototypes */
-void i8259_init(void);
-void i8259_set_mask(uint8_t irq);
-void i8259_clear_mask(uint8_t irq);
-void i8259_mask(void);
-void i8259_unmask(void);
+char* itoa(int32_t number, uint8_t base, uint8_t pad);
+void* memcpy(void *dest, const void *src, size_t n);
+void* memset(void *dest, int c, size_t n);
+int8_t strlcmp(const char *s1, const char *s2);
+int32_t strncmp(const char *s1, const char *s2, size_t n);
+char* strncpy(char *dest, const char *src, size_t n);
+size_t strlen(const char *string);
+size_t strnlen(const char *string, size_t n);
+void strlower(char *string);
+void strupper(char *string);
 
 #endif

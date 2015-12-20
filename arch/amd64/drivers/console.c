@@ -24,12 +24,12 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
-#include <kernel/string.h>
+#include <amd64/asm.h>
+#include <lib/string.h>
 
+/* Macro constants */
 #define CONSOLE_START   (char*) 0xb8000 /* The starting address for video memory */
 #define CONSOLE_END     (char*) 0xb8fa0 /* The ending address for video memory */
-
 #define CHAR_WIDTH  2       /* The number of bytes used per character */
 #define LINES       25      /* The number of lines on the screen */
 #define LINE_CHARS  80      /* The number of characters per line */
@@ -96,8 +96,6 @@ void console_set_background(uint8_t attribute) {
  *   uint8_t attribute: The coloring attribute.
  * Returns:
  *   The number of characters written.
- * Side Effect:
- *   Updates the video pointer.
  */
 size_t console_write(char *message, size_t length, uint8_t attribute) {
     size_t c = 0;

@@ -22,7 +22,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <drivers/console.h>
+#include <amd64/console.h>
 
 /*
  * Obtains the CPU vendor string.

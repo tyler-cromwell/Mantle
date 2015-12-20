@@ -1,6 +1,6 @@
 # Include
-This directory contains all header files used in by the kernel.
+This directory contains all header files used by the kernel.
 
 ## Contents
-- `drivers` - Contains header files for driver code.
 - `kernel` - Contains header files for core kernel functions.
+- `lib` - Contains header files for the kernel library.

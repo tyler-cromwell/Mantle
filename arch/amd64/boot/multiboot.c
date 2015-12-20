@@ -20,11 +20,12 @@
 /* C Standard Library Headers,
    these don't need to link against libc */
 #include <stddef.h>
+#include <stdint.h>
 
 /* Kernel Headers */
+#include <amd64/console.h>
 #include <amd64/multiboot.h>
-#include <drivers/console.h>
-#include <kernel/string.h>
+#include <lib/string.h>
 
 /* Macros for converting byte metrics */
 #define CONVERT_NUM 1024

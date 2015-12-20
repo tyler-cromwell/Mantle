@@ -18,18 +18,18 @@
 **********************************************************************/
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
+#include <amd64/console.h>
+#include <amd64/cpuid.h>
 #include <amd64/i8259.h>
 #include <amd64/shell.h>
 #include <amd64/multiboot.h>
-#include <drivers/console.h>
-#include <kernel/string.h>
+#include <lib/string.h>
 
 /* Linker Script Symbols */
 extern struct undefined KERNEL_LMA;
 extern struct undefined KERNEL_SIZE;
 
-/* External - functions / variables */
+/* External functions / variables */
 extern char keyboard_getchar(void); /* Defined in "keyboard.c" */
 
 /* Internal variables */
@@ -38,13 +38,13 @@ static char input[SHELL_BUFSIZ] = {0};
 /*
  * Basic text input function.
  * Argument:
- *   char *prompt: the prompt to display.
+ *   char *prompt: The prompt to display.
  * Returns:
  *   a pointer to the input buffer.
  */
 char* shell_readline(char *prompt) {
     char *next = input;
-    char *end = input + 15;
+    char *end = input + SHELL_BUFSIZ - 1;
     uint8_t backspaces = 0;
 
     console_printf(FG_WHITE, "%s", prompt);

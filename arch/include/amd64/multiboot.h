@@ -22,13 +22,14 @@
  * GNU Multiboot 0.6.96 is the supported version, currently.
  */
 
-#ifndef X86_MULTIBOOT_H
-#define X86_MULTIBOOT_H
+#ifndef AMD64_MULTIBOOT_H
+#define AMD64_MULTIBOOT_H
 
 /* C Standard Library Headers,
    these don't need to link against libc */
 #include <stdint.h>
 
+/* Macro constants */
 #define MULTIBOOT_BOOT_MAGIC    0x2badb002  /* Bootloader magic number */
 #define MULTIBOOT_MEMORY        1 << 0      /* Lower and Upper Memory flag */
 #define MULTIBOOT_MODULES       1 << 3      /* Boot modules flag */
@@ -133,6 +134,7 @@ struct MultibootDrive {
     uint16_t *drive_ports;              /* Null terminated array */
 } __attribute__((__packed__));
 
+/* Function prototypes */
 void multiboot_init(struct MultibootInfo *mbinfo);
 void multiboot_dump(void);
 

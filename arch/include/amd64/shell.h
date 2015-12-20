@@ -25,7 +25,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
+#include <amd64/asm.h>
 #include <amd64/multiboot.h>
 
 /* Macro Constants */

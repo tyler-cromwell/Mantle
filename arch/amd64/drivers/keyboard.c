@@ -22,15 +22,14 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <amd64/amd64.h>
-#include <drivers/console.h>
+#include <amd64/asm.h>
 
 /* Keyboard ports */
-#define KEYBOARD_CMD    0x64
 #define KEYBOARD_DATA   0x60
+#define KEYBOARD_STATUS 0x64
 
 /* US QWERTY keyboard map */
-static uint8_t keyboard_map[128] = {
+static uint8_t keymap[128] = {
     0,      /* <NOTHING> */
     27,     /* Escape */
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
@@ -67,30 +66,48 @@ static uint8_t keyboard_map[128] = {
     0,      /* All other keys are undefined */
 };
 
+/* Newest character read from the keyboard */
+static char next = -1;
+
 /*
- * Basic keyboard input function.
+ * Basic PS/2 keyboard IRQ handler.
+ *
+ * Only called in "idt.c"
  */
-char keyboard_getchar(void) {
-    uint8_t status = inb(KEYBOARD_CMD);
+void keyboard_handler(void) {
+    uint8_t status = inb(KEYBOARD_STATUS);
 
     if (status & 0x01) {
-        char keycode = inb(KEYBOARD_DATA);
+        char scan = inb(KEYBOARD_DATA);
 
-        if (keycode < 0) {
-            return -1;
+        if (scan < 0) {
+            goto stop;
         }
 
-        char letter = keyboard_map[keycode];
+        char key = keymap[scan];
 
         /* Only printable characters */
-        if ((keycode >= 0x02 && keycode <= 0x0e) ||
-            (keycode >= 0x10 && keycode <= 0x1c) ||
-            (keycode >= 0x1e && keycode <= 0x29) ||
-            (keycode >= 0x2b && keycode <= 0x35) ||
-             keycode == 0x39) {
-            return letter;
+        if ((scan >= 0x02 && scan <= 0x0e) ||
+            (scan >= 0x10 && scan <= 0x1c) ||
+            (scan >= 0x1e && scan <= 0x29) ||
+            (scan >= 0x2b && scan <= 0x35) ||
+             scan == 0x39) {
+            next = key;
         }
     }
 
-    return -1;
+stop:
+    return;
+}
+
+/*
+ * Basic getchar function.
+ * Returns:
+ *   The newest character typed.
+ */
+char keyboard_getchar(void) {
+    while (next == -1) {}   /* Wait for IRQ */
+    char c = next;          /* Save key value */
+    next = -1;              /* Reset buffer */
+    return c;
 }

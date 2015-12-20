@@ -17,8 +17,8 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-#ifndef DRIVERS_CONSOLE_H
-#define DRIVERS_CONSOLE_H
+#ifndef AMD64_CONSOLE_H
+#define AMD64_CONSOLE_H
 
 /* C Standard Library Headers,
    these don't need to link against libc */
@@ -60,6 +60,7 @@
 #define BG_BROWN_L      0xe0
 #define BG_WHITE        0xf0
 
+/* Function prototypes */
 void console_clear(void);
 void console_set_background(uint8_t attribute);
 size_t console_write(char *message, size_t length, uint8_t attribute);

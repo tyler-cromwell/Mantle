@@ -18,38 +18,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Global Symbols
-global irq00    ; i8253 timer
-global irq01    ; Keyboard
-;      irq02    ; Slave PIC
-global irq03
-global irq04
-global irq05
-global irq06
-global irq07
-global irq08
-global irq09
-global irq10
-global irq11
-global irq12
-global irq13
-global irq14
-global irq15
-;      irq16
-;      irq17
-;      irq18
-;      irq19
-;      irq20
-;      irq21
-;      irq22
-;      irq23
-;      irq24
-;      irq25
-;      irq26
-;      irq27
-;      irq28
-;      irq29
-;      irq30
-;      irq31
+global irq00    ; i8253 PIT
+global irq01    ; PS/2 Keyboard
+global irq03    ; COM2
+global irq04    ; COM1
+global irq05    ; LPT2
+global irq06    ; Floppy Disk
+global irq07    ; LPT1
+global irq08    ; CMOS RTC
+global irq09    ; Free for peripherals
+global irq10    ; Free for peripherals
+global irq11    ; Free for peripherals
+global irq12    ; PS/2 Mouse
+global irq13    ; FPU / Coprocessor / Inter-processor
+global irq14    ; Primary ATA HDD
+global irq15    ; Secondary ATA HDD
 
 ; External Symbols
 extern idt_irq_handler
@@ -165,7 +148,7 @@ irq15:
     jmp common_handler
 
 
-; Common Interrupt handler stub
+; Common (ASM level) IRQ handler.
 common_handler:
     ; Save register values
     push rax

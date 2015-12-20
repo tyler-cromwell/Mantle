@@ -8,9 +8,8 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 
 ## Repository Hierarchy
 - `arch` - Architecture specific code.
-- `drivers` - Driver code.
 - `include` - Platform independent header files.
-- `kernel` - Kernel core.
+- `lib` - Platform independent library functions.
 
 ## Branches
 - `master` - Mainline branch. Documentation, and feature/subsystem merges are committed to this branch.

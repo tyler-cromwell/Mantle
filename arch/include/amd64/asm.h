@@ -17,20 +17,19 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-#ifndef X86_H
-#define X86_H
+#ifndef AMD64_ASM_H
+#define AMD64_ASM_H
 
 /* C Standard Library Headers,
    these don't need to link against libc */
 #include <stdint.h>
 
-#define VENDOR_AMD      "AuthenticAMD"
-#define VENDOR_INTEL    "GenuineIntel"
-
 /*
  * Read a byte from an I/O port.
  * Arguments:
  *   uint16_t port: The port to read from.
+ * Returns:
+ *   the byte read from the port.
  */
 static inline uint8_t inb(uint16_t port) {
     uint8_t value;
@@ -48,13 +47,4 @@ static inline void outb(uint16_t port, uint8_t value) {
     __asm__ volatile ("outb %0, %1": : "a"(value), "Nd"(port));
 }
 
-/* CPUID */
-void cpuid_vendor(char *id);
-uint32_t cpuid_cpus(void);
-
-/* Interrupt Descriptor Table */
-void idt_configure(void);
-
-/* Keyboard */
-void keyboard_handler(void);
 #endif

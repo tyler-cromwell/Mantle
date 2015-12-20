@@ -27,29 +27,16 @@ global exc05    ; Bounds Check
 global exc06    ; Invalid Opcode
 global exc07    ; Coprocessor Not Available
 global exc08    ; Double Fault
-;      exc09
 global exc10    ; Invalid TSS
 global exc11    ; Segment Not Present
 global exc12    ; Stack Fault
 global exc13    ; General Protection
 global exc14    ; Page Fault
-;      exc15
 global exc16    ; x87 Floating Point
 global exc17    ; Alignment Check
 global exc18    ; Machine Check
 global exc19    ; SIMD Floating Point
-;      exc20
-;      exc21
-;      exc22
-;      exc23
-;      exc24
-;      exc25
-;      exc26
-;      exc27
-;      exc28
-;      exc29
 global exc30    ; Security
-;      exc31
 
 ; External Symbols
 extern idt_exception_handler
@@ -193,7 +180,7 @@ exc30:
     jmp common_handler
 
 
-; Common Interrupt handler stub
+; Common (ASM level) Interrupt handler.
 common_handler:
     ; Save register values
     push rax

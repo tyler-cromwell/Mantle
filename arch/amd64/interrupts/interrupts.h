@@ -67,35 +67,21 @@ void exc05(void);
 void exc06(void);
 void exc07(void);
 void exc08(void);
-/*   exc09     */
 void exc10(void);
 void exc11(void);
 void exc12(void);
 void exc13(void);
 void exc14(void);
-/*   exc15     */
 void exc16(void);
 void exc17(void);
 void exc18(void);
 void exc19(void);
-/*   exc20     */
-/*   exc21     */
-/*   exc22     */
-/*   exc23     */
-/*   exc24     */
-/*   exc25     */
-/*   exc26     */
-/*   exc27     */
-/*   exc28     */
-/*   exc29     */
 void exc30(void);
-/*   exc31     */
 
 
 /* Hardware Interrupts */
 void irq00(void);
 void irq01(void);
-/*   irq02     */
 void irq03(void);
 void irq04(void);
 void irq05(void);
@@ -109,21 +95,5 @@ void irq12(void);
 void irq13(void);
 void irq14(void);
 void irq15(void);
-/*   irq16     */
-/*   irq17     */
-/*   irq18     */
-/*   irq19     */
-/*   irq20     */
-/*   irq21     */
-/*   irq22     */
-/*   irq23     */
-/*   irq24     */
-/*   irq25     */
-/*   irq26     */
-/*   irq27     */
-/*   irq28     */
-/*   irq29     */
-/*   irq30     */
-/*   irq31     */
 
 #endif
