@@ -36,6 +36,7 @@
 #define I8259_IRQ_TIMER     0x00
 #define I8259_IRQ_KEYBOARD  0x01
 
+/* Function prototypes */
 void i8259_init(void);
 void i8259_set_mask(uint8_t irq);
 void i8259_clear_mask(uint8_t irq);

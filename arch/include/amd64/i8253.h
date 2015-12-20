@@ -24,6 +24,7 @@
    these don't need to link against libc */
 #include <stdint.h>
 
-void i8253_init(uint8_t);
+/* Function prototypes */
+void i8253_init(uint8_t frequency);
 
 #endif

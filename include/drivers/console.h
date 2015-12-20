@@ -60,6 +60,7 @@
 #define BG_BROWN_L      0xe0
 #define BG_WHITE        0xf0
 
+/* Function prototypes */
 void console_clear(void);
 void console_set_background(uint8_t attribute);
 size_t console_write(char *message, size_t length, uint8_t attribute);

@@ -134,7 +134,8 @@ struct MultibootDrive {
     uint16_t *drive_ports;              /* Null terminated array */
 } __attribute__((__packed__));
 
-void multiboot_init(struct MultibootInfo *mbinfo);
+/* Function prototypes */
+void multibooat_init(struct MultibootInfo *mbinfo);
 void multiboot_dump(void);
 
 #endif
