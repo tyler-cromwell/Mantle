@@ -23,8 +23,8 @@
 #include <stdint.h>
 
 /* Kernel Headers */
+#include <amd64/console.h>
 #include <amd64/multiboot.h>
-#include <drivers/console.h>
 #include <kernel/string.h>
 
 /* Macros for converting byte metrics */

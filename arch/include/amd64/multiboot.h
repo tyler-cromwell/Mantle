@@ -135,7 +135,7 @@ struct MultibootDrive {
 } __attribute__((__packed__));
 
 /* Function prototypes */
-void multibooat_init(struct MultibootInfo *mbinfo);
+void multiboot_init(struct MultibootInfo *mbinfo);
 void multiboot_dump(void);
 
 #endif
