@@ -22,8 +22,8 @@
  * GNU Multiboot 0.6.96 is the supported version, currently.
  */
 
-#ifndef X86_MULTIBOOT_H
-#define X86_MULTIBOOT_H
+#ifndef AMD64_MULTIBOOT_H
+#define AMD64_MULTIBOOT_H
 
 /* C Standard Library Headers,
    these don't need to link against libc */

@@ -17,8 +17,8 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-#ifndef X86_H
-#define X86_H
+#ifndef AMD64_H
+#define AMD64_H
 
 /* C Standard Library Headers,
    these don't need to link against libc */
@@ -49,4 +49,5 @@ static inline void outb(uint16_t port, uint8_t value) {
 
 /* Interrupt Descriptor Table */
 void idt_configure(void);
+
 #endif
