@@ -17,8 +17,8 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-#ifndef DRIVERS_CONSOLE_H
-#define DRIVERS_CONSOLE_H
+#ifndef AMD64_CONSOLE_H
+#define AMD64_CONSOLE_H
 
 /* C Standard Library Headers,
    these don't need to link against libc */
