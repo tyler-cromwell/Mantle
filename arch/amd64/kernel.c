@@ -21,8 +21,8 @@
 #include <amd64/console.h>
 #include <amd64/multiboot.h>
 #include <amd64/shell.h>
-#include <kernel/string.h>
 #include <kernel/version.h>
+#include <lib/string.h>
 
 /* External */
 void idt_configure(void);   /* Defined in "idt.c" */
@@ -35,7 +35,7 @@ void idt_configure(void);   /* Defined in "idt.c" */
  *   struct MultibootInfo *mbinfo:
  *       The physical memory address of the Multiboot information struct.
  */
-void kernel_main(uint64_t magic, struct MultibootInfo *mbinfo) {
+void kernel_early(uint64_t magic, struct MultibootInfo *mbinfo) {
     console_clear();
     console_printf(FG_BLUE_L, STRING"\n");
 

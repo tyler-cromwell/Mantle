@@ -26,7 +26,7 @@
 #include <amd64/console.h>
 #include <amd64/i8253.h>
 #include <amd64/i8259.h>
-#include <kernel/string.h>
+#include <lib/string.h>
 
 /* Local Kernel Headers */
 #include "interrupts.h"

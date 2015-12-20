@@ -23,7 +23,7 @@
 #include <stdint.h>
 
 /* Kernel Headers */
-#include <kernel/string.h>
+#include <lib/string.h>
 
 /*
  * Creates the string representation of a number.

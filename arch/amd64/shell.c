@@ -23,7 +23,7 @@
 #include <amd64/i8259.h>
 #include <amd64/shell.h>
 #include <amd64/multiboot.h>
-#include <kernel/string.h>
+#include <lib/string.h>
 
 /* Linker Script Symbols */
 extern struct undefined KERNEL_LMA;

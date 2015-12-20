@@ -10,4 +10,5 @@ This directory contains all AMD64 specific code.
 
 #### Files
 - `cpuid.c` - Functions that make use of the CPUID instruction.
+- `kernel.c` - Early stage kernel code for AMD64.
 - `shell.c` - Implements a CLI shell.

@@ -25,7 +25,7 @@
 
 /* Kernel Headers */
 #include <amd64/asm.h>
-#include <kernel/string.h>
+#include <lib/string.h>
 
 /* Macro constants */
 #define CONSOLE_START   (char*) 0xb8000 /* The starting address for video memory */

@@ -1,6 +1,5 @@
 # Kernel
-This directory contains the internal library header files.
+This directory contains the headers for the core piece of the kernel.
 
 ## Contents
-- `string.h` - The header file for all string manipulation functions.
 - `version.h` - The header containing the kernel version.

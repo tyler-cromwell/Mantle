@@ -23,7 +23,7 @@
 global kernel_boot
 
 ; External Symbols
-extern kernel_main
+extern kernel_early
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  Multiboot Header
@@ -202,6 +202,6 @@ kernel_jump:
 
     mov rdi, rax    ; Pass arguments as per the
     mov rsi, rbx    ; x86-64 calling convention
-    call kernel_main    ; Enter the Kernel
+    call kernel_early   ; Enter the Kernel
 
     hlt
