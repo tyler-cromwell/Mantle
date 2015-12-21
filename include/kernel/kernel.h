@@ -17,12 +17,15 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef KERNEL_H
+#define KERNEL_H
 
-#define PROJECT "<NAME>"
-#define VERSION "<VERSION>"
-#define CODENAME "<CODENAME>"
-#define STRING PROJECT" "VERSION" ("CODENAME")"
+/* Linker Script Symbols */
+extern struct undefined KERNEL_LMA;
+extern struct undefined KERNEL_SIZE;
+extern struct undefined MULTIBOOT_HEADER;
+extern struct undefined SECTION_TEXT;
+extern struct undefined SECTION_DATA;
+extern struct undefined SECTION_BSS;
 
 #endif

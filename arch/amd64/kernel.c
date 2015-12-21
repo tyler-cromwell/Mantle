@@ -64,7 +64,7 @@ void kernel_early(uint64_t magic, struct MultibootInfo *mbinfo) {
             console_printf(FG_WHITE, "cpuinfo: Prints CPUID information.\n");
             console_printf(FG_WHITE, "halt: Exits the shell and halts.\n");
             console_printf(FG_WHITE, "kinfo: Prints information about the kernel.\n");
-            console_printf(FG_WHITE, "multiboot: Dumps Multiboot information.\n");
+            console_printf(FG_WHITE, "multiboot: Prints Multiboot information.\n");
         }
         else if (strlcmp(input, "halt") > 0) {
             break;

@@ -241,6 +241,6 @@ common_handler:
     add rsp, 16 ; Cleanup Interrupt Vector
                 ; and Error Code
 
-    hlt ; Temporary
+    hlt ; Temporary?
     ;sti
     ;iretq
