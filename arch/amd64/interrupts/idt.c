@@ -214,12 +214,23 @@ void idt_exception_handler(uint64_t vector, uint64_t error) {
     if (vector == 14) {
         struct PageFaultError pfe = {0};
         memcpy(&pfe, &error, sizeof(uint16_t));
+        console_printf(FG_BROWN_L, "P: %d\n", pfe.p);
+        console_printf(FG_BROWN_L, "R/W: %d\n", pfe.rw);
+        console_printf(FG_BROWN_L, "U/S: %d\n", pfe.us);
+        console_printf(FG_BROWN_L, "RSV: %d\n", pfe.rsv);
+        console_printf(FG_BROWN_L, "I/D: %d\n", pfe.id);
     }
     /* If Error Code */
     else if (error > 0) {
         struct SelectorError se = {0};
         memcpy(&se, &error, sizeof(uint32_t));
+        console_printf(FG_BROWN_L, "EXT: %d\n", se.ext);
+        console_printf(FG_BROWN_L, "IDT: %d\n", se.idt);
+        console_printf(FG_BROWN_L, "TI: %d\n", se.ti);
+        console_printf(FG_BROWN_L, "Index: %d\n", se.index);
     }
+
+    console_printf(FG_WHITE | BG_RED, "System halted");
 }
 
 /*
