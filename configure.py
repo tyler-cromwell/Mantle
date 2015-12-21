@@ -64,7 +64,7 @@ to restore them to their template form.
 This is I don't have to type it myself every time.
 """
 def clean():
-    for f in FILES:
+    for f in FILES[:-1]:
         print('Resetting \''+ f +'\'... ', end='')
         os.system('git checkout '+f)
         print('DONE')
