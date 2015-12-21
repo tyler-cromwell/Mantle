@@ -59,6 +59,9 @@ void kernel_early(uint64_t magic, struct MultibootInfo *mbinfo) {
         else if (strlcmp(input, "clear") > 0) {
             console_clear();
         }
+        else if (strlcmp(input, "halt") > 0) {
+            break;
+        }
         else if (strlen(input) > 0) {
             console_printf(FG_WHITE, "Unkown command \"%s\"\n", input);
         }
@@ -67,7 +70,6 @@ void kernel_early(uint64_t magic, struct MultibootInfo *mbinfo) {
         memset(input, '\0', SHELL_BUFSIZ);
     }
 
-    while (1) {}
     console_printf(BG_RED, "System halted");
     return;
 }
