@@ -26,7 +26,7 @@ AS = nasm
 CC = x86_64-elf-gcc
 LD = x86_64-elf-gcc
 
-INCLUDE = -I ./arch/include/ -I ./include/
+INCLUDE = -I ./include/
 
 ASFLAGS = -felf64
 CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse \
@@ -34,17 +34,17 @@ CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse \
 LDFLAGS = -ffreestanding -nostdlib -lgcc -z max-page-size=0x1000 \
 		  -T $(LD_SCRIPT) -o $(IMAGE)
 
-C_SRC = $(shell find ./ -name '*.c')
-C_OBJ = $(C_SRC:%.c=%.o)
-
 ASM_SRC = $(shell find ./ -name '*.asm')
 ASM_OBJ = $(ASM_SRC:%.asm=%.o)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+C_SRC = $(shell find ./ -name '*.c')
+C_OBJ = $(C_SRC:%.c=%.o)
 
 %.o: %.asm
 	$(AS) $(ASFLAGS) $< -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: all
 all: $(C_OBJ) $(ASM_OBJ)

@@ -205,7 +205,7 @@ void idt_configure(void) {
 }
 
 /*
- * Common (C level) Interrupt handler.
+ * Common (C level) Exception handler.
  */
 void idt_exception_handler(uint64_t vector, uint64_t error) {
     console_printf(FG_BROWN_L, "%s!\n", interrupts[vector]);

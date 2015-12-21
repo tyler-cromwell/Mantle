@@ -30,6 +30,7 @@ SECTIONS {
 
     /* Bootstrap code */
     .boot : {
+        MULTIBOOT_HEADER = .;
         *boot* (.multiboot) /* Mulitboot Header */
         *boot* (.text)
         *boot* (.data)
@@ -40,6 +41,7 @@ SECTIONS {
 
     /* Consolidate all text sections */
     .text : AT(ADDR(.text) - KERNEL_VMA) {
+        SECTION_TEXT = .;
         *(EXCLUDE_FILE(*boot) .text)
         *(.rodata*)
         . = ALIGN(0x1000);
@@ -47,6 +49,7 @@ SECTIONS {
 
     /* Consolidate all data sections */
     .data : AT(ADDR(.data) - KERNEL_VMA) {
+        SECTION_DATA = .;
         *(EXCLUDE_FILE(*boot) .data)
         . = ALIGN(0x1000);
     }
@@ -58,6 +61,7 @@ SECTIONS {
 
     /* Consolidate all bss sections */
     .bss : AT(ADDR(.bss) - KERNEL_VMA) {
+        SECTION_BSS = .;
         *(EXCLUDE_FILE(*boot) .bss)
         *(COMMON)
         . = ALIGN(0x1000);

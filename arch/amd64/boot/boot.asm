@@ -204,4 +204,5 @@ kernel_jump:
     mov rsi, rbx    ; x86-64 calling convention
     call kernel_early   ; Enter the Kernel
 
+    cli
     hlt

@@ -180,7 +180,7 @@ exc30:
     jmp common_handler
 
 
-; Common (ASM level) Interrupt handler.
+; Common (ASM level) Exception handler.
 common_handler:
     ; Save register values
     push rax
@@ -241,6 +241,6 @@ common_handler:
     add rsp, 16 ; Cleanup Interrupt Vector
                 ; and Error Code
 
-    hlt ; Temporary
+    hlt ; Temporary?
     ;sti
     ;iretq

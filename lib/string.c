@@ -120,7 +120,6 @@ void *memset(void *dest, int c, size_t n) {
  *   A status/error code:
  *     1 if equal, 0 if unequal
  *     -1 if s1 is NULL, -2 if s2 is
- *     -3 if s1 has 0 length, -4 if s2 does
  */
 int8_t strlcmp(const char *s1, const char *s2) {
     /* If a string is NULL, return an error */
@@ -135,14 +134,6 @@ int8_t strlcmp(const char *s1, const char *s2) {
     size_t sl1 = strlen(s1);
     size_t sl2 = strlen(s2);
     size_t l = 0;
-
-    /* Stop if a string has 0 length */
-    if (sl1 == 0) {
-        return -3;
-    }
-    else if (sl2 == 0) {
-        return -4;
-    }
 
     /* Compare length before content */
     if (sl1 == sl2) {

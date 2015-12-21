@@ -23,11 +23,8 @@
 #include <amd64/i8259.h>
 #include <amd64/shell.h>
 #include <amd64/multiboot.h>
+#include <kernel/kernel.h>
 #include <lib/string.h>
-
-/* Linker Script Symbols */
-extern struct undefined KERNEL_LMA;
-extern struct undefined KERNEL_SIZE;
 
 /* External functions / variables */
 extern char keyboard_getchar(void); /* Defined in "keyboard.c" */
@@ -88,6 +85,10 @@ void shell_cmd_kinfo(void) {
     uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
     console_printf(FG_WHITE, "Size in memory: %uKB\n", size);
     console_printf(FG_WHITE, "Physical address: %x\n", &KERNEL_LMA);
+    console_printf(FG_WHITE, "Multiboot header: %x\n", &MULTIBOOT_HEADER);
+    console_printf(FG_WHITE, "Text section: %x\n", &SECTION_TEXT);
+    console_printf(FG_WHITE, "Data section: %x\n", &SECTION_DATA);
+    console_printf(FG_WHITE, "BSS section: %x\n", &SECTION_BSS);
 }
 
 /*
@@ -113,7 +114,7 @@ void shell_cmd_cpuinfo(void) {
 }
 
 /*
- * Dump Multiboot information.
+ * Dump Multiboot information (if available).
  * Arguments:
  *   uint64_t magic: Bootloader magic number.
  *   struct MultibootInfo *mbinfo: Pointer to the Multiboot information.
@@ -123,5 +124,7 @@ void shell_cmd_multiboot(uint64_t magic, struct MultibootInfo *mbinfo) {
     if (magic == MULTIBOOT_BOOT_MAGIC) {
         multiboot_init(mbinfo);
         multiboot_dump();
+    } else {
+        console_printf(FG_WHITE, "Kernel not booted via Multiboot\n");
     }
 }

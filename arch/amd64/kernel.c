@@ -59,6 +59,16 @@ void kernel_early(uint64_t magic, struct MultibootInfo *mbinfo) {
         else if (strlcmp(input, "clear") > 0) {
             console_clear();
         }
+        else if (strlcmp(input, "help") > 0) {
+            console_printf(FG_WHITE, "clear: Clears the screen.\n");
+            console_printf(FG_WHITE, "cpuinfo: Prints CPUID information.\n");
+            console_printf(FG_WHITE, "halt: Exits the shell and halts.\n");
+            console_printf(FG_WHITE, "kinfo: Prints information about the kernel.\n");
+            console_printf(FG_WHITE, "multiboot: Prints Multiboot information.\n");
+        }
+        else if (strlcmp(input, "halt") > 0) {
+            break;
+        }
         else if (strlen(input) > 0) {
             console_printf(FG_WHITE, "Unkown command \"%s\"\n", input);
         }
@@ -67,7 +77,6 @@ void kernel_early(uint64_t magic, struct MultibootInfo *mbinfo) {
         memset(input, '\0', SHELL_BUFSIZ);
     }
 
-    while (1) {}
-    console_printf(BG_RED, "System halted");
+    console_printf(FG_WHITE | BG_RED, "System halted");
     return;
 }
