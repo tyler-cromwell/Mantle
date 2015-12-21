@@ -180,7 +180,7 @@ exc30:
     jmp common_handler
 
 
-; Common (ASM level) Interrupt handler.
+; Common (ASM level) Exception handler.
 common_handler:
     ; Save register values
     push rax
