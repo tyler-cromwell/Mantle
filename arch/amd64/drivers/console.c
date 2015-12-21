@@ -54,7 +54,7 @@ static void move_cursor(uint8_t attribute) {
     outb(0x3d4, 0x0e);
     outb(0x3d5, (uint8_t) ((pos >> 8) & 0xff));
 
-    *(next+1) = *(next+1) | attribute;
+    *(next+1) = *(next+1) | (attribute & 0x0f);
 }
 
 /*

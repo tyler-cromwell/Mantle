@@ -86,9 +86,9 @@ void shell_cmd_kinfo(void) {
     console_printf(FG_WHITE, "Size in memory: %uKB\n", size);
     console_printf(FG_WHITE, "Physical address: %x\n", &KERNEL_LMA);
     console_printf(FG_WHITE, "Multiboot header: %x\n", &MULTIBOOT_HEADER);
-    console_printf(FG_WHITE, "Text section: %x\n", &SECTION_TEXT);
-    console_printf(FG_WHITE, "Data section: %x\n", &SECTION_DATA);
-    console_printf(FG_WHITE, "BSS section: %x\n", &SECTION_BSS);
+    console_printf(FG_WHITE, "Text: %x\n", &SECTION_TEXT);
+    console_printf(FG_WHITE, "Data: %x\n", &SECTION_DATA);
+    console_printf(FG_WHITE, "BSS: %x\n", &SECTION_BSS);
 }
 
 /*

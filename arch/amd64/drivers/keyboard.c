@@ -67,7 +67,7 @@ static uint8_t keymap[128] = {
 };
 
 /* Newest character read from the keyboard */
-static char next = -1;
+static volatile char next = -1;
 
 /*
  * Basic PS/2 keyboard IRQ handler.
