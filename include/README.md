@@ -2,5 +2,6 @@
 This directory contains all header files used by the kernel.
 
 ## Contents
-- `kernel` - Contains header files for core kernel functions.
-- `lib` - Contains header files for the kernel library.
+- `amd64` - Header files for AMD64 specific code.
+- `kernel` - Header files for core kernel functions.
+- `lib` - Header files for the kernel library.

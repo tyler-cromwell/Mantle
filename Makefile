@@ -26,7 +26,7 @@ AS = nasm
 CC = x86_64-elf-gcc
 LD = x86_64-elf-gcc
 
-INCLUDE = -I ./arch/include/ -I ./include/
+INCLUDE = -I ./include/
 
 ASFLAGS = -felf64
 CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse \
