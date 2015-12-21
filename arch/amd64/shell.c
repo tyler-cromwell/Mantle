@@ -113,7 +113,7 @@ void shell_cmd_cpuinfo(void) {
 }
 
 /*
- * Dump Multiboot information.
+ * Dump Multiboot information (if available).
  * Arguments:
  *   uint64_t magic: Bootloader magic number.
  *   struct MultibootInfo *mbinfo: Pointer to the Multiboot information.
@@ -123,5 +123,7 @@ void shell_cmd_multiboot(uint64_t magic, struct MultibootInfo *mbinfo) {
     if (magic == MULTIBOOT_BOOT_MAGIC) {
         multiboot_init(mbinfo);
         multiboot_dump();
+    } else {
+        console_printf(FG_WHITE, "Kernel not booted via Multiboot\n");
     }
 }
