@@ -85,7 +85,7 @@ void shell_cmd_kinfo(void) {
     uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
     console_printf(FG_WHITE, "Size in memory: %uKB\n", size);
     console_printf(FG_WHITE, "Physical address: %x\n", &KERNEL_LMA);
-    console_printf(FG_WHITE, "Multiboot header: %x\n", &MULTIBOOT_HEADER);
+    console_printf(FG_WHITE, "Bootstrap: %x\n", &BOOTSTRAP);
     console_printf(FG_WHITE, "Text: %x\n", &SECTION_TEXT);
     console_printf(FG_WHITE, "Data: %x\n", &SECTION_DATA);
     console_printf(FG_WHITE, "BSS: %x\n", &SECTION_BSS);

@@ -30,7 +30,7 @@ SECTIONS {
 
     /* Bootstrap code */
     .boot : {
-        MULTIBOOT_HEADER = .;
+        BOOTSTRAP = .;
         *boot* (.multiboot) /* Mulitboot Header */
         *boot* (.text)
         *boot* (.data)

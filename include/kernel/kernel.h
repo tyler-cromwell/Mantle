@@ -23,7 +23,7 @@
 /* Linker Script Symbols */
 extern struct undefined KERNEL_LMA;
 extern struct undefined KERNEL_SIZE;
-extern struct undefined MULTIBOOT_HEADER;
+extern struct undefined BOOTSTRAP;
 extern struct undefined SECTION_TEXT;
 extern struct undefined SECTION_DATA;
 extern struct undefined SECTION_BSS;
