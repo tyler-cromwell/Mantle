@@ -78,14 +78,11 @@ void keyboard_handler(void);    /* Defined in "keyboard.c" */
  */
 static void disable_apic(void) {
     uint32_t register ecx asm("ecx") = 0x0000001b;
+    uint32_t msr = 0;
 
-    asm volatile (
-        ".intel_syntax noprefix\n\t"
-        "rdmsr\n\t"
-        "and eax, (0 << 11)\n\t"
-        "wrmsr\n\t"
-        ".att_syntax prefix\n\t"
-    );
+    asm volatile ("rdmsr\n\t" : "=A" (msr));
+    msr &= (0 << 11);
+    asm volatile ("wrmsr\n\t" : : "A" (msr));
 }
 
 /*
@@ -95,10 +92,9 @@ static void disable_apic(void) {
  */
 static void idt_load(struct Idtr *idtr) {
     asm volatile (
-        ".intel_syntax noprefix\n\t"
-        "lidt [rdi]\n\t"
+        "lidt (%0)\n\t"
         "sti\n\t"
-        ".att_syntax prefix\n\t"
+        : : "p" (idtr)
     );
 }
 
