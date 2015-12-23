@@ -205,7 +205,7 @@ void idt_configure(void) {
  * Common (C level) Exception handler.
  */
 void idt_exception_handler(uint64_t vector, uint64_t error) {
-    console_printf(FG_BROWN_L, "%s!\n", interrupts[vector]);
+    console_printf(FG_WHITE | BG_RED, "%s\n", interrupts[vector]);
 
     /* If Page Fault */
     if (vector == 14) {
@@ -214,21 +214,21 @@ void idt_exception_handler(uint64_t vector, uint64_t error) {
 
         memcpy(&pfe, &error, sizeof(uint16_t));
 
-        console_printf(FG_BROWN_L, "P: %d\n", pfe.p);
-        console_printf(FG_BROWN_L, "R/W: %d\n", pfe.rw);
-        console_printf(FG_BROWN_L, "U/S: %d\n", pfe.us);
-        console_printf(FG_BROWN_L, "RSV: %d\n", pfe.rsv);
-        console_printf(FG_BROWN_L, "I/D: %d\n", pfe.id);
-        console_printf(FG_BROWN_L, "PFLA: %u\n", cr2);
+        console_printf(FG_WHITE | BG_RED, "PFLA: %x\n", cr2);
+        console_printf(FG_WHITE | BG_RED, "P: %d\n", pfe.p);
+        console_printf(FG_WHITE | BG_RED, "R/W: %d\n", pfe.rw);
+        console_printf(FG_WHITE | BG_RED, "U/S: %d\n", pfe.us);
+        console_printf(FG_WHITE | BG_RED, "RSV: %d\n", pfe.rsv);
+        console_printf(FG_WHITE | BG_RED, "I/D: %d\n", pfe.id);
     }
     /* If Error Code */
     else if (error > 0) {
         struct SelectorError se = {0};
         memcpy(&se, &error, sizeof(uint32_t));
-        console_printf(FG_BROWN_L, "EXT: %d\n", se.ext);
-        console_printf(FG_BROWN_L, "IDT: %d\n", se.idt);
-        console_printf(FG_BROWN_L, "TI: %d\n", se.ti);
-        console_printf(FG_BROWN_L, "Index: %d\n", se.index);
+        console_printf(FG_WHITE | BG_RED, "EXT: %d\n", se.ext);
+        console_printf(FG_WHITE | BG_RED, "IDT: %d\n", se.idt);
+        console_printf(FG_WHITE | BG_RED, "TI: %d\n", se.ti);
+        console_printf(FG_WHITE | BG_RED, "Index: %d\n", se.index);
     }
 
     console_printf(FG_WHITE | BG_RED, "System halted");
