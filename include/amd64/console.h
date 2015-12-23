@@ -63,7 +63,7 @@
 /* Function prototypes */
 void console_clear(void);
 void console_set_background(uint8_t color);
-size_t console_write(char *message, size_t length, uint8_t color);
+size_t console_write(uint8_t color, char *message, size_t length);
 size_t console_printf(uint8_t color, char *format, ...);
 
 #endif
