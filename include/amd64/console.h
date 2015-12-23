@@ -62,8 +62,8 @@
 
 /* Function prototypes */
 void console_clear(void);
-void console_set_background(uint8_t attribute);
-size_t console_write(char *message, size_t length, uint8_t attribute);
-size_t console_printf(uint8_t attribute, char *format, ...);
+void console_set_background(uint8_t color);
+size_t console_write(char *message, size_t length, uint8_t color);
+size_t console_printf(uint8_t color, char *format, ...);
 
 #endif

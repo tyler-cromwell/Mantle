@@ -43,9 +43,9 @@ static char *next = CONSOLE_START;
  * Moves cursor to the location of the
  * next available character.
  * Argument:
- *   uint8_t attribute: The color attribute.
+ *   uint8_t color: The color.
  */
-static void move_cursor(uint8_t attribute) {
+static void move_cursor(uint8_t color) {
     uint16_t pos = (next - CONSOLE_START) / 2;
 
     outb(0x3d4, 0x0f);
@@ -54,7 +54,7 @@ static void move_cursor(uint8_t attribute) {
     outb(0x3d4, 0x0e);
     outb(0x3d5, (uint8_t) ((pos >> 8) & 0xff));
 
-    *(next+1) = *(next+1) | (attribute & 0x0f);
+    *(next+1) = *(next+1) | (color & 0x0f);
 }
 
 /*
@@ -71,20 +71,20 @@ void console_clear(void) {
 /*
  * Sets the background to a specific color.
  * Argument:
- *   uint8_t attribute: The color attribute.
+ *   uint8_t color: The color color.
  */
-void console_set_background(uint8_t attribute) {
+void console_set_background(uint8_t color) {
     next = CONSOLE_START;
     uint16_t offset = 0;
 
     while (offset < BYTES) {
-        if (attribute >= 0x10) {
-            next[offset+1] = (next[offset+1] % 0x10) + attribute;
+        if (color >= 0x10) {
+            next[offset+1] = (next[offset+1] % 0x10) + color;
         }
         offset += CHAR_WIDTH;
     }
 
-    move_cursor(attribute);
+    move_cursor(color);
 }
 
 /*
@@ -93,11 +93,11 @@ void console_set_background(uint8_t attribute) {
  * Arguments:
  *   char *message:  The message to write.
  *   uint16_t length: The number of bytes to write.
- *   uint8_t attribute: The coloring attribute.
+ *   uint8_t color: The coloring color.
  * Returns:
  *   The number of characters written.
  */
-size_t console_write(char *message, size_t length, uint8_t attribute) {
+size_t console_write(char *message, size_t length, uint8_t color) {
     size_t c = 0;
 
     /* Ensure that the number of characters to write does not exceed the maximum */
@@ -149,26 +149,26 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
         /* Write everything else */
         else {
             *next = message[c];
-            *(next+1) = (*(next+1) & 0xf0) | attribute;
+            *(next+1) = (*(next+1) & 0xf0) | color;
             next += CHAR_WIDTH;
         }
         c++;
     }
 
-    move_cursor(attribute);
+    move_cursor(color);
     return c;
 }
 
 /*
  * Printf style function that writes a string of characters to the console.
  * Arguments:
- *   uint8_t attribute: The coloring attribute.
+ *   uint8_t color: The coloring color.
  *   char *format: The format string.
  *   ... : A variable length list of other arguments.
  * Returns:
  *   The number of characters written.
  */
-size_t console_printf(uint8_t attribute, char *format, ...) {
+size_t console_printf(uint8_t color, char *format, ...) {
     __builtin_va_list arguments;
     __builtin_va_start(arguments, format);
     size_t c = 0;
@@ -176,7 +176,7 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
     /* Process each character */
     for (; *format != '\0'; format++) {
         if (*format != '%') {
-            c += console_write(format, 1, attribute);
+            c += console_write(format, 1, color);
         } else {
             /* Increment again for tag character */
             char *tag = format+1;
@@ -186,65 +186,65 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
             switch (*tag) {
                 case 'c':
                     /* Character */
-                    b = __builtin_va_arg(arguments, int64_t);
-                    c += console_write(&b, 1, attribute);
+                    b = __builtin_va_arg(arguments, int32_t);
+                    c += console_write(&b, 1, color);
                     format++;
                     break;
                 case 'd':
                 case 'i':
-                    /* Signed 32-bit Integer */
+                    /* Signed 64-bit Integer */
                     s = itoa(__builtin_va_arg(arguments, int64_t), 10, 0);
-                    c += console_write(s, strlen(s), attribute);
+                    c += console_write(s, strlen(s), color);
                     format++;
                     break;
                 case 'o':
                     /* Unsigned Octal Integer */
                     s = itoa(__builtin_va_arg(arguments, uint64_t), 8, 0);
-                    c += console_write("0o", 2, attribute);
-                    c += console_write(s, strlen(s), attribute);
+                    c += console_write("0o", 2, color);
+                    c += console_write(s, strlen(s), color);
                     format++;
                     break;
                 case 'p':
                     /* Pointer address */
                     s = itoa(__builtin_va_arg(arguments, uint64_t), 16, 0);
-                    c += console_write(s, strlen(s), attribute);
+                    c += console_write(s, strlen(s), color);
                     format++;
                     break;
                 case 's':
                     /* String */
                     s = __builtin_va_arg(arguments, char*);
-                    c += console_write(s, strlen(s), attribute);
+                    c += console_write(s, strlen(s), color);
                     format++;
                     break;
                 case 'u':
-                    /* Unsigned 32-bit Integer */
+                    /* Unsigned 64-bit Integer */
                     s = itoa(__builtin_va_arg(arguments, uint64_t), 10, 0);
-                    c += console_write(s, strlen(s), attribute);
+                    c += console_write(s, strlen(s), color);
                     format++;
                     break;
                 case 'x':
                     /* Unsigned Hexadecimal Integer (lowercase) */
                     s = itoa(__builtin_va_arg(arguments, uint64_t), 16, 0);
-                    c += console_write("0x", 2, attribute);
-                    c += console_write(s, strlen(s), attribute);
+                    c += console_write("0x", 2, color);
+                    c += console_write(s, strlen(s), color);
                     format++;
                     break;
                 case 'X':
                     /* Unsigned Hexadecimal Integer (uppercase) */
                     s = itoa(__builtin_va_arg(arguments, uint64_t), 16, 0);
                     strupper(s);
-                    c += console_write("0x", 2, attribute);
-                    c += console_write(s, strlen(s), attribute);
+                    c += console_write("0x", 2, color);
+                    c += console_write(s, strlen(s), color);
                     format++;
                     break;
                 case '%':
                     /* Percent sign */
                     b = '%';
-                    c += console_write(&b, 1, attribute);
+                    c += console_write(&b, 1, color);
                     format++;
                     break;
                 default:
-                    c += console_write(format, 1, attribute);
+                    c += console_write(format, 1, color);
             }
         }
     }
