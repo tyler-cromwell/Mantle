@@ -181,7 +181,8 @@ void idt_configure(void) {
     /* Initialize controller (using i8259) */
     disable_apic();
     i8259_init();
-    i8259_unmask();
+    i8259_clear_mask(I8259_IRQ_TIMER);
+    i8259_clear_mask(I8259_IRQ_KEYBOARD);
 
     /* Initialize the i8253 timer */
     i8253_init(100);
