@@ -71,7 +71,7 @@ void console_clear(void) {
 /*
  * Sets the background to a specific color.
  * Argument:
- *   uint8_t color: The color color.
+ *   uint8_t color: The color.
  */
 void console_set_background(uint8_t color) {
     next = CONSOLE_START;
@@ -91,7 +91,7 @@ void console_set_background(uint8_t color) {
  * Writes a string of characters to the console.
  * Interprets the newline, backspace, and carriage return.
  * Arguments:
- *   uint8_t color: The coloring color.
+ *   uint8_t color: The color.
  *   char *message:  The message to write.
  *   uint16_t length: The number of bytes to write.
  * Returns:
