@@ -27,21 +27,20 @@
 
 /*
  * Creates the string representation of a number.
- * CURRENTLY ONLY 32-bit numbers.
  * Argument:
- *   int32_t number: The number to be represented.
+ *   int64_t number: The number to be represented.
  *   uint8_t base: The base to convert to.
  *   uint8_t pad: Option for printing leading zeros
  * Returns:
  *   The string representation of number.
  */
-char* itoa(int32_t number, uint8_t base, uint8_t pad) {
-    static char buffer[12] = {0};
-    char *string = buffer + 11;
-    int32_t n = number;
-    uint8_t c = 0;
+char* itoa(int64_t number, uint8_t base, uint8_t pad) {
+    static char buffer[22] = {0};
+    char *string = buffer + 21;
+    int64_t n = number;
+    uint16_t c = 0;
 
-    memset(buffer, 0, 12);
+    memset(buffer, 0, 22);
 
     /* If number is zero, just stop */
     if (n == 0) {

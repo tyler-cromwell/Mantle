@@ -26,7 +26,7 @@
 #include <stdint.h>
 
 /* Function prototypes */
-char* itoa(int32_t number, uint8_t base, uint8_t pad);
+char* itoa(int64_t number, uint8_t base, uint8_t pad);
 void* memcpy(void *dest, const void *src, size_t n);
 void* memset(void *dest, int c, size_t n);
 int8_t strlcmp(const char *s1, const char *s2);

@@ -169,9 +169,9 @@ size_t console_write(char *message, size_t length, uint8_t attribute) {
  *   The number of characters written.
  */
 size_t console_printf(uint8_t attribute, char *format, ...) {
+    __builtin_va_list arguments;
+    __builtin_va_start(arguments, format);
     size_t c = 0;
-    va_list arguments;
-    va_start(arguments, format);
 
     /* Process each character */
     for (; *format != '\0'; format++) {
@@ -186,52 +186,52 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
             switch (*tag) {
                 case 'c':
                     /* Character */
-                    b = va_arg(arguments, int32_t);
+                    b = __builtin_va_arg(arguments, int64_t);
                     c += console_write(&b, 1, attribute);
                     format++;
                     break;
                 case 'd':
                 case 'i':
                     /* Signed 32-bit Integer */
-                    s = itoa(va_arg(arguments, int32_t), 10, 0);
+                    s = itoa(__builtin_va_arg(arguments, int64_t), 10, 0);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
                 case 'o':
                     /* Unsigned Octal Integer */
-                    s = itoa(va_arg(arguments, uint32_t), 8, 0);
+                    s = itoa(__builtin_va_arg(arguments, uint64_t), 8, 0);
                     c += console_write("0o", 2, attribute);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
                 case 'p':
                     /* Pointer address */
-                    s = itoa(va_arg(arguments, uint32_t), 16, 0);
+                    s = itoa(__builtin_va_arg(arguments, uint64_t), 16, 0);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
                 case 's':
                     /* String */
-                    s = va_arg(arguments, char*);
+                    s = __builtin_va_arg(arguments, char*);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
                 case 'u':
                     /* Unsigned 32-bit Integer */
-                    s = itoa(va_arg(arguments, uint32_t), 10, 0);
+                    s = itoa(__builtin_va_arg(arguments, uint64_t), 10, 0);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
                 case 'x':
                     /* Unsigned Hexadecimal Integer (lowercase) */
-                    s = itoa(va_arg(arguments, uint32_t), 16, 0);
+                    s = itoa(__builtin_va_arg(arguments, uint64_t), 16, 0);
                     c += console_write("0x", 2, attribute);
                     c += console_write(s, strlen(s), attribute);
                     format++;
                     break;
                 case 'X':
                     /* Unsigned Hexadecimal Integer (uppercase) */
-                    s = itoa(va_arg(arguments, uint32_t), 16, 0);
+                    s = itoa(__builtin_va_arg(arguments, uint64_t), 16, 0);
                     strupper(s);
                     c += console_write("0x", 2, attribute);
                     c += console_write(s, strlen(s), attribute);
@@ -249,6 +249,6 @@ size_t console_printf(uint8_t attribute, char *format, ...) {
         }
     }
 
-    va_end(arguments);
+    __builtin_va_end(arguments);
     return c;
 }
