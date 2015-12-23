@@ -24,6 +24,31 @@
    these don't need to link against libc */
 #include <stdint.h>
 
+/* Control Register numbers*/
+#define CR0 0
+#define CR2 2
+#define CR3 3
+#define CR4 4
+#define CR8 8
+
+/*
+ * Copies the value of a Control Register.
+ * Returns:
+ *   the value of a Control Register.
+ */
+static inline uint64_t rcr(uint8_t n) {
+    uint64_t cr = 0;
+
+    switch (n) {
+        case 0: asm volatile ("mov %%cr0, %0" : "=r" (cr)); break;
+        case 2: asm volatile ("mov %%cr2, %0" : "=r" (cr)); break;
+        case 3: asm volatile ("mov %%cr3, %0" : "=r" (cr)); break;
+        case 4: asm volatile ("mov %%cr4, %0" : "=r" (cr)); break;
+        case 8: asm volatile ("mov %%cr8, %0" : "=r" (cr)); break;
+    }
+
+    return cr;
+}
 /*
  * Read a byte from an I/O port.
  * Arguments:
@@ -32,8 +57,8 @@
  *   the byte read from the port.
  */
 static inline uint8_t inb(uint16_t port) {
-    uint8_t value;
-    __asm__ volatile ("inb %1, %0": "=a"(value): "Nd"(port));
+    uint8_t value = 0;
+    asm volatile ("inb %1, %0": "=a"(value): "Nd"(port));
     return value;
 }
 
@@ -44,7 +69,7 @@ static inline uint8_t inb(uint16_t port) {
  *   uint8_t value: The value to write.
  */
 static inline void outb(uint16_t port, uint8_t value) {
-    __asm__ volatile ("outb %0, %1": : "a"(value), "Nd"(port));
+    asm volatile ("outb %0, %1": : "a"(value), "Nd"(port));
 }
 
 #endif
