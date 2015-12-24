@@ -217,11 +217,11 @@ void idt_configure(void) {
  * Only called in "exceptions.asm"
  *
  * Argument:
- *   struct Registers *const registers:
+ *   const struct Registers *const registers:
  *     Pointer to the area on the stack
  *     containing the pushed registers.
  */
-void idt_exception_handler(struct Registers *const registers) {
+void idt_exception_handler(const struct Registers *const registers) {
     console_printf(FG_WHITE | BG_RED, "%s\n", interrupts[registers->vector]);
 
     /* If Page Fault */
@@ -245,6 +245,7 @@ void idt_exception_handler(struct Registers *const registers) {
         console_printf(FG_WHITE | BG_RED, "EXT: %u, IDT: %u, TI: %u, Index: %u\n", se.ext, se.idt, se.ti, se.index);
     }
 
+    console_printf(FG_WHITE | BG_RED, "RIP=%x\n", registers->rip);
     console_printf(FG_WHITE | BG_RED, "System halted");
 }
 
@@ -254,11 +255,11 @@ void idt_exception_handler(struct Registers *const registers) {
  * Only called in "irqs.asm"
  *
  * Argument:
- *   struct Registers *const registers:
+ *   const struct Registers *const registers:
  *     Pointer to the area on the stack
  *     containing the pushed registers.
  */
-void idt_irq_handler(struct Registers *const registers) {
+void idt_irq_handler(const struct Registers *const registers) {
     /* Send reset signal */
     if (registers->vector >= 40) {
         outb(I8259_SLAVE_CMD, 0x20);
