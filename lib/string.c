@@ -25,47 +25,71 @@
 /* Kernel Headers */
 #include <lib/string.h>
 
+#define ITOA_BUFSIZ 65
+
 /*
  * Creates the string representation of a number.
  * Argument:
- *   int64_t number: The number to be represented.
- *   uint8_t base: The base to convert to.
- *   uint8_t pad: Option for printing leading zeros
+ *   struct ItoaOptions *opts:
+ *     Pointer to the options that determine
+ *     how the number should be converted.
+ *   uint64_t number: The raw bits of the number.
  * Returns:
  *   The string representation of number.
  */
-char* itoa(int64_t number, uint8_t base, uint8_t pad) {
-    static char buffer[22] = {0};
-    char *string = buffer + 21;
-    int64_t n = number;
+char* itoa(struct ItoaOptions *opts, uint64_t raw) {
+    static char buffer[ITOA_BUFSIZ] = {0};
+    char *string = buffer + ITOA_BUFSIZ - 1;
     uint16_t c = 0;
+    uint8_t base = 0;
 
-    memset(buffer, 0, 22);
+    /* Determine base */
+    if (opts->binary) base = 2;
+    else if (opts->octal) base = 8;
+    else if (opts->hex) base = 16;
+    else base = 10;
+
+    memset(buffer, 0, ITOA_BUFSIZ);
 
     /* If number is zero, just stop */
-    if (n == 0) {
+    if (raw == 0) {
         *--string = '0';
         c++;
     }
     /* Convert, up to a base of 16 */
     else {
-        while (n != 0) {
-            *--string = "fedcba9876543210123456789abcdef"[15 + n % base];
-            n /= base;
-            c++;
-        }
+        /* Parse signed */
+        if (opts->sign) {
+            int64_t i = (int32_t) raw;
 
-        if (number < 0 && base == 10) {
-            *--string = '-';
+            while (i != 0) {
+                *--string = "fedcba9876543210123456789abcdef"[15 + i % base];
+                i /= base;
+                c++;
+            }
+
+            if (!(opts->hex && opts->octal && opts->binary)) {
+                *--string = '-';
+            }
+        }
+        /* Parse unsigned */
+        else {
+            uint64_t u = raw;
+
+            while (u != 0) {
+                *--string = "0123456789abcdef"[u % base];
+                u /= base;
+                c++;
+            }
         }
     }
 
     /* Print leading zeros */
-    if (pad) {
+    if (opts->pad) {
         uint8_t d = 0;
-        if (base == 2) d = 32;
-        else if (base == 8) d = 11;
-        else if (base == 16) d = 8;
+        if (base == 2) d = 64;
+        else if (base == 8) d = 22;
+        else if (base == 16) d = 16;
 
         for (; c < d && string != buffer; c++) {
             *--string = '0';

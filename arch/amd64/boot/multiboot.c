@@ -108,11 +108,16 @@ void multiboot_dump(void) {
         size_t ents = info->mmap_length / sizeof(struct MultibootMmap);
 
         for (size_t i = 0; i < ents; i++) {
+            struct ItoaOptions opts = {0};
+            memset(&opts, 0, sizeof(struct ItoaOptions));
+            opts.pad = 1;
+            opts.hex = 1;
+
             /* Region Base Address */
             uint32_t n = mmap[i].base_addr;
-            char addr[9] = {0};
+            char addr[17] = {0};
 
-            memcpy(addr, itoa(n, 16, 1), 8);
+            memcpy(addr, itoa(&opts, n), 17);
             if (ents >= 10 && i < 10) {
                 console_printf(FG_WHITE, "[ %u]: 0x%s - ", i, addr);
             } else {
@@ -121,7 +126,7 @@ void multiboot_dump(void) {
 
             /* Region Ending Address */
             n = mmap[i].base_addr + mmap[i].length - 1;
-            memcpy(addr, itoa(n, 16, 1), 8);
+            memcpy(addr, itoa(&opts, n), 17);
             console_printf(FG_WHITE, "0x%s (", addr);
 
             /* Region length */

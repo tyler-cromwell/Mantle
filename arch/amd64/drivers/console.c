@@ -177,36 +177,43 @@ size_t console_printf(uint8_t color, char *format, ...) {
     for (; *format != '\0'; format++) {
         if (*format != '%') {
             c += console_write(color, format, 1);
-        } else {
+        }
+        else {
+            struct ItoaOptions opts = {0};
+            memset(&opts, 0, sizeof(struct ItoaOptions));
+
             /* Increment again for tag character */
             char *tag = format+1;
             char *s = NULL;
-            char b = 0;
+            char ch = 0;
 
             switch (*tag) {
                 case 'c':
                     /* Character */
-                    b = __builtin_va_arg(arguments, int32_t);
-                    c += console_write(color, &b, 1);
+                    ch = __builtin_va_arg(arguments, int32_t);
+                    c += console_write(color, &ch, 1);
                     format++;
                     break;
                 case 'd':
                 case 'i':
                     /* Signed 64-bit Integer */
-                    s = itoa(__builtin_va_arg(arguments, int64_t), 10, 0);
+                    opts.sign = 1;
+                    s = itoa(&opts, __builtin_va_arg(arguments, int64_t));
                     c += console_write(color, s, strlen(s));
                     format++;
                     break;
                 case 'o':
                     /* Unsigned Octal Integer */
-                    s = itoa(__builtin_va_arg(arguments, uint64_t), 8, 0);
+                    opts.octal = 1;
+                    s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
                     c += console_write(color, "0o", 2);
                     c += console_write(color, s, strlen(s));
                     format++;
                     break;
                 case 'p':
                     /* Pointer address */
-                    s = itoa(__builtin_va_arg(arguments, uint64_t), 16, 0);
+                    opts.hex = 1;
+                    s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
                     c += console_write(color, s, strlen(s));
                     format++;
                     break;
@@ -218,20 +225,22 @@ size_t console_printf(uint8_t color, char *format, ...) {
                     break;
                 case 'u':
                     /* Unsigned 64-bit Integer */
-                    s = itoa(__builtin_va_arg(arguments, uint64_t), 10, 0);
+                    s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
                     c += console_write(color, s, strlen(s));
                     format++;
                     break;
                 case 'x':
                     /* Unsigned Hexadecimal Integer (lowercase) */
-                    s = itoa(__builtin_va_arg(arguments, uint64_t), 16, 0);
+                    opts.hex = 1;
+                    s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
                     c += console_write(color, "0x", 2);
                     c += console_write(color, s, strlen(s));
                     format++;
                     break;
                 case 'X':
                     /* Unsigned Hexadecimal Integer (uppercase) */
-                    s = itoa(__builtin_va_arg(arguments, uint64_t), 16, 0);
+                    opts.hex = 1;
+                    s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
                     strupper(s);
                     c += console_write(color, "0x", 2);
                     c += console_write(color, s, strlen(s));
@@ -239,8 +248,8 @@ size_t console_printf(uint8_t color, char *format, ...) {
                     break;
                 case '%':
                     /* Percent sign */
-                    b = '%';
-                    c += console_write(color, &b, 1);
+                    ch = '%';
+                    c += console_write(color, &ch, 1);
                     format++;
                     break;
                 default:

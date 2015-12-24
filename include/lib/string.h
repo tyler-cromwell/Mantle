@@ -25,8 +25,18 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/* Itoa conversion structure */
+struct ItoaOptions {
+    uint8_t pad : 1;
+    uint8_t sign : 1;
+    uint8_t binary : 1;
+    uint8_t octal : 1;
+    uint8_t hex : 1;
+    uint8_t reserved : 3;
+} __attribute__((__packed__));
+
 /* Function prototypes */
-char* itoa(int64_t number, uint8_t base, uint8_t pad);
+char* itoa(struct ItoaOptions *opts, uint64_t raw);
 void* memcpy(void *dest, const void *src, size_t n);
 void* memset(void *dest, int c, size_t n);
 int8_t strlcmp(const char *s1, const char *s2);
