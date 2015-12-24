@@ -67,7 +67,7 @@ struct PageFaultError {
     uint32_t reserved : 27;
 } __attribute__((__packed__));
 
-/* Register states before interrupt */
+/* Layout of Interrupt handler stack */
 struct Registers {
     uint64_t ds;
     uint64_t r15, r14, r13, r12, r11, r10, r9, r8;
