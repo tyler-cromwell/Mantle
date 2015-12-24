@@ -50,11 +50,11 @@ struct Idtr {
 
 /* Selector Error code */
 struct SelectorError {
-    uint16_t ext : 1;
-    uint16_t idt : 1;
-    uint16_t ti : 1;
-    uint16_t index : 13;
-    uint16_t reserved;
+    uint32_t ext : 1;
+    uint32_t idt : 1;
+    uint32_t ti : 1;
+    uint32_t index : 13;
+    uint32_t reserved : 16;
 } __attribute__((__packed__));
 
 /* Page Fault Error code */
@@ -65,6 +65,16 @@ struct PageFaultError {
     uint32_t rsv : 1;
     uint32_t id : 1;
     uint32_t reserved : 27;
+} __attribute__((__packed__));
+
+/* Register states before interrupt */
+struct Registers {
+    uint64_t ds;
+    uint64_t r15, r14, r13, r12, r11, r10, r9, r8;
+    uint64_t rdi, rsi, rbp, rsp;
+    uint64_t rdx, rcx, rbx, rax;
+    uint64_t vector, error;
+    uint64_t rip, cs, rflags, userrsp, ss;
 } __attribute__((__packed__));
 
 /* The Interrupt Descriptor Table */
@@ -203,32 +213,36 @@ void idt_configure(void) {
 
 /*
  * Common (C level) Exception handler.
+ *
+ * Only called in "exceptions.asm"
+ *
+ * Argument:
+ *   struct Registers *const registers:
+ *     Pointer to the area on the stack
+ *     containing the pushed registers.
  */
-void idt_exception_handler(uint64_t vector, uint64_t error) {
-    console_printf(FG_WHITE | BG_RED, "%s\n", interrupts[vector]);
+void idt_exception_handler(struct Registers *const registers) {
+    console_printf(FG_WHITE | BG_RED, "%s\n", interrupts[registers->vector]);
 
     /* If Page Fault */
-    if (vector == 14) {
+    if (registers->vector == 14) {
         struct PageFaultError pfe = {0};
         uint64_t cr2 = rcr(CR2);
 
-        memcpy(&pfe, &error, sizeof(uint16_t));
+        memset(&pfe, 0, sizeof(uint32_t));
+        memcpy(&pfe, &registers->error, sizeof(uint32_t));
 
         console_printf(FG_WHITE | BG_RED, "PFLA: %x\n", cr2);
-        console_printf(FG_WHITE | BG_RED, "P: %d\n", pfe.p);
-        console_printf(FG_WHITE | BG_RED, "R/W: %d\n", pfe.rw);
-        console_printf(FG_WHITE | BG_RED, "U/S: %d\n", pfe.us);
-        console_printf(FG_WHITE | BG_RED, "RSV: %d\n", pfe.rsv);
-        console_printf(FG_WHITE | BG_RED, "I/D: %d\n", pfe.id);
+        console_printf(FG_WHITE | BG_RED, "P: %u, R/W: %u, U/S: %u, RSV: %u, I/D: %u\n", pfe.p, pfe.rw, pfe.us, pfe.rsv, pfe.id);
     }
     /* If Error Code */
-    else if (error > 0) {
+    else if (registers->error > 0) {
         struct SelectorError se = {0};
-        memcpy(&se, &error, sizeof(uint32_t));
-        console_printf(FG_WHITE | BG_RED, "EXT: %d\n", se.ext);
-        console_printf(FG_WHITE | BG_RED, "IDT: %d\n", se.idt);
-        console_printf(FG_WHITE | BG_RED, "TI: %d\n", se.ti);
-        console_printf(FG_WHITE | BG_RED, "Index: %d\n", se.index);
+
+        memset(&se, 0, sizeof(uint32_t));
+        memcpy(&se, &registers->error, sizeof(uint32_t));
+
+        console_printf(FG_WHITE | BG_RED, "EXT: %u, IDT: %u, TI: %u, Index: %u\n", se.ext, se.idt, se.ti, se.index);
     }
 
     console_printf(FG_WHITE | BG_RED, "System halted");
@@ -236,16 +250,23 @@ void idt_exception_handler(uint64_t vector, uint64_t error) {
 
 /*
  * Common (C level) IRQ handler.
+ *
+ * Only called in "irqs.asm"
+ *
+ * Argument:
+ *   struct Registers *const registers:
+ *     Pointer to the area on the stack
+ *     containing the pushed registers.
  */
-void idt_irq_handler(uint64_t vector) {
+void idt_irq_handler(struct Registers *const registers) {
     /* Send reset signal */
-    if (vector >= 40) {
+    if (registers->vector >= 40) {
         outb(I8259_SLAVE_CMD, 0x20);
     }
     outb(I8259_MASTER_CMD, 0x20);
 
     /* Determine specific handler */
-    switch (vector) {
+    switch (registers->vector) {
         case 32: break;
         case 33: keyboard_handler(); break;
     }

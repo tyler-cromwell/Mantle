@@ -155,10 +155,10 @@ common_handler:
     push rbx
     push rcx
     push rdx
+    push rsp
     push rbp
     push rsi
     push rdi
-    push rsp
     push r8
     push r9
     push r10
@@ -178,7 +178,7 @@ common_handler:
     mov gs, ax
 
     ; Pass arguments then call C handler
-    mov rdi, [rsp+136]  ; Interrupt Vector
+    mov rdi, rsp
     call idt_irq_handler
 
     ; Restore data segment
@@ -195,10 +195,10 @@ common_handler:
     pop r10
     pop r9
     pop r8
-    pop rsp
     pop rdi
     pop rsi
     pop rbp
+    pop rsp
     pop rdx
     pop rcx
     pop rbx
@@ -207,5 +207,6 @@ common_handler:
     ; Cleanup and return
     add rsp, 16 ; Cleanup Interrupt Vector
                 ; and Error Code
+
     sti
     iretq
