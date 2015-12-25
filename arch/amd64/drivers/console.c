@@ -188,6 +188,13 @@ size_t console_printf(uint8_t color, char *format, ...) {
             char ch = 0;
 
             switch (*tag) {
+                case 'b':
+                    opts.binary = 1;
+                    s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
+                    c += console_write(color, "0b", 2);
+                    c += console_write(color, s, strlen(s));
+                    format++;
+                    break;
                 case 'c':
                     /* Character */
                     ch = __builtin_va_arg(arguments, int32_t);
