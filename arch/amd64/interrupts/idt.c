@@ -229,8 +229,8 @@ void idt_exception_handler(const struct Registers *const registers) {
         struct PageFaultError pfe = {0};
         uint64_t cr2 = rcr(CR2);
 
-        memset(&pfe, 0, sizeof(uint32_t));
-        memcpy(&pfe, &registers->error, sizeof(uint32_t));
+        memset(&pfe, 0, sizeof(struct PageFaultError));
+        memcpy(&pfe, &registers->error, sizeof(struct PageFaultError));
 
         console_printf(FG_WHITE | BG_RED, "PFLA: %x\n", cr2);
         console_printf(FG_WHITE | BG_RED, "P: %u, R/W: %u, U/S: %u, RSV: %u, I/D: %u\n", pfe.p, pfe.rw, pfe.us, pfe.rsv, pfe.id);
@@ -239,8 +239,8 @@ void idt_exception_handler(const struct Registers *const registers) {
     else if (registers->error > 0) {
         struct SelectorError se = {0};
 
-        memset(&se, 0, sizeof(uint32_t));
-        memcpy(&se, &registers->error, sizeof(uint32_t));
+        memset(&se, 0, sizeof(struct SelectorError));
+        memcpy(&se, &registers->error, sizeof(struct SelectorError));
 
         console_printf(FG_WHITE | BG_RED, "EXT: %u, IDT: %u, TI: %u, Index: %u\n", se.ext, se.idt, se.ti, se.index);
     }
