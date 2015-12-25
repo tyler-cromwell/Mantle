@@ -33,11 +33,11 @@
  *   struct ItoaOptions *opts:
  *     Pointer to the options that determine
  *     how the number should be converted.
- *   uint64_t number: The raw bits of the number.
+ *   int64_t number: The number to convert.
  * Returns:
  *   The string representation of number.
  */
-char* itoa(struct ItoaOptions *opts, uint64_t raw) {
+char* itoa(struct ItoaOptions *opts, int64_t number) {
     static char buffer[ITOA_BUFSIZ] = {0};
     char *string = buffer + ITOA_BUFSIZ - 1;
     uint16_t c = 0;
@@ -52,35 +52,23 @@ char* itoa(struct ItoaOptions *opts, uint64_t raw) {
     memset(buffer, 0, ITOA_BUFSIZ);
 
     /* If number is zero, just stop */
-    if (raw == 0) {
+    if (number == 0) {
         *--string = '0';
         c++;
     }
     /* Convert, up to a base of 16 */
     else {
-        /* Parse signed */
-        if (opts->sign) {
-            int64_t i = (int32_t) raw;
+        int64_t i = number;
 
-            while (i != 0) {
-                *--string = "fedcba9876543210123456789abcdef"[15 + i % base];
-                i /= base;
-                c++;
-            }
-
-            if (!(opts->hex && opts->octal && opts->binary)) {
-                *--string = '-';
-            }
+        while (i != 0) {
+            *--string = "fedcba9876543210123456789abcdef"[15 + i % base];
+            i /= base;
+            c++;
         }
-        /* Parse unsigned */
-        else {
-            uint64_t u = raw;
 
-            while (u != 0) {
-                *--string = "0123456789abcdef"[u % base];
-                u /= base;
-                c++;
-            }
+        /* If negative */
+        if (number < 0 && !(opts->hex || opts->octal || opts->binary)) {
+            *--string = '-';
         }
     }
 

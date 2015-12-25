@@ -36,7 +36,7 @@ struct ItoaOptions {
 } __attribute__((__packed__));
 
 /* Function prototypes */
-char* itoa(struct ItoaOptions *opts, uint64_t raw);
+char* itoa(struct ItoaOptions *opts, int64_t number);
 void* memcpy(void *dest, const void *src, size_t n);
 void* memset(void *dest, int c, size_t n);
 int8_t strlcmp(const char *s1, const char *s2);
