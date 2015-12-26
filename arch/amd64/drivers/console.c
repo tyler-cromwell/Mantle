@@ -152,7 +152,7 @@ size_t console_write(uint8_t color, char *message, size_t length) {
             uint8_t indent = TAB_WIDTH;
 
             /* Determine amount to indent by */
-            while ((uint16_t) (next + indent) % TAB_WIDTH != 0) {
+            while ((uint16_t) (next + (indent * CHAR_WIDTH)) % (TAB_WIDTH * CHAR_WIDTH) != 0) {
                 indent--;
             }
 
@@ -205,7 +205,11 @@ size_t console_printf(uint8_t color, char *format, ...) {
             char ch = 0;
 
             switch (*tag) {
+                case 'B':
+                    /* Binary Integer (leading zeros) */
+                    opts.pad = 1;
                 case 'b':
+                    /* Binary Integer (no leading zeros) */
                     opts.binary = 1;
                     s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
                     c += console_write(color, "0b", 2);
@@ -221,13 +225,15 @@ size_t console_printf(uint8_t color, char *format, ...) {
                 case 'd':
                 case 'i':
                     /* Signed 64-bit Integer */
-                    opts.sign = 1;
                     s = itoa(&opts, __builtin_va_arg(arguments, int64_t));
                     c += console_write(color, s, strlen(s));
                     format++;
                     break;
+                case 'O':
+                    /* Octal Integer (leading zeros, lowercase) */
+                    opts.pad = 1;
                 case 'o':
-                    /* Unsigned Octal Integer */
+                    /* Octal Integer (no leading zeros, lowercase) */
                     opts.octal = 1;
                     s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
                     c += console_write(color, "0o", 2);
@@ -253,19 +259,13 @@ size_t console_printf(uint8_t color, char *format, ...) {
                     c += console_write(color, s, strlen(s));
                     format++;
                     break;
-                case 'x':
-                    /* Unsigned Hexadecimal Integer (lowercase) */
-                    opts.hex = 1;
-                    s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
-                    c += console_write(color, "0x", 2);
-                    c += console_write(color, s, strlen(s));
-                    format++;
-                    break;
                 case 'X':
-                    /* Unsigned Hexadecimal Integer (uppercase) */
+                    /* Hexadecimal Integer (leading zeros, lowercase) */
+                    opts.pad = 1;
+                case 'x':
+                    /* Hexadecimal Integer (no leading zeros, lowercase) */
                     opts.hex = 1;
                     s = itoa(&opts, __builtin_va_arg(arguments, uint64_t));
-                    strupper(s);
                     c += console_write(color, "0x", 2);
                     c += console_write(color, s, strlen(s));
                     format++;
