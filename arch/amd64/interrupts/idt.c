@@ -67,14 +67,14 @@ struct PageFaultError {
     uint32_t reserved : 27;
 } __attribute__((__packed__));
 
-/* Layout of Interrupt handler stack */
+/* Register states before Interrupt */
 struct Registers {
     uint64_t ds;
     uint64_t r15, r14, r13, r12, r11, r10, r9, r8;
     uint64_t rdi, rsi, rbp, rsp;
     uint64_t rdx, rcx, rbx, rax;
     uint64_t vector, error;
-    uint64_t rip, cs, rflags, userrsp, ss;
+    uint64_t rip, cs, rflags, retrsp, retss;
 } __attribute__((__packed__));
 
 /* The Interrupt Descriptor Table */
@@ -100,7 +100,7 @@ static void disable_apic(void) {
  * Argument:
  *   struct Idtr *idtr: A struct representing the IDTR.
  */
-static void idt_load(struct Idtr *idtr) {
+static void lidt(struct Idtr *idtr) {
     asm volatile (
         "lidt (%0)\n\t"
         "sti\n\t"
@@ -181,6 +181,25 @@ static void idt_install_irq_handlers(void) {
 }
 
 /*
+ * Dumps the register contents before the Interrupt.
+ * Argument:
+ *   const struct Registers *const registers:
+ *     Pointer to the area on the stack
+ *     containing the pushed registers.
+ */
+static void dump_registers(const struct Registers *const r) {
+    console_printf(FG_WHITE | BG_RED, "[SS:RSP] %x:%X\n", r->retss, r->retrsp);
+    console_printf(FG_WHITE | BG_RED, "rflags=%B\n", r->rflags);
+    console_printf(FG_WHITE | BG_RED, "rip=%X\tcs=%X\tds=%X\n", r->rip, r->cs, r->ds);
+    console_printf(FG_WHITE | BG_RED, "rax=%X\trbx=%X\trcx=%X\n", r->rax, r->rbx, r->rcx);
+    console_printf(FG_WHITE | BG_RED, "rdx=%X\trdi=%X\trsi=%X\n", r->rdx, r->rdi, r->rsi);
+    console_printf(FG_WHITE | BG_RED, "rbp=%X\trsp=%X\tr8=%X\n", r->rbp, r->rsp, r->r8);
+    console_printf(FG_WHITE | BG_RED, "r9=%X\tr10=%X\tr11=%X\n", r->r9, r->r10, r->r11);
+    console_printf(FG_WHITE | BG_RED, "r12=%X\tr13=%X\tr14=%X\n", r->r12, r->r13, r->r14);
+    console_printf(FG_WHITE | BG_RED, "r15=%X\n", r->r15);
+}
+
+/*
  * Installs the Interrupt Descriptor Table.
  *
  * Only called in "kernel.c"
@@ -206,7 +225,7 @@ void idt_configure(void) {
     /* Install handlers */
     idt_install_exception_handlers();
     idt_install_irq_handlers();    
-    idt_load(&idtr);
+    lidt(&idtr);
 
     console_printf(FG_WHITE, "IDT setup, interrupts enabled\n\n");
 }
@@ -245,7 +264,7 @@ void idt_exception_handler(const struct Registers *const registers) {
         console_printf(FG_WHITE | BG_RED, "EXT: %u, IDT: %u, TI: %u, Index: %u\n", se.ext, se.idt, se.ti, se.index);
     }
 
-    console_printf(FG_WHITE | BG_RED, "RIP=%x\n", registers->rip);
+    dump_registers(registers);
     console_printf(FG_WHITE | BG_RED, "System halted");
 }
 
