@@ -60,6 +60,7 @@ char* itoa(struct ItoaOptions *opts, int64_t number) {
     else {
         int64_t i = number;
 
+        /* Do convertion */
         while (i != 0) {
             *--string = "fedcba9876543210123456789abcdef"[15 + i % base];
             i /= base;
@@ -67,7 +68,7 @@ char* itoa(struct ItoaOptions *opts, int64_t number) {
         }
 
         /* If negative */
-        if (number < 0 && !(opts->hex || opts->octal || opts->binary)) {
+        if (number < 0 && base == 10) {
             *--string = '-';
         }
     }
