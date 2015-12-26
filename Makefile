@@ -47,7 +47,7 @@ C_OBJ = $(C_SRC:%.c=%.o)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: all
-all: $(C_OBJ) $(ASM_OBJ)
+all: $(ASM_OBJ) $(C_OBJ)
 	$(LD) $(LDFLAGS) $(C_OBJ) $(ASM_OBJ)
 
 .PHONY: iso
