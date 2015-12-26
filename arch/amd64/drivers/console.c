@@ -150,9 +150,10 @@ size_t console_write(uint8_t color, char *message, size_t length) {
         /* Interpret Tab */
         else if (message[c] == '\t') {
             uint8_t indent = TAB_WIDTH;
+            uint64_t n = (uint64_t) next;
 
             /* Determine amount to indent by */
-            while ((uint16_t) (next + (indent * CHAR_WIDTH)) % (TAB_WIDTH * CHAR_WIDTH) != 0) {
+            while ((n + (indent * CHAR_WIDTH)) % (TAB_WIDTH * CHAR_WIDTH) != 0) {
                 indent--;
             }
 
