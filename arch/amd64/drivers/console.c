@@ -30,6 +30,7 @@
 /* Macro constants */
 #define CONSOLE_START   (char*) 0xb8000 /* The starting address for video memory */
 #define CONSOLE_END     (char*) 0xb8fa0 /* The ending address for video memory */
+#define TAB_WIDTH   4       /* The number of characters to advance by for indentation */
 #define CHAR_WIDTH  2       /* The number of bytes used per character */
 #define LINES       25      /* The number of lines on the screen */
 #define LINE_CHARS  80      /* The number of characters per line */
@@ -144,6 +145,22 @@ size_t console_write(uint8_t color, char *message, size_t length) {
             for (uint8_t r = line % LINE_BYTES; r > 0; r -= CHAR_WIDTH) {
                 next -= CHAR_WIDTH;
                 *next = '\0';
+            }
+        }
+        /* Interpret Tab */
+        else if (message[c] == '\t') {
+            uint8_t indent = TAB_WIDTH;
+
+            /* Determine amount to indent by */
+            while ((uint16_t) (next + indent) % TAB_WIDTH != 0) {
+                indent--;
+            }
+
+            /* Indent */
+            for (uint8_t i = 0; i < indent; i++) {
+                *next = ' ';
+                *(next+1) = (*(next+1) & 0xf0) | color;
+                next += CHAR_WIDTH;
             }
         }
         /* Write everything else */
