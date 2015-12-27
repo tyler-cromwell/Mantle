@@ -50,21 +50,21 @@ struct Idtr {
 
 /* Selector Error code */
 struct SelectorError {
-    uint32_t ext : 1;
-    uint32_t idt : 1;
-    uint32_t ti : 1;
-    uint32_t index : 13;
-    uint32_t reserved : 16;
+    uint32_t ext        : 1;
+    uint32_t idt        : 1;
+    uint32_t ti         : 1;
+    uint32_t index      : 13;
+    uint32_t reserved   : 16;
 } __attribute__((__packed__));
 
 /* Page Fault Error code */
 struct PageFaultError {
-    uint32_t p : 1;
-    uint32_t rw : 1;
-    uint32_t us : 1;
-    uint32_t rsv : 1;
-    uint32_t id : 1;
-    uint32_t reserved : 27;
+    uint32_t p          : 1;
+    uint32_t rw         : 1;
+    uint32_t us         : 1;
+    uint32_t rsv        : 1;
+    uint32_t id         : 1;
+    uint32_t reserved   : 27;
 } __attribute__((__packed__));
 
 /* Register states before Interrupt */

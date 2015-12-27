@@ -27,11 +27,11 @@
 
 /* Itoa conversion structure */
 struct ItoaOptions {
-    uint8_t pad : 1;
-    uint8_t binary : 1;
-    uint8_t octal : 1;
-    uint8_t hex : 1;
-    uint8_t reserved : 4;
+    uint8_t pad         : 1;
+    uint8_t binary      : 1;
+    uint8_t octal       : 1;
+    uint8_t hex         : 1;
+    uint8_t reserved    : 4;
 } __attribute__((__packed__));
 
 /* Function prototypes */
