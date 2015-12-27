@@ -202,7 +202,7 @@ static void dump_registers(const struct Registers *const r) {
 /*
  * Installs the Interrupt Descriptor Table.
  *
- * Only called in "kernel.c"
+ * Only called in "init.c"
  */
 void idt_configure(void) {
     memset((void*) idt, 0, sizeof(struct IdtGate) * 256);
