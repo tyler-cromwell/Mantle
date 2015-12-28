@@ -102,27 +102,29 @@ kernel_boot:
     mov cr0, eax
 
     ; Setup Paging
-    mov edi, 0x1000
+    mov edi, 0x8000 ; PML4T base address
     mov cr3, edi
     xor eax, eax
     mov ecx, 4096
     rep stosd
     mov edi, cr3
 
-    mov DWORD [edi], 0x2003 ; PML4T[0] -> PDPT
-    add edi, 4096
-    mov DWORD [edi], 0x3003 ; PDPT[0] -> PDT
-    add edi, 4096
-    mov DWORD [edi], 0x4003 ; PDT[0] -> PT
-    add edi, 4096
+    ; Form the Hierarchy
+    mov DWORD [edi], 0x9003 ; PML4T[0] -> PDPT
+    add edi, 0x1000
+    mov DWORD [edi], 0xa003 ; PDPT[0] -> PDT
+    add edi, 0x1000
+    mov DWORD [edi], 0xb003 ; PDT[0] -> PT
+    add edi, 0x1000
 
-    mov ebx, 0x00000003
-    mov ecx, 512    ; First 2MB
+    ; Identity Mapping
+    mov ebx, 0x00000003 ; First page frame base address
+    mov ecx, 512        ; Fill the first/only Page Table (first 2MB)
 
     .setEntry:
-    mov DWORD [edi], ebx
-    add ebx, 0x1000
-    add edi, 8
+    mov DWORD [edi], ebx    ; Map the frame into the entry
+    add ebx, 0x1000         ; Move to the next frame
+    add edi, 8              ; Move to the next entry
     loop .setEntry
 
     ; Enable PAE
