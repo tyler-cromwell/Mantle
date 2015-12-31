@@ -24,19 +24,25 @@
    these don't need to link against libc */
 #include <stdint.h>
 
-/* Control Register numbers*/
+/* Control Register numbers */
 #define CR0 0
 #define CR2 2
 #define CR3 3
 #define CR4 4
 #define CR8 8
 
+/* Control Register masks, discards unused bits */
+#define CR0_MASK    0x00000e005003f
+#define CR3_MASK    0xffffffffff018
+#define CR4_MASK    0x00000000507ff
+#define CR8_MASK    0x00000003f7fd7
+
 /*
  * Copies the value of a Control Register.
  * Returns:
  *   the value of a Control Register.
  */
-static inline uint64_t rcr(uint8_t n) {
+static uint64_t rcr(uint8_t n) {
     uint64_t cr = 0;
 
     switch (n) {
@@ -49,6 +55,36 @@ static inline uint64_t rcr(uint8_t n) {
 
     return cr;
 }
+
+/*
+ * Writes a value into a Control Register.
+ * Arguments:
+ *   uint8_t cr: The number of the register to write to.
+ *   uint64_t value: The value to write.
+ */
+static void wcr(uint8_t cr, uint64_t value) {
+    uint64_t v = 0;
+
+    switch (cr) {
+        case 0:
+            v = (value & CR0_MASK);
+            asm volatile ("mov %0, %%cr0" :: "r" (v));
+            break;
+        case 3:
+            v = (value & CR3_MASK);
+            asm volatile ("mov %0, %%cr3" :: "r" (v));
+            break;
+        case 4:
+            v = (value & CR4_MASK);
+            asm volatile ("mov %0, %%cr4" :: "r" (v));
+            break;
+        case 8:
+            v = (value & CR8_MASK);
+            asm volatile ("mov %0, %%cr8" :: "r" (v));
+            break;
+    }
+}
+
 /*
  * Read a byte from an I/O port.
  * Arguments:
