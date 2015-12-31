@@ -149,3 +149,17 @@ void multiboot_dump(void) {
         }
     }
 }
+
+/*
+ * Returns the total amount of system memory (the sum
+ * of lower and upper memory).
+ * Returns:
+ *   the total memory or 0 if not passed from bootloader.
+ */
+uint64_t multiboot_memsize(void) {
+    if (info->flags & MULTIBOOT_MEMORY) {
+        return info->mem_lower + info->mem_upper;
+    } else {
+        return 0;
+    }
+}

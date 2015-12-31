@@ -137,5 +137,6 @@ struct MultibootDrive {
 /* Function prototypes */
 void multiboot_init(struct MultibootInfo *mbinfo);
 void multiboot_dump(void);
+uint64_t multiboot_memsize(void);
 
 #endif
