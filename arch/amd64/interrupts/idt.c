@@ -227,7 +227,7 @@ void idt_configure(void) {
     idt_install_irq_handlers();    
     lidt(&idtr);
 
-    console_printf(FG_WHITE, "IDT setup, interrupts enabled\n\n");
+    console_printf(FG_WHITE, "IDT setup, interrupts enabled\n");
 }
 
 /*
