@@ -152,7 +152,7 @@ void multiboot_dump(void) {
 
 /*
  * Returns the total amount of system memory (the sum
- * of lower and upper memory).
+ * of lower and upper memory), measured in KILOBYTES.
  * Returns:
  *   the total memory or 0 if not passed from bootloader.
  */
