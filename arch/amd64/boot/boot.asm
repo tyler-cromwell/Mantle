@@ -30,9 +30,9 @@ extern init_kernel
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [section .multiboot]
     align 4
-    dd 0x1badb002           ; Magic number
-    dd 0x03                 ; Flags
-    dd -(0x1badb002 + 0x03) ; Checksum
+    dd 0x1badb002                   ; Magic number
+    dd 0x00000003                   ; Flags
+    dd -(0x1badb002 + 0x00000003)   ; Checksum
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -90,7 +90,7 @@ kernel_boot:
     jz .NoLongMode
 
     ;;;;;;;;;;;;;;;;;;;;; Clear Screen ;;;;;;;;;;;;;;;;;;;;;
-    mov edi, 0xb8000
+    mov edi, 0x000b8000
     mov eax, 0x0f000f00
     mov ecx, 1000
     rep stosd
@@ -102,29 +102,38 @@ kernel_boot:
     mov cr0, eax
 
     ; Setup Paging
-    mov edi, 0x8000 ; PML4T base address
+    mov edi, 0x00011000                 ; PML4T base address
     mov cr3, edi
     xor eax, eax
     mov ecx, 4096
     rep stosd
-    mov edi, cr3
+    mov edi, cr3                        ; Points at 0x00011000
 
     ; Form the Hierarchy
-    mov DWORD [edi], 0x9003 ; PML4T[0] -> PDPT
-    add edi, 0x1000
-    mov DWORD [edi], 0xa003 ; PDPT[0] -> PDT
-    add edi, 0x1000
-    mov DWORD [edi], 0xb003 ; PDT[0] -> PT
-    add edi, 0x1000
+    mov DWORD [edi], 0x00012003         ; PML4T[0] -> PDPT
+    add edi, 0x00001000                 ; Now points to 0x00012000
+    mov DWORD [edi], 0x00013003         ; PDPT[0] -> PDT
+    add edi, 0x00001000                 ; Now points to 0x00013000
+    mov DWORD [edi+0x00], 0x00014003    ; PDT[0] -> PT
+    mov DWORD [edi+0x08], 0x00015003    ; PDT[1] -> PT
+    mov DWORD [edi+0x10], 0x00016003    ; PDT[2] -> PT
+    mov DWORD [edi+0x18], 0x00017003    ; PDT[3] -> PT
+    mov DWORD [edi+0x20], 0x00018003    ; PDT[4] -> PT
+    mov DWORD [edi+0x28], 0x00019003    ; PDT[5] -> PT
+    mov DWORD [edi+0x30], 0x0001a003    ; PDT[6] -> PT
+    mov DWORD [edi+0x38], 0x0001b003    ; PDT[7] -> PT
+    mov DWORD [edi+0x40], 0x0001c003    ; PDT[8] -> PT
+    mov DWORD [edi+0x48], 0x0001d003    ; PDT[9] -> PT
+    add edi, 0x00001000                 ; Now points to 0x00014000
 
     ; Identity Mapping
-    mov ebx, 0x00000003 ; First page frame base address
-    mov ecx, 512        ; Fill the first/only Page Table (first 2MB)
+    mov ebx, 0x00000003     ; First physical page frame base address
+    mov ecx, 5120           ; Map first 20 Megabytes
 
     .setEntry:
     mov DWORD [edi], ebx    ; Map the frame into the entry
-    add ebx, 0x1000         ; Move to the next frame
-    add edi, 8              ; Move to the next entry
+    add ebx, 0x00001000     ; Move to the next frame
+    add edi, 0x08           ; Move to the next entry
     loop .setEntry
 
     ; Enable PAE
@@ -149,7 +158,7 @@ kernel_boot:
 
     ;;;;;;;;;;;;;;;;;; No Long Mode support ;;;;;;;;;;;;;;;;;;
     .NoLongMode:
-    mov eax, 0xb8000
+    mov eax, 0x000b8000
     mov ecx, fail_msg_len
     mov edx, fail_msg
 
