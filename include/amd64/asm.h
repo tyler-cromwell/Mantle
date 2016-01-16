@@ -42,7 +42,7 @@
  * Returns:
  *   the value of a Control Register.
  */
-static uint64_t rcr(uint8_t n) {
+static uint64_t rdcr(uint8_t n) {
     uint64_t cr = 0;
 
     switch (n) {
@@ -62,7 +62,7 @@ static uint64_t rcr(uint8_t n) {
  *   uint8_t cr: The number of the register to write to.
  *   uint64_t value: The value to write.
  */
-static void wcr(uint8_t cr, uint64_t value) {
+static void wrcr(uint8_t cr, uint64_t value) {
     uint64_t v = 0;
 
     switch (cr) {

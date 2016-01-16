@@ -246,7 +246,7 @@ void idt_exception_handler(const struct Registers *const registers) {
     /* If Page Fault */
     if (registers->vector == 14) {
         struct PageFaultError pfe = {0};
-        uint64_t cr2 = rcr(CR2);
+        uint64_t cr2 = rdcr(CR2);
 
         memset(&pfe, 0, sizeof(struct PageFaultError));
         memcpy(&pfe, &registers->error, sizeof(struct PageFaultError));
