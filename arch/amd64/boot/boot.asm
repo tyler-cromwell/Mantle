@@ -111,20 +111,20 @@ kernel_boot:
 
     ; Form the Hierarchy
     mov DWORD [edi], 0x00012003         ; PML4T[0] -> PDPT
-    add edi, 0x00001000                 ; Now points to 0x00012000
+    add edi, 0x00001000                 ; Now points to 0x00012000 (PDPT)
     mov DWORD [edi], 0x00013003         ; PDPT[0] -> PDT
-    add edi, 0x00001000                 ; Now points to 0x00013000
-    mov DWORD [edi+0x00], 0x00014003    ; PDT[0] -> PT
-    mov DWORD [edi+0x08], 0x00015003    ; PDT[1] -> PT
-    mov DWORD [edi+0x10], 0x00016003    ; PDT[2] -> PT
-    mov DWORD [edi+0x18], 0x00017003    ; PDT[3] -> PT
-    mov DWORD [edi+0x20], 0x00018003    ; PDT[4] -> PT
-    mov DWORD [edi+0x28], 0x00019003    ; PDT[5] -> PT
-    mov DWORD [edi+0x30], 0x0001a003    ; PDT[6] -> PT
-    mov DWORD [edi+0x38], 0x0001b003    ; PDT[7] -> PT
-    mov DWORD [edi+0x40], 0x0001c003    ; PDT[8] -> PT
-    mov DWORD [edi+0x48], 0x0001d003    ; PDT[9] -> PT
-    add edi, 0x00001000                 ; Now points to 0x00014000
+    add edi, 0x00001000                 ; Now points to 0x00013000 (PDT)
+    mov DWORD [edi+0x00], 0x00014003    ; PDT[0] -> PT 1
+    mov DWORD [edi+0x08], 0x00015003    ; PDT[1] -> PT 2
+    mov DWORD [edi+0x10], 0x00016003    ; PDT[2] -> PT 3
+    mov DWORD [edi+0x18], 0x00017003    ; PDT[3] -> PT 4
+    mov DWORD [edi+0x20], 0x00018003    ; PDT[4] -> PT 5
+    mov DWORD [edi+0x28], 0x00019003    ; PDT[5] -> PT 6
+    mov DWORD [edi+0x30], 0x0001a003    ; PDT[6] -> PT 7
+    mov DWORD [edi+0x38], 0x0001b003    ; PDT[7] -> PT 8
+    mov DWORD [edi+0x40], 0x0001c003    ; PDT[8] -> PT 9
+    mov DWORD [edi+0x48], 0x0001d003    ; PDT[9] -> PT 10
+    add edi, 0x00001000                 ; Now points to 0x00014000 (PT 1)
 
     ; Identity Mapping
     mov ebx, 0x00000003     ; First physical page frame base address
