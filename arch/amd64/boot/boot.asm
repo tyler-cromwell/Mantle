@@ -23,6 +23,7 @@
 global kernel_boot
 
 ; External Symbols
+extern KERNEL_SIZE
 extern init_kernel
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -101,6 +102,17 @@ kernel_boot:
     and eax, 0x7fffffff
     mov cr0, eax
 
+    ; Determine number of pages for the kernel
+    mov edx, 0
+    mov eax, KERNEL_SIZE
+    mov ebx, 4096
+    div ebx         ; EAX = Page amount, EDX = Remaining bytes
+    cmp edx, 0      ; Check for remaining bytes that need a Page
+    je .end
+    inc eax         ; Add a page for to account for remaining bytes
+    .end:
+    mov ebx, eax
+
     ; Setup Paging
     mov edi, 0x00011000                 ; PML4T base address
     mov cr3, edi
@@ -127,8 +139,9 @@ kernel_boot:
     add edi, 0x00001000                 ; Now points to 0x00014000 (PT 1)
 
     ; Identity Mapping
+    mov ecx, 4096           ; Page amount for first 16 Megabytes
+    add ecx, ebx            ; Add kernel page amount
     mov ebx, 0x00000003     ; First physical page frame base address
-    mov ecx, 5120           ; Map first 20 Megabytes
 
     .setEntry:
     mov DWORD [edi], ebx    ; Map the frame into the entry
