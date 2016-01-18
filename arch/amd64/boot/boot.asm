@@ -111,7 +111,7 @@ kernel_boot:
     je .end
     inc eax         ; Add a page for to account for remaining bytes
     .end:
-    mov ebx, eax
+    push eax
 
     ; Setup Paging
     mov edi, 0x00011000                 ; PML4T base address
@@ -135,12 +135,12 @@ kernel_boot:
     mov DWORD [edi+0x30], 0x0001a003    ; PDT[6] -> PT 7
     mov DWORD [edi+0x38], 0x0001b003    ; PDT[7] -> PT 8
     mov DWORD [edi+0x40], 0x0001c003    ; PDT[8] -> PT 9
-    mov DWORD [edi+0x48], 0x0001d003    ; PDT[9] -> PT 10
     add edi, 0x00001000                 ; Now points to 0x00014000 (PT 1)
 
     ; Identity Mapping
+    pop eax
     mov ecx, 4096           ; Page amount for first 16 Megabytes
-    add ecx, ebx            ; Add kernel page amount
+    add ecx, eax            ; Add kernel page amount
     mov ebx, 0x00000003     ; First physical page frame base address
 
     .setEntry:
