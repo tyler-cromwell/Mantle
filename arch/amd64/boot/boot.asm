@@ -102,30 +102,43 @@ kernel_boot:
     and eax, 0x7fffffff
     mov cr0, eax
 
-    ; Determine number of pages for the kernel
+    ; Determine number of Pages for the kernel
     mov edx, 0
     mov eax, KERNEL_SIZE
     mov ebx, 4096
-    div ebx         ; EAX = Page amount, EDX = Remaining bytes
-    cmp edx, 0      ; Check for remaining bytes that need a Page
-    je .end
-    inc eax         ; Add a page for to account for remaining bytes
-    .end:
-    push eax
+    div ebx         ; EAX = Page amount, EDX = Remainder
+    cmp edx, 0      ; Do we need more ages?
+    je .end1
+    inc eax         ; Add a page to account for remainder
+    .end1:
+    push eax        ; Store page amount
 
-    ; Setup Paging
-    mov edi, 0x00011000                 ; PML4T base address
+    ; Determine number of Pages Tables for the kernel
+    mov edx, 0
+    ; EAX already contains page amount
+    mov ebx, 512
+    div ebx         ; EAX = Page table amount, EDX = Remainder
+    cmp edx, 0      ; Do we need more page tables?
+    je .end2
+    inc eax         ; Add a page table to account for remainder
+    .end2:
+    push eax        ; Store page table amount
+
+    ; Setup PML4T and CR3
+    mov edi, 0x00011000     ; PML4T base address
     mov cr3, edi
     xor eax, eax
     mov ecx, 4096
     rep stosd
-    mov edi, cr3                        ; Points at 0x00011000
+    mov edi, cr3            ; Points at 0x00011000
 
     ; Form the Hierarchy
     mov DWORD [edi], 0x00012003         ; PML4T[0] -> PDPT
     add edi, 0x00001000                 ; Now points to 0x00012000 (PDPT)
     mov DWORD [edi], 0x00013003         ; PDPT[0] -> PDT
     add edi, 0x00001000                 ; Now points to 0x00013000 (PDT)
+
+    ; Tables for the first 16 Megabytes
     mov DWORD [edi+0x00], 0x00014003    ; PDT[0] -> PT 1
     mov DWORD [edi+0x08], 0x00015003    ; PDT[1] -> PT 2
     mov DWORD [edi+0x10], 0x00016003    ; PDT[2] -> PT 3
@@ -134,20 +147,34 @@ kernel_boot:
     mov DWORD [edi+0x28], 0x00019003    ; PDT[5] -> PT 6
     mov DWORD [edi+0x30], 0x0001a003    ; PDT[6] -> PT 7
     mov DWORD [edi+0x38], 0x0001b003    ; PDT[7] -> PT 8
-    mov DWORD [edi+0x40], 0x0001c003    ; PDT[8] -> PT 9
-    add edi, 0x00001000                 ; Now points to 0x00014000 (PT 1)
+
+    pop eax                 ; Retrieve page table amount
+    push edi
+    add edi, 0x40
+    mov ecx, eax
+    mov ebx, 0x0001c003
+
+    ; Create Page Tables to store kernel Pages
+    .createPageTable:
+    mov DWORD [edi], ebx
+    add ebx, 0x00001000
+    add edi, 0x08
+    loop .createPageTable
+
+    pop edi
+    add edi, 0x00001000     ; Now points to 0x00014000 (PT 1)
 
     ; Identity Mapping
-    pop eax
+    pop eax                 ; Retrieve page amount
     mov ecx, 4096           ; Page amount for first 16 Megabytes
     add ecx, eax            ; Add kernel page amount
     mov ebx, 0x00000003     ; First physical page frame base address
 
-    .setEntry:
+    .mapFrame:
     mov DWORD [edi], ebx    ; Map the frame into the entry
     add ebx, 0x00001000     ; Move to the next frame
     add edi, 0x08           ; Move to the next entry
-    loop .setEntry
+    loop .mapFrame
 
     ; Enable PAE
     mov eax, cr4
