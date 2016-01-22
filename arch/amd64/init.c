@@ -39,8 +39,15 @@ void init_kernel(uint64_t magic, struct MultibootInfo *mbinfo) {
     console_clear();
     console_printf(FG_BLUE_L, STRING"\n");
 
+    /* Get Multiboot Info */
+    if (magic == MULTIBOOT_BOOT_MAGIC) {
+        multiboot_init(mbinfo);
+    }
+
     /* Initialize critical components */
     idt_configure();        /* Interrupt handling */
+
+    console_printf(FG_WHITE, "\n");
 
     /* Wait for commands */
     while (1) {
@@ -54,7 +61,7 @@ void init_kernel(uint64_t magic, struct MultibootInfo *mbinfo) {
             shell_cmd_cpuinfo();
         }
         else if (strlcmp(input, "multiboot") > 0) {
-            shell_cmd_multiboot(magic, mbinfo);
+            shell_cmd_multiboot(magic);
         }
         else if (strlcmp(input, "clear") > 0) {
             console_clear();

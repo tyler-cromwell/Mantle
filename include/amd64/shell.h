@@ -35,6 +35,6 @@
 char* shell_readline(char *prompt);
 void shell_cmd_kinfo(void);
 void shell_cmd_cpuinfo(void);
-void shell_cmd_multiboot(uint64_t magic, struct MultibootInfo *mbinfo);
+void shell_cmd_multiboot(uint64_t magic);
 
 #endif
