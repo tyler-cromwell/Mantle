@@ -107,7 +107,7 @@ kernel_boot:
     mov eax, KERNEL_SIZE
     mov ebx, 4096
     div ebx         ; EAX = Page amount, EDX = Remainder
-    cmp edx, 0      ; Do we need more ages?
+    cmp edx, 0
     je .end1
     inc eax         ; Add a page to account for remainder
     .end1:
@@ -118,7 +118,7 @@ kernel_boot:
     ; EAX already contains page amount
     mov ebx, 512
     div ebx         ; EAX = Page table amount, EDX = Remainder
-    cmp edx, 0      ; Do we need more page tables?
+    cmp edx, 0
     je .end2
     inc eax         ; Add a page table to account for remainder
     .end2:
@@ -152,6 +152,7 @@ kernel_boot:
     push edi
     add edi, 0x40
     mov ecx, eax
+    mov edx, eax
     mov ebx, 0x0001c003
 
     ; Create Page Tables to store kernel Pages
@@ -166,8 +167,10 @@ kernel_boot:
 
     ; Identity Mapping
     pop eax                 ; Retrieve page amount
-    mov ecx, 4096           ; Page amount for first 16 Megabytes
-    add ecx, eax            ; Add kernel page amount
+    mov ecx, eax
+    push ecx
+    push edx
+    add ecx, 4096           ; Add Page amount for first 16 Megabytes
     mov ebx, 0x00000003     ; First physical page frame base address
 
     .mapFrame:
@@ -193,6 +196,10 @@ kernel_boot:
     mov cr0, eax
 
     ; Load GDT and far jump
+    pop edx     ; Kernel Page Table amount
+    pop ecx     ; Kernel Page amount
+    pop eax     ; Multiboot bootloader magic number
+    pop ebx     ; Multiboot information address
     lgdt [GDT64.Pointer]
     jmp GDT64.Code:kernel_jump  ; Activates Long Mode
 
@@ -225,27 +232,13 @@ kernel_boot:
 kernel_jump:
     ;;;;;;;;;;;;;; Reload Segment Registers ;;;;;;;;;;;;;;
     cli
-    mov ax, GDT64.Data
-    mov fs, ax
-    mov gs, ax
-    mov ax, GDT64.Null
-    mov ds, ax
-    mov es, ax
-    mov ss, ax
-
-    ;;;;;;;;;;;;; Extract Multiboot information ;;;;;;;;;;;;;
-    pop rax
-    mov rbx, rax
-
-    mov rdx, 0x00000000ffffffff
-    and rax, rdx    ; Preserve the magic number
-
-    mov rdx, 0xffffffff00000000
-    and rbx, rdx    ; Preserve the info address
-    shr rbx, 32
-
-    xor rcx, rcx
-    xor rdx, rdx
+    mov di, GDT64.Data
+    mov fs, di
+    mov gs, di
+    mov di, GDT64.Null
+    mov ds, di
+    mov es, di
+    mov ss, di
 
     ;;;;;;;;;;;;;;;;;;;; Begin Kerneling ;;;;;;;;;;;;;;;;;;;;
     mov rsp, stack_top  ; Setup the stack
@@ -253,6 +246,9 @@ kernel_jump:
 
     mov rdi, rax    ; Pass arguments as per the
     mov rsi, rbx    ; x86-64 calling convention
+    ; RDX - Already contains kernel Page Table amount
+    ; RCX - Already contains kernel Page amount
+
     call init_kernel    ; Enter the Kernel
 
     cli
