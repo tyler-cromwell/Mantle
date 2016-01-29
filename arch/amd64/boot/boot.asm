@@ -152,7 +152,6 @@ kernel_boot:
     push edi
     add edi, 0x40
     mov ecx, eax
-    mov edx, eax
     mov ebx, 0x0001c003
 
     ; Create Page Tables to store kernel Pages
@@ -167,10 +166,9 @@ kernel_boot:
 
     ; Identity Mapping
     pop eax                 ; Retrieve page amount
-    mov ecx, eax
+    mov ecx, 4096
+    add ecx, eax            ; Add Page amount for first 16 Megabytes
     push ecx
-    push edx
-    add ecx, 4096           ; Add Page amount for first 16 Megabytes
     mov ebx, 0x00000003     ; First physical page frame base address
 
     .mapFrame:
@@ -196,10 +194,9 @@ kernel_boot:
     mov cr0, eax
 
     ; Load GDT and far jump
-    pop edx     ; Kernel Page Table amount
     pop ecx     ; Kernel Page amount
-    pop eax     ; Multiboot bootloader magic number
-    pop ebx     ; Multiboot information address
+    pop eax     ; Bootloader magic number
+    pop ebx     ; Multiboot address
     lgdt [GDT64.Pointer]
     jmp GDT64.Code:kernel_jump  ; Activates Long Mode
 
@@ -244,10 +241,10 @@ kernel_jump:
     mov rsp, stack_top  ; Setup the stack
     mov rbp, stack_top
 
-    mov rdi, rax    ; Pass arguments as per the
-    mov rsi, rbx    ; x86-64 calling convention
-    ; RDX - Already contains kernel Page Table amount
-    ; RCX - Already contains kernel Page amount
+    ; Setup arguments (x86-64 CC)
+    mov rdi, rax    ; Bootloader magic number
+    mov rsi, rbx    ; Multiboot address
+    mov rdx, rcx    ; Page amount
 
     call init_kernel    ; Enter the Kernel
 
