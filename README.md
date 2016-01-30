@@ -39,4 +39,9 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
   - `ARCH`: The architecture to build.
   - `IMAGE`: The kernel binary image.
 
+## Editing
+For syntax highlighting of the types in `kernel/types.h`, create a file called `~/.vim/after/syntax/c.vim` and add the following lines:
+- `syn keyword cType uchar_t ushort_t uint_t ulong_t`
+- `syn keyword cType byte_t word_t dword_t qword_t`
+
 [dmr]: http://en.wikipedia.org/wiki/Dennis_Ritchie
