@@ -25,7 +25,9 @@
 #include <lib/string.h>
 
 /* External */
-void idt_configure(void);       /* Defined in "idt.c" */
+void idt_configure(void);               /* Defined in "idt.c" */
+void paging_configure(uint64_t pages);  /* Defined in "paging.c" */
+void paging_pageinfo(void);             /* Defined in "paging.c" */
 
 /*
  * Early kernel setup, initializes critical components.
@@ -34,8 +36,9 @@ void idt_configure(void);       /* Defined in "idt.c" */
  *   uint64_t magic: A Multiboot bootloaders magic number.
  *   struct MultibootInfo *mbinfo:
  *       The physical memory address of the Multiboot information struct.
+ *   uint64_t pages: Amount of Pages in use at boot.
  */
-void init_kernel(uint64_t magic, struct MultibootInfo *mbinfo) {
+void init_kernel(uint64_t magic, struct MultibootInfo *mbinfo, uint64_t pages) {
     console_clear();
     console_printf(FG_BLUE_L, STRING"\n");
 
@@ -45,7 +48,8 @@ void init_kernel(uint64_t magic, struct MultibootInfo *mbinfo) {
     }
 
     /* Initialize critical components */
-    idt_configure();        /* Interrupt handling */
+    idt_configure();            /* Interrupt handling */
+    paging_configure(pages);    /* Memory management */
 
     console_printf(FG_WHITE, "\n");
 
@@ -63,6 +67,9 @@ void init_kernel(uint64_t magic, struct MultibootInfo *mbinfo) {
         else if (strlcmp(input, "multiboot") > 0) {
             shell_cmd_multiboot(magic);
         }
+        else if (strlcmp(input, "pageinfo") > 0) {
+            paging_pageinfo();
+        }
         else if (strlcmp(input, "clear") > 0) {
             console_clear();
         }
@@ -71,6 +78,7 @@ void init_kernel(uint64_t magic, struct MultibootInfo *mbinfo) {
             console_printf(FG_WHITE, "cpuinfo: Prints CPUID information.\n");
             console_printf(FG_WHITE, "halt: Exits the shell and halts.\n");
             console_printf(FG_WHITE, "kinfo: Prints information about the kernel.\n");
+            console_printf(FG_WHITE, "pageinfo: Prints information about the paging tree.\n");
             console_printf(FG_WHITE, "multiboot: Prints Multiboot information.\n");
         }
         else if (strlcmp(input, "halt") > 0) {
