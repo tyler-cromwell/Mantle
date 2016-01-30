@@ -17,64 +17,61 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
-#include <stdint.h>
-
-/* Kernel Headers */
+/* Kernel header(s) */
 #include <amd64/asm.h>
 #include <amd64/console.h>
 #include <amd64/i8253.h>
 #include <amd64/i8259.h>
+#include <kernel/types.h>
 #include <lib/string.h>
 
-/* Local Kernel Headers */
+/* Local kernel header(s) */
 #include "interrupts.h"
 
 /* A Long Mode IDT interrupt gate */
 struct IdtGate {
-    uint16_t offset_low;    /* Lower portion of the offset */
-    uint16_t selector;      /* Interrupt selector */
-    uint8_t zero1;          /* Always zero */
-    uint8_t type_attr;      /* Type attributes */
-    uint16_t offset_middle; /* Middle portion of the offset */
-    uint32_t offset_high;   /* Upper portion of the offset */
-    uint32_t zero2;         /* Always zero */
+    word_t offset_low;      /* Lower portion of the offset */
+    word_t selector;        /* Interrupt selector */
+    byte_t zero1;           /* Always zero */
+    byte_t type_attr;       /* Type attributes */
+    word_t offset_middle;   /* Middle portion of the offset */
+    dword_t offset_high;    /* Upper portion of the offset */
+    dword_t zero2;          /* Always zero */
 } __attribute__((__packed__));
 
 /* The Long Mode IDTR register */
 struct Idtr {
-    uint16_t limit; /* The length of the IDT */
-    uint64_t base;  /* IDT base address */
+    word_t limit;   /* The length of the IDT */
+    qword_t base;   /* IDT base address */
 } __attribute__((__packed__));
 
 /* Selector Error code */
 struct SelectorError {
-    uint32_t ext        : 1;
-    uint32_t idt        : 1;
-    uint32_t ti         : 1;
-    uint32_t index      : 13;
-    uint32_t reserved   : 16;
+    dword_t ext         : 1;
+    dword_t idt         : 1;
+    dword_t ti          : 1;
+    dword_t index       : 13;
+    dword_t reserved    : 16;
 } __attribute__((__packed__));
 
 /* Page Fault Error code */
 struct PageFaultError {
-    uint32_t p          : 1;
-    uint32_t rw         : 1;
-    uint32_t us         : 1;
-    uint32_t rsv        : 1;
-    uint32_t id         : 1;
-    uint32_t reserved   : 27;
+    dword_t p           : 1;
+    dword_t rw          : 1;
+    dword_t us          : 1;
+    dword_t rsv         : 1;
+    dword_t id          : 1;
+    dword_t reserved    : 27;
 } __attribute__((__packed__));
 
 /* Register states before Interrupt */
 struct Registers {
-    uint64_t ds;
-    uint64_t r15, r14, r13, r12, r11, r10, r9, r8;
-    uint64_t rdi, rsi, rbp, rsp;
-    uint64_t rdx, rcx, rbx, rax;
-    uint64_t vector, error;
-    uint64_t rip, cs, rflags, retrsp, retss;
+    qword_t ds;
+    qword_t r15, r14, r13, r12, r11, r10, r9, r8;
+    qword_t rdi, rsi, rbp, rsp;
+    qword_t rdx, rcx, rbx, rax;
+    qword_t vector, error;
+    qword_t rip, cs, rflags, retrsp, retss;
 } __attribute__((__packed__));
 
 /* The Interrupt Descriptor Table */
@@ -87,8 +84,8 @@ void keyboard_handler(void);    /* Defined in "keyboard.c" */
  * Disables the APIC.
  */
 static void disable_apic(void) {
-    uint32_t register ecx asm("ecx") = 0x0000001b;
-    uint32_t msr = 0;
+    dword_t register ecx asm("ecx") = 0x0000001b;
+    dword_t msr = 0;
 
     asm volatile ("rdmsr\n\t" : "=A" (msr));
     msr &= (0 << 11);
@@ -111,12 +108,12 @@ static void lidt(struct Idtr *idtr) {
 /*
  * Creates a new interrupt gate.
  * Arguments:
- *   uint8_t index: The index into the IDT.
- *   uint32_t; Descriptor base address.
- *   uint16_t: A code segment selector.
- *   uint8_t: Type attributes.
+ *   byte_t index: The index into the IDT.
+ *   dword_t; Descriptor base address.
+ *   word_t: A code segment selector.
+ *   byte_t: Type attributes.
  */
-static void idt_set_gate(uint8_t index, uint64_t base, uint16_t selector, uint8_t type_attr) {
+static void idt_set_gate(byte_t index, qword_t base, word_t selector, byte_t type_attr) {
     struct IdtGate gate = {
         .offset_low = (base >> 0) & 0xffff,
         .selector = selector,
@@ -136,25 +133,25 @@ static void idt_set_gate(uint8_t index, uint64_t base, uint16_t selector, uint8_
  * exc 20-29, 31 - RESERVED
  */
 static void idt_install_exception_handlers(void) {
-    idt_set_gate( 0, (uint64_t) exc00, 0x08, 0x8e); /* Division by Zero (Fault - Precise) */
-    idt_set_gate( 1, (uint64_t) exc01, 0x08, 0x8e); /* Debug (Fault/Trap - Precise) */
-    idt_set_gate( 2, (uint64_t) exc02, 0x08, 0x8e); /* Non-maskable Interrupt */
-    idt_set_gate( 3, (uint64_t) exc03, 0x08, 0x8e); /* Breakpoint (Trap - Precise) */
-    idt_set_gate( 4, (uint64_t) exc04, 0x08, 0x8e); /* Overflow (Trap - Precise) */
-    idt_set_gate( 5, (uint64_t) exc05, 0x08, 0x8e); /* Bounds Check (Fault - Precise) */
-    idt_set_gate( 6, (uint64_t) exc06, 0x08, 0x8e); /* Invalid Opcode (Fault - Precise) */
-    idt_set_gate( 7, (uint64_t) exc07, 0x08, 0x8e); /* Device Not Available (Fault - Precise) */
-    idt_set_gate( 8, (uint64_t) exc08, 0x08, 0x8e); /* Double Fault (Abort - Imprecise) */
-    idt_set_gate(10, (uint64_t) exc10, 0x08, 0x8e); /* Invalid TSS (Fault - Precise) */
-    idt_set_gate(11, (uint64_t) exc11, 0x08, 0x8e); /* Segment Not Present (Fault - Precise) */
-    idt_set_gate(12, (uint64_t) exc12, 0x08, 0x8e); /* Stack Fault (Fault - Precise) */
-    idt_set_gate(13, (uint64_t) exc13, 0x08, 0x8e); /* General Protect (Fault - Precise) */
-    idt_set_gate(14, (uint64_t) exc14, 0x08, 0x8e); /* Page Fault (Fault - Precise) */
-    idt_set_gate(16, (uint64_t) exc16, 0x08, 0x8e); /* x87 Floating Point (Fault - Imprecise) */
-    idt_set_gate(17, (uint64_t) exc17, 0x08, 0x8e); /* Alignment Check (Fault - Precise) */
-    idt_set_gate(18, (uint64_t) exc18, 0x08, 0x8e); /* Machine Check (Abort - Imprecise) */
-    idt_set_gate(19, (uint64_t) exc19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
-    idt_set_gate(30, (uint64_t) exc30, 0x08, 0x8e); /* Security (- Precise) */
+    idt_set_gate( 0, (qword_t) exc00, 0x08, 0x8e); /* Division by Zero (Fault - Precise) */
+    idt_set_gate( 1, (qword_t) exc01, 0x08, 0x8e); /* Debug (Fault/Trap - Precise) */
+    idt_set_gate( 2, (qword_t) exc02, 0x08, 0x8e); /* Non-maskable Interrupt */
+    idt_set_gate( 3, (qword_t) exc03, 0x08, 0x8e); /* Breakpoint (Trap - Precise) */
+    idt_set_gate( 4, (qword_t) exc04, 0x08, 0x8e); /* Overflow (Trap - Precise) */
+    idt_set_gate( 5, (qword_t) exc05, 0x08, 0x8e); /* Bounds Check (Fault - Precise) */
+    idt_set_gate( 6, (qword_t) exc06, 0x08, 0x8e); /* Invalid Opcode (Fault - Precise) */
+    idt_set_gate( 7, (qword_t) exc07, 0x08, 0x8e); /* Device Not Available (Fault - Precise) */
+    idt_set_gate( 8, (qword_t) exc08, 0x08, 0x8e); /* Double Fault (Abort - Imprecise) */
+    idt_set_gate(10, (qword_t) exc10, 0x08, 0x8e); /* Invalid TSS (Fault - Precise) */
+    idt_set_gate(11, (qword_t) exc11, 0x08, 0x8e); /* Segment Not Present (Fault - Precise) */
+    idt_set_gate(12, (qword_t) exc12, 0x08, 0x8e); /* Stack Fault (Fault - Precise) */
+    idt_set_gate(13, (qword_t) exc13, 0x08, 0x8e); /* General Protect (Fault - Precise) */
+    idt_set_gate(14, (qword_t) exc14, 0x08, 0x8e); /* Page Fault (Fault - Precise) */
+    idt_set_gate(16, (qword_t) exc16, 0x08, 0x8e); /* x87 Floating Point (Fault - Imprecise) */
+    idt_set_gate(17, (qword_t) exc17, 0x08, 0x8e); /* Alignment Check (Fault - Precise) */
+    idt_set_gate(18, (qword_t) exc18, 0x08, 0x8e); /* Machine Check (Abort - Imprecise) */
+    idt_set_gate(19, (qword_t) exc19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
+    idt_set_gate(30, (qword_t) exc30, 0x08, 0x8e); /* Security (- Precise) */
     console_printf(FG_WHITE, "Exception handlers installed\n");
 }
 
@@ -162,21 +159,21 @@ static void idt_install_exception_handlers(void) {
  * Installs the Interrupt Request handlers.
  */
 static void idt_install_irq_handlers(void) {
-    idt_set_gate(32, (uint64_t) irq00, 0x08, 0x8e); /* i8253 PIT */
-    idt_set_gate(33, (uint64_t) irq01, 0x08, 0x8e); /* PS/2 Keyboard */
-    idt_set_gate(35, (uint64_t) irq03, 0x08, 0x8e); /* COM2 */
-    idt_set_gate(36, (uint64_t) irq04, 0x08, 0x8e); /* COM1 */
-    idt_set_gate(37, (uint64_t) irq05, 0x08, 0x8e); /* LPT2 */
-    idt_set_gate(38, (uint64_t) irq06, 0x08, 0x8e); /* Floppy Disk */
-    idt_set_gate(39, (uint64_t) irq07, 0x08, 0x8e); /* LPT1 */
-    idt_set_gate(40, (uint64_t) irq08, 0x08, 0x8e); /* CMOS RTC */
-    idt_set_gate(41, (uint64_t) irq09, 0x08, 0x8e); /* Free for peripherals */
-    idt_set_gate(42, (uint64_t) irq10, 0x08, 0x8e); /* Free for peripherals */
-    idt_set_gate(43, (uint64_t) irq11, 0x08, 0x8e); /* Free for peripherals */
-    idt_set_gate(44, (uint64_t) irq12, 0x08, 0x8e); /* PS/2 Mouse */
-    idt_set_gate(45, (uint64_t) irq13, 0x08, 0x8e); /* FPU / Coprocessor / Inter-processors */
-    idt_set_gate(46, (uint64_t) irq14, 0x08, 0x8e); /* Primary ATA HDD */
-    idt_set_gate(47, (uint64_t) irq15, 0x08, 0x8e); /* Secondary ATA HDD */
+    idt_set_gate(32, (qword_t) irq00, 0x08, 0x8e); /* i8253 PIT */
+    idt_set_gate(33, (qword_t) irq01, 0x08, 0x8e); /* PS/2 Keyboard */
+    idt_set_gate(35, (qword_t) irq03, 0x08, 0x8e); /* COM2 */
+    idt_set_gate(36, (qword_t) irq04, 0x08, 0x8e); /* COM1 */
+    idt_set_gate(37, (qword_t) irq05, 0x08, 0x8e); /* LPT2 */
+    idt_set_gate(38, (qword_t) irq06, 0x08, 0x8e); /* Floppy Disk */
+    idt_set_gate(39, (qword_t) irq07, 0x08, 0x8e); /* LPT1 */
+    idt_set_gate(40, (qword_t) irq08, 0x08, 0x8e); /* CMOS RTC */
+    idt_set_gate(41, (qword_t) irq09, 0x08, 0x8e); /* Free for peripherals */
+    idt_set_gate(42, (qword_t) irq10, 0x08, 0x8e); /* Free for peripherals */
+    idt_set_gate(43, (qword_t) irq11, 0x08, 0x8e); /* Free for peripherals */
+    idt_set_gate(44, (qword_t) irq12, 0x08, 0x8e); /* PS/2 Mouse */
+    idt_set_gate(45, (qword_t) irq13, 0x08, 0x8e); /* FPU / Coprocessor / Inter-processors */
+    idt_set_gate(46, (qword_t) irq14, 0x08, 0x8e); /* Primary ATA HDD */
+    idt_set_gate(47, (qword_t) irq15, 0x08, 0x8e); /* Secondary ATA HDD */
     console_printf(FG_WHITE, "IRQ handlers installed\n");
 }
 
@@ -219,7 +216,7 @@ void idt_configure(void) {
     /* Setup Pointer */
     struct Idtr idtr = {
         .limit = (sizeof(struct IdtGate) * 256) - 1,
-        .base = (uint64_t) idt
+        .base = (qword_t) idt
     };
 
     /* Install handlers */
@@ -246,7 +243,7 @@ void idt_exception_handler(const struct Registers *const registers) {
     /* If Page Fault */
     if (registers->vector == 14) {
         struct PageFaultError pfe = {0};
-        uint64_t cr2 = rdcr(CR2);
+        qword_t cr2 = rdcr(CR2);
 
         memset(&pfe, 0, sizeof(struct PageFaultError));
         memcpy(&pfe, &registers->error, sizeof(struct PageFaultError));

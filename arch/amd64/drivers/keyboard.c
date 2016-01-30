@@ -17,19 +17,16 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
-#include <stdint.h>
-
 /* Kernel Headers */
 #include <amd64/asm.h>
+#include <kernel/types.h>
 
 /* Keyboard ports */
 #define KEYBOARD_DATA   0x60
 #define KEYBOARD_STATUS 0x64
 
 /* US QWERTY keyboard map */
-static uint8_t keymap[128] = {
+static byte_t keymap[128] = {
     0,      /* <NOTHING> */
     27,     /* Escape */
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
@@ -75,7 +72,7 @@ static volatile char next = -1;
  * Only called in "idt.c"
  */
 void keyboard_handler(void) {
-    uint8_t status = inb(KEYBOARD_STATUS);
+    byte_t status = inb(KEYBOARD_STATUS);
 
     if (status & 0x01) {
         char scan = inb(KEYBOARD_DATA);

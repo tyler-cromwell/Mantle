@@ -17,18 +17,22 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-#ifndef AMD64_CPUID_H
-#define AMD64_CPUID_H
+#ifndef KERNEL_TYPES_H
+#define KERNEL_TYPES_H
 
-/* Kernel header(s) */
-#include <kernel/types.h>
+/* C Standard Library header(s) */
+#include <stdint.h>
 
-/* Macro constants */
-#define VENDOR_AMD      "AuthenticAMD"
-#define VENDOR_INTEL    "GenuineIntel"
+/* Unsigned primitives */
+typedef unsigned char uchar_t;
+typedef unsigned short ushort_t;
+typedef unsigned int uint_t;
+typedef unsigned long ulong_t;
 
-/* Function prototypes */
-void cpuid_vendor(char *id);
-dword_t cpuid_cpus(void);
+/* Architecture word sizes */
+typedef uint8_t byte_t;
+typedef uint16_t word_t;
+typedef uint32_t dword_t;
+typedef uint64_t qword_t;
 
 #endif

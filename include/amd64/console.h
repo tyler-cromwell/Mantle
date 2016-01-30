@@ -20,10 +20,12 @@
 #ifndef AMD64_CONSOLE_H
 #define AMD64_CONSOLE_H
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
+/* C Standard Library header(s) */
 #include <stddef.h>
 #include <stdint.h>
+
+/* Kernel header(s) */
+#include <kernel/types.h>
 
 /* Text colors */
 #define FG_BLACK        0x00
@@ -62,8 +64,8 @@
 
 /* Function prototypes */
 void console_clear(void);
-void console_set_background(uint8_t color);
-size_t console_write(uint8_t color, char *message, size_t length);
-size_t console_printf(uint8_t color, char *format, ...);
+void console_set_background(uchar_t color);
+size_t console_write(uchar_t color, char *message, size_t length);
+size_t console_printf(uchar_t color, char *format, ...);
 
 #endif

@@ -17,14 +17,14 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Headers,
-   this does not need to link against libc */
+/* C Standard Library header(s) */
 #include <stddef.h>
 #include <stdint.h>
 
-/* Kernel Headers */
+/* Kernel header(s) */
 #include <amd64/console.h>
 #include <amd64/multiboot.h>
+#include <kernel/types.h>
 
 /* Macro Constants */
 #define MAX_PDP     512
@@ -33,18 +33,18 @@
 #define MAX_PAGE    512 * 512 * 512 * 512
 
 /* Counters */
-static uint16_t pointers = 0;
-static uint32_t directories = 0;
-static uint32_t tables = 0;
-static uint64_t pages = 0;
-static uint64_t unmapped_frames = 0;
+static ushort_t pointers = 0;
+static uint_t directories = 0;
+static uint_t tables = 0;
+static ulong_t pages = 0;
+static ulong_t unmapped_frames = 0;
 
 /*
  * Initializes the paging tree.
  *
  * Only called in "init.c"
  */
-void paging_configure(uint64_t p) {
+void paging_configure(ulong_t p) {
     /* Count structures */
     pages = p;
     tables = (pages + 512 - (pages % 512)) / 512;
@@ -52,8 +52,8 @@ void paging_configure(uint64_t p) {
     pointers = (directories + 512 - (directories % 512)) / 512;
 
     /* Determine available frames */
-    uint64_t memory = multiboot_memsize();  /* Measured in KB */
-    uint64_t max_frames = memory / 4;       /* 4KB per page/frame */
+    size_t memory = multiboot_memsize();    /* Measured in KB */
+    size_t max_frames = memory / 4;         /* 4KB per page/frame */
     unmapped_frames = max_frames - pages;
 
     console_printf(FG_WHITE, "Paging setup\n");

@@ -17,28 +17,29 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* Kernel Headers */
+/* Kernel header(s) */
 #include <amd64/console.h>
 #include <amd64/multiboot.h>
 #include <amd64/shell.h>
+#include <kernel/types.h>
 #include <kernel/version.h>
 #include <lib/string.h>
 
 /* External */
 void idt_configure(void);               /* Defined in "idt.c" */
-void paging_configure(uint64_t pages);  /* Defined in "paging.c" */
+void paging_configure(ulong_t pages);   /* Defined in "paging.c" */
 void paging_pageinfo(void);             /* Defined in "paging.c" */
 
 /*
  * Early kernel setup, initializes critical components.
  * The system will halt when/if this function returns.
  * Arguments:
- *   uint64_t magic: A Multiboot bootloaders magic number.
+ *   ulong_t magic: A Multiboot bootloaders magic number.
  *   struct MultibootInfo *mbinfo:
  *       The physical memory address of the Multiboot information struct.
- *   uint64_t pages: Amount of Pages in use at boot.
+ *   ulong_t pages: Amount of Pages in use at boot.
  */
-void init_kernel(uint64_t magic, struct MultibootInfo *mbinfo, uint64_t pages) {
+void init_kernel(ulong_t magic, struct MultibootInfo *mbinfo, ulong_t pages) {
     console_clear();
     console_printf(FG_BLUE_L, STRING"\n");
 

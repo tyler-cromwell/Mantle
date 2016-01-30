@@ -20,11 +20,10 @@
 #ifndef AMD64_I8253_H
 #define AMD64_I8253_H
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
-#include <stdint.h>
+/* Kernel header(s) */
+#include <kernel/types.h>
 
 /* Function prototypes */
-void i8253_init(uint8_t frequency);
+void i8253_init(byte_t frequency);
 
 #endif

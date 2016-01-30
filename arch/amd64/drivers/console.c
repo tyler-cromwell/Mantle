@@ -17,14 +17,14 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
+/* C Standard Library header(s) */
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
 
-/* Kernel Headers */
+/* Kernel header(s) */
 #include <amd64/asm.h>
+#include <kernel/types.h>
 #include <lib/string.h>
 
 /* Macro constants */
@@ -44,16 +44,16 @@ static char *next = CONSOLE_START;
  * Moves cursor to the location of the
  * next available character.
  * Argument:
- *   uint8_t color: The color.
+ *   uchar_t color: The color attribute.
  */
-static void move_cursor(uint8_t color) {
+static void move_cursor(uchar_t color) {
     uint16_t pos = (next - CONSOLE_START) / 2;
 
     outb(0x3d4, 0x0f);
-    outb(0x3d5, (uint8_t) ((pos >> 0) & 0xff));
+    outb(0x3d5, (byte_t) ((pos >> 0) & 0xff));
 
     outb(0x3d4, 0x0e);
-    outb(0x3d5, (uint8_t) ((pos >> 8) & 0xff));
+    outb(0x3d5, (byte_t) ((pos >> 8) & 0xff));
 
     *(next+1) = *(next+1) | (color & 0x0f);
 }
@@ -72,9 +72,9 @@ void console_clear(void) {
 /*
  * Sets the background to a specific color.
  * Argument:
- *   uint8_t color: The color.
+ *   uchar_t color: The color.
  */
-void console_set_background(uint8_t color) {
+void console_set_background(uchar_t color) {
     next = CONSOLE_START;
     uint16_t offset = 0;
 
@@ -92,13 +92,13 @@ void console_set_background(uint8_t color) {
  * Writes a string of characters to the console.
  * Interprets the newline, backspace, and carriage return.
  * Arguments:
- *   uint8_t color: The color.
+ *   uchar_t color: The color attribute.
  *   char *message:  The message to write.
  *   uint16_t length: The number of bytes to write.
  * Returns:
  *   The number of characters written.
  */
-size_t console_write(uint8_t color, char *message, size_t length) {
+size_t console_write(uchar_t color, char *message, size_t length) {
     size_t c = 0;
 
     /* Ensure that the number of characters to write does not exceed the maximum */
@@ -124,7 +124,7 @@ size_t console_write(uint8_t color, char *message, size_t length) {
         if (message[c] == '\n') {
             uint16_t remaining = LINE_CHARS - (((next - CONSOLE_START) % LINE_BYTES) / CHAR_WIDTH);
 
-            for (uint8_t i = 0; i < remaining; i++) {
+            for (byte_t i = 0; i < remaining; i++) {
                 *next = '\0';
                 next += CHAR_WIDTH;
             }
@@ -142,14 +142,14 @@ size_t console_write(uint8_t color, char *message, size_t length) {
         else if (message[c] == '\r') {
             uint16_t line = next - CONSOLE_START;
 
-            for (uint8_t r = line % LINE_BYTES; r > 0; r -= CHAR_WIDTH) {
+            for (byte_t r = line % LINE_BYTES; r > 0; r -= CHAR_WIDTH) {
                 next -= CHAR_WIDTH;
                 *next = '\0';
             }
         }
         /* Interpret Tab */
         else if (message[c] == '\t') {
-            uint8_t indent = TAB_WIDTH;
+            byte_t indent = TAB_WIDTH;
             uint64_t n = (uint64_t) next;
 
             /* Determine amount to indent by */
@@ -158,7 +158,7 @@ size_t console_write(uint8_t color, char *message, size_t length) {
             }
 
             /* Indent */
-            for (uint8_t i = 0; i < indent; i++) {
+            for (byte_t i = 0; i < indent; i++) {
                 *next = ' ';
                 *(next+1) = (*(next+1) & 0xf0) | color;
                 next += CHAR_WIDTH;
@@ -180,13 +180,13 @@ size_t console_write(uint8_t color, char *message, size_t length) {
 /*
  * Printf style function that writes a string of characters to the console.
  * Arguments:
- *   uint8_t color: The coloring color.
+ *   uchar_t color: The color attribute.
  *   char *format: The format string.
  *   ... : A variable length list of other arguments.
  * Returns:
  *   The number of characters written.
  */
-size_t console_printf(uint8_t color, char *format, ...) {
+size_t console_printf(uchar_t color, char *format, ...) {
     __builtin_va_list arguments;
     __builtin_va_start(arguments, format);
     size_t c = 0;

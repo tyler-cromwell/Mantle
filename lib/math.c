@@ -17,15 +17,17 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
+/* C Standard Library header(s) */
 #include <stddef.h>
+
+/* Kernel header(s) */
+#include <kernel/types.h>
 
 /*
  * Calculate the result of a number raised to a power.
  * DOES NOT HANDLE NEGATIVE POWERS, that requires floating point math.
  */
-long pow(long base, unsigned long power) {
+long pow(long base, ulong_t power) {
     long result = base;
 
     /* Anything to the 0th power is 1 */

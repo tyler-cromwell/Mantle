@@ -17,21 +17,21 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
+/* C Standard Library header(s) */
 #include <stdint.h>
 
-/* Kernel Headers */
+/* Kernel header(s) */
 #include <amd64/asm.h>
+#include <kernel/types.h>
 
 /*
  * Initializes the Intel 8253
  * Programmable Interval Timer.
  */
-void i8253_init(uint8_t frequency) {
-    uint32_t d = 1193180 / frequency;
-    uint8_t l = d & 0xff;
-    uint8_t h = (d >> 8) & 0xff;
+void i8253_init(byte_t frequency) {
+    dword_t d = 1193180 / frequency;
+    byte_t l = d & 0xff;
+    byte_t h = (d >> 8) & 0xff;
 
     outb(0x42, 0x36);
     outb(0x40, l);

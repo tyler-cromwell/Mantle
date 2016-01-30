@@ -17,12 +17,12 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
+/* C Standard Library header(s) */
 #include <stdint.h>
 
-/* Kernel Headers */
+/* Kernel header(s) */
 #include <amd64/asm.h>
+#include <kernel/types.h>
 
 /* Master PIC */
 #define MASTER_CMD  0x20
@@ -57,11 +57,11 @@ void i8259_init(void) {
 /*
  * Masks the given IRQ.
  * Arugment:
- *   uint8_t irq: The IRQ number to mask.
+ *   byte_t irq: The IRQ number to mask.
  */
-void i8259_set_mask(uint8_t irq) {
-    uint16_t port;
-    uint8_t value;
+void i8259_set_mask(byte_t irq) {
+    word_t port;
+    byte_t value;
 
     /* Determine PIC */
     if (irq < 8) {
@@ -78,11 +78,11 @@ void i8259_set_mask(uint8_t irq) {
 /*
  * Unmasks the given IRQ.
  * Argument:
- *   uint8_t irq: The IRQ number to unmask.
+ *   byte_t irq: The IRQ number to unmask.
  */
-void i8259_clear_mask(uint8_t irq) {
-    uint16_t port;
-    uint8_t value;
+void i8259_clear_mask(byte_t irq) {
+    word_t port;
+    byte_t value;
 
     /* Determine PIC */
     if (irq < 8) {

@@ -17,12 +17,8 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Headers,
-   these do not need to link against libc */
-#include <stdint.h>
-
-/* Kernel Headers */
-#include <amd64/console.h>
+/* Kernel header(s) */
+#include <kernel/types.h>
 
 /*
  * Obtains the CPU vendor string.
@@ -30,8 +26,8 @@
  *   char *id: Pointer to the location to save the vendor id.
  */
 void cpuid_vendor(char *id) {
-    uint32_t register eax asm("eax") = 0, ebx asm("ebx") = 0;
-    uint32_t register ecx asm("ecx") = 0, edx asm("edx") = 0;
+    dword_t register eax asm("eax") = 0, ebx asm("ebx") = 0;
+    dword_t register ecx asm("ecx") = 0, edx asm("edx") = 0;
 
     asm volatile (
         "cpuid"
@@ -40,7 +36,7 @@ void cpuid_vendor(char *id) {
     );
 
     /* Get the vendor_id of the CPU */
-    for (uint8_t i = 0; i < 4; i++) {
+    for (byte_t i = 0; i < 4; i++) {
         id[i+0] = ebx >> (i * 8);
         id[i+4] = edx >> (i * 8);
         id[i+8] = ecx >> (i * 8);
@@ -52,8 +48,8 @@ void cpuid_vendor(char *id) {
  * Returns:
  *   The number of processors.
  */
-uint32_t cpuid_cpus(void) {
-    uint32_t register eax asm("eax") = 1, ebx asm("ebx") = 0;
+dword_t cpuid_cpus(void) {
+    dword_t register eax asm("eax") = 1, ebx asm("ebx") = 0;
 
     asm volatile (
         "cpuid"

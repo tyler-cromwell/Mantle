@@ -20,10 +20,9 @@
 #ifndef LIB_MATH_H
 #define LIB_MATH_H
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
-#include <stddef.h>
+/* Kernel header(s) */
+#include <kernel/types.h>
 
-long pow(long base, unsigned long power);
+long pow(long base, ulong_t power);
 
 #endif

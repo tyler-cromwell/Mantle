@@ -20,9 +20,8 @@
 #ifndef AMD64_ASM_H
 #define AMD64_ASM_H
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
-#include <stdint.h>
+/* Kernel header(s) */
+#include <kernel/types.h>
 
 /* Control Register numbers */
 #define CR0 0
@@ -42,8 +41,8 @@
  * Returns:
  *   the value of a Control Register.
  */
-static uint64_t rdcr(uint8_t n) {
-    uint64_t cr = 0;
+static qword_t rdcr(byte_t n) {
+    qword_t cr = 0;
 
     switch (n) {
         case 0: asm volatile ("mov %%cr0, %0" : "=r" (cr)); break;
@@ -59,11 +58,11 @@ static uint64_t rdcr(uint8_t n) {
 /*
  * Writes a value into a Control Register.
  * Arguments:
- *   uint8_t cr: The number of the register to write to.
- *   uint64_t value: The value to write.
+ *   byte_t cr: The number of the register to write to.
+ *   qword_t value: The value to write.
  */
-static void wrcr(uint8_t cr, uint64_t value) {
-    uint64_t v = 0;
+static void wrcr(byte_t cr, qword_t value) {
+    qword_t v = 0;
 
     switch (cr) {
         case 0:
@@ -88,12 +87,12 @@ static void wrcr(uint8_t cr, uint64_t value) {
 /*
  * Read a byte from an I/O port.
  * Arguments:
- *   uint16_t port: The port to read from.
+ *   word_t port: The port to read from.
  * Returns:
  *   the byte read from the port.
  */
-static inline uint8_t inb(uint16_t port) {
-    uint8_t value = 0;
+static inline byte_t inb(word_t port) {
+    byte_t value = 0;
     asm volatile ("inb %1, %0": "=a"(value): "Nd"(port));
     return value;
 }
@@ -101,10 +100,10 @@ static inline uint8_t inb(uint16_t port) {
 /*
  * Write a byte to an I/O port.
  * Arguments:
- *   uint16_t port: The port to write to.
- *   uint8_t value: The value to write.
+ *   word_t port: The port to write to.
+ *   byte_t value: The value to write.
  */
-static inline void outb(uint16_t port, uint8_t value) {
+static inline void outb(word_t port, byte_t value) {
     asm volatile ("outb %0, %1": : "a"(value), "Nd"(port));
 }
 

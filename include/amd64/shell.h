@@ -20,13 +20,13 @@
 #ifndef AMD64_SHELL_H
 #define AMD64_SHELL_H
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
+/* C Standard Library header(s) */
 #include <stdint.h>
 
-/* Kernel Headers */
+/* Kernel header(s) */
 #include <amd64/asm.h>
 #include <amd64/multiboot.h>
+#include <kernel/types.h>
 
 /* Macro Constants */
 #define SHELL_BUFSIZ    16
@@ -35,6 +35,6 @@
 char* shell_readline(char *prompt);
 void shell_cmd_kinfo(void);
 void shell_cmd_cpuinfo(void);
-void shell_cmd_multiboot(uint64_t magic);
+void shell_cmd_multiboot(ulong_t magic);
 
 #endif

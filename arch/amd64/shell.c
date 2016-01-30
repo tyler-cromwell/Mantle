@@ -17,13 +17,14 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* Kernel Headers */
+/* Kernel header(s) */
 #include <amd64/console.h>
 #include <amd64/cpuid.h>
 #include <amd64/i8259.h>
 #include <amd64/shell.h>
 #include <amd64/multiboot.h>
 #include <kernel/kernel.h>
+#include <kernel/types.h>
 #include <lib/string.h>
 
 /* External functions / variables */
@@ -42,7 +43,7 @@ static char input[SHELL_BUFSIZ] = {0};
 char* shell_readline(char *prompt) {
     char *next = input;
     char *end = input + SHELL_BUFSIZ - 1;
-    uint8_t backspaces = 0;
+    uchar_t backspaces = 0;
 
     console_printf(FG_WHITE, "%s", prompt);
     memset(input, '\0', SHELL_BUFSIZ);
@@ -82,7 +83,7 @@ char* shell_readline(char *prompt) {
  */
 void shell_cmd_kinfo(void) {
     /* Get Kernel size */
-    uint64_t size = ((uint64_t) &KERNEL_SIZE) / 1024;
+    ulong_t size = ((ulong_t) &KERNEL_SIZE) / 1024;
     console_printf(FG_WHITE, "Size in memory:\t\t%uKB\n", size);
     console_printf(FG_WHITE, "Physical address:\t%x\n", &KERNEL_LMA);
     console_printf(FG_WHITE, "Bootstrap address:\t%x\n", &BOOTSTRAP);
@@ -116,9 +117,9 @@ void shell_cmd_cpuinfo(void) {
 /*
  * Dump Multiboot information (if available).
  * Arguments:
- *   uint64_t magic: Bootloader magic number.
+ *   ulong_t magic: Bootloader magic number.
  */
-void shell_cmd_multiboot(uint64_t magic) {
+void shell_cmd_multiboot(ulong_t magic) {
     /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {
         multiboot_dump();

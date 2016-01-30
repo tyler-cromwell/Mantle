@@ -17,12 +17,11 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
+/* C Standard Library header(s) */
 #include <stddef.h>
-#include <stdint.h>
 
-/* Kernel Headers */
+/* Kernel header(s) */
+#include <kernel/types.h>
 #include <lib/string.h>
 
 #define ITOA_BUFSIZ 65
@@ -33,15 +32,15 @@
  *   struct ItoaOptions *opts:
  *     Pointer to the options that determine
  *     how the number should be converted.
- *   int64_t number: The number to convert.
+ *   long_t number: The number to convert.
  * Returns:
  *   The string representation of number.
  */
-char* itoa(struct ItoaOptions *opts, int64_t number) {
+char* itoa(struct ItoaOptions *opts, long number) {
     static char buffer[ITOA_BUFSIZ] = {0};
     char *string = buffer + ITOA_BUFSIZ - 1;
-    uint16_t c = 0;
-    uint8_t base = 0;
+    ushort_t c = 0;
+    uchar_t base = 0;
 
     /* Determine base */
     if (opts->binary) base = 2;
@@ -58,7 +57,7 @@ char* itoa(struct ItoaOptions *opts, int64_t number) {
     }
     /* Convert, up to a base of 16 */
     else {
-        int64_t i = number;
+        long i = number;
 
         /* Do convertion */
         while (i != 0) {
@@ -75,7 +74,7 @@ char* itoa(struct ItoaOptions *opts, int64_t number) {
 
     /* Print leading zeros */
     if (opts->pad) {
-        uint8_t d = 0;
+        uchar_t d = 0;
         if (base == 2) d = 64;
         else if (base == 8) d = 22;
         else if (base == 16) d = 16;
@@ -98,9 +97,9 @@ char* itoa(struct ItoaOptions *opts, int64_t number) {
  *   A pointer to the destination buffer.
  */
 void *memcpy(void *dest, const void *src, size_t n) {
-    uint8_t *buf = dest;
+    byte_t *buf = dest;
     for (size_t i = 0; i < n; i++) {
-        buf[i] = ((uint8_t*) src)[i];
+        buf[i] = ((byte_t*) src)[i];
     }
     return dest;
 }
@@ -115,9 +114,9 @@ void *memcpy(void *dest, const void *src, size_t n) {
  *   A pointer to the destination buffer.
  */
 void *memset(void *dest, int c, size_t n) {
-    uint8_t *buf = dest;
+    byte_t *buf = dest;
     for (size_t i = 0; i < n; i++) {
-        buf[i] = (uint8_t) c;
+        buf[i] = (byte_t) c;
     }
     return dest;
 }
@@ -164,7 +163,7 @@ int8_t strlcmp(const char *s1, const char *s2) {
  *   size_t n: The number of bytes to compare.
  * Returns (see above)
  */
-int32_t strncmp(const char *s1, const char *s2, size_t n) {
+int strncmp(const char *s1, const char *s2, size_t n) {
     for (size_t i = 0; i < n; i++) {
         if ((s1[i] - s2[i]) != 0) {
             return s1[i] - s2[i];

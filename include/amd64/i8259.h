@@ -20,9 +20,8 @@
 #ifndef AMD64_I8259_H
 #define AMD64_I8259_H
 
-/* C Standard Library Headers,
-   these don't need to link against libc */
-#include <stdint.h>
+/* Kernel header(s) */
+#include <kernel/types.h>
 
 /* Master PIC */
 #define I8259_MASTER_CMD    0x20
@@ -38,8 +37,8 @@
 
 /* Function prototypes */
 void i8259_init(void);
-void i8259_set_mask(uint8_t irq);
-void i8259_clear_mask(uint8_t irq);
+void i8259_set_mask(byte_t irq);
+void i8259_clear_mask(byte_t irq);
 void i8259_mask(void);
 void i8259_unmask(void);
 
