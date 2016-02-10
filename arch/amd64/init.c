@@ -26,9 +26,9 @@
 #include <lib/string.h>
 
 /* External */
-void idt_configure(void);               /* Defined in "idt.c" */
-void paging_configure(ulong_t pages);   /* Defined in "paging.c" */
-void paging_pageinfo(void);             /* Defined in "paging.c" */
+void idt_configure(void);                               /* Defined in "idt.c" */
+void paging_configure(size_t memory, ulong_t pages);    /* Defined in "paging.c" */
+void paging_pageinfo(void);                             /* Defined in "paging.c" */
 
 /*
  * Early kernel setup, initializes critical components.
@@ -43,14 +43,13 @@ void init_kernel(ulong_t magic, struct MultibootInfo *mbinfo, ulong_t pages) {
     console_clear();
     console_printf(FG_BLUE_L, STRING"\n");
 
-    /* Get Multiboot Info */
-    if (magic == MULTIBOOT_BOOT_MAGIC) {
-        multiboot_init(mbinfo);
-    }
-
-    /* Initialize critical components */
-    idt_configure();            /* Interrupt handling */
-    paging_configure(pages);    /* Memory management */
+    /* Setup critical components */
+    multiboot_init(mbinfo);
+    idt_configure();            /* Interrupts */
+    paging_configure(           /* Virtual Memory */
+        multiboot_memsize(),
+        pages
+    );
 
     console_printf(FG_WHITE, "\n");
 

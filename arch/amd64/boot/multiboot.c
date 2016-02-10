@@ -37,38 +37,14 @@
 static struct MultibootInfo *info;
 static struct MultibootMmap *mmap;
 
-static struct MultibootMmap *kernel_region; /* A pointer to the available mmap region the kerne lis within */
-static struct MultibootMmap kernel = {
-    .size = 24,
-    .base_addr = 0x00100000,    /* The address the kernel is loaded at */
-    .length = 16 * 1024 * 1024, /* "Allocated" length for the kernel binary (16MB) */
-    .type = 2                   /* This area is reserved */
-};
-
 /*
- * Initializes all applicable structures from information passed in from the Bootloader.
+ * Saves pointers to Multiboot structures.
  * Argument(s):
- *   struct MultibootInfo* mbinfo: Pointer to the info struct created by the Bootloader.
+ *   struct MultibootInfo* mbinfo: Pointer to the info struct.
  */
 void multiboot_init(struct MultibootInfo *mbinfo) {
     info = mbinfo;
-
-    /* Initialize the Memory Map */
-    if (info->flags & MULTIBOOT_MMAP) {
-        ulong_t ents = info->mmap_length / sizeof(struct MultibootMmap);
-        mmap = (struct MultibootMmap*) (ulong_t) info->mmap_addr;
-
-        for (ulong_t i = 0; i < ents; i++) {
-            /* If the kernel region fits in the first available region */
-            if (mmap[i].type == MMAP_AVAILABLE &&
-                mmap[i].length >= kernel.length) {
-
-                /* Bookmark for later */
-                kernel_region = mmap + (i * sizeof(struct MultibootMmap));
-                break;
-            }
-        }
-    }
+    mmap = (struct MultibootMmap*) (ulong_t) info->mmap_addr;
 }
 
 /*
