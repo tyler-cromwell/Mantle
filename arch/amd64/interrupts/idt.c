@@ -128,11 +128,11 @@ static void idt_set_gate(byte_t index, qword_t base, word_t selector, byte_t typ
 }
 
 /*
- * Installs the system exceptions handlers.
+ * Installs the system Exception and IRQ handlers.
  * exc9 - Coprocessor Segment Overrun - RESERVED
  * exc 20-29, 31 - RESERVED
  */
-static void idt_install_exception_handlers(void) {
+static void idt_install_handlers(void) {
     idt_set_gate( 0, (qword_t) exc00, 0x08, 0x8e); /* Division by Zero (Fault - Precise) */
     idt_set_gate( 1, (qword_t) exc01, 0x08, 0x8e); /* Debug (Fault/Trap - Precise) */
     idt_set_gate( 2, (qword_t) exc02, 0x08, 0x8e); /* Non-maskable Interrupt */
@@ -153,12 +153,7 @@ static void idt_install_exception_handlers(void) {
     idt_set_gate(19, (qword_t) exc19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
     idt_set_gate(30, (qword_t) exc30, 0x08, 0x8e); /* Security (- Precise) */
     console_printf(FG_WHITE, "Exception handlers installed\n");
-}
 
-/*
- * Installs the Interrupt Request handlers.
- */
-static void idt_install_irq_handlers(void) {
     idt_set_gate(32, (qword_t) irq00, 0x08, 0x8e); /* i8253 PIT */
     idt_set_gate(33, (qword_t) irq01, 0x08, 0x8e); /* PS/2 Keyboard */
     idt_set_gate(35, (qword_t) irq03, 0x08, 0x8e); /* COM2 */
@@ -219,11 +214,8 @@ void idt_configure(void) {
         .base = (qword_t) idt
     };
 
-    /* Install handlers */
-    idt_install_exception_handlers();
-    idt_install_irq_handlers();    
+    idt_install_handlers();
     lidt(&idtr);
-
     console_printf(FG_WHITE, "IDT setup, interrupts enabled\n");
 }
 

@@ -19,17 +19,16 @@
 
 /* C Standard Library header(s) */
 #include <stddef.h>
-#include <stdint.h>
 
 /* Kernel header(s) */
 #include <amd64/console.h>
 #include <kernel/types.h>
 
 /* Macro Constants */
-#define MAX_PDP     512
-#define MAX_PD      512 * 512
-#define MAX_PT      512 * 512 * 512
-#define MAX_PAGE    512 * 512 * 512 * 512
+#define MAX_PDP     (512) - 1
+#define MAX_PD      (512 * 512) - 1
+#define MAX_PT      (512 * 512 * 512) - 1
+#define MAX_PAGE    (512 * 512 * 512 * 512) - 1
 
 /* Counters */
 static ushort_t pointers = 0;
@@ -42,8 +41,10 @@ static ulong_t unmapped_frames = 0;
  * Initializes the paging tree.
  *
  * Only called in "init.c"
- * Arguments:
  *
+ * Arguments:
+ *   size_t memory: Size of installed memory (KB).
+ *   ulong_t page_num: Total number of in-use pages.
  */
 void paging_configure(size_t memory, ulong_t page_num) {
     /* Count structures */
