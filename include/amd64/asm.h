@@ -41,7 +41,7 @@
  * Returns:
  *   the value of a Control Register.
  */
-static qword_t rdcr(byte_t n) {
+static inline qword_t rdcr(byte_t n) {
     qword_t cr = 0;
 
     switch (n) {
@@ -61,7 +61,7 @@ static qword_t rdcr(byte_t n) {
  *   byte_t cr: The number of the register to write to.
  *   qword_t value: The value to write.
  */
-static void wrcr(byte_t cr, qword_t value) {
+static inline void wrcr(byte_t cr, qword_t value) {
     qword_t v = 0;
 
     switch (cr) {
