@@ -17,8 +17,9 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* Kernel Headers */
+/* Kernel header(s) */
 #include <amd64/asm.h>
+#include <amd64/i8259.h>
 #include <kernel/types.h>
 
 /* Keyboard ports */
@@ -103,8 +104,10 @@ stop:
  *   The newest character typed.
  */
 char keyboard_getchar(void) {
-    while (next == -1) {}   /* Wait for IRQ */
-    char c = next;          /* Save key value */
-    next = -1;              /* Reset buffer */
+    i8259_clear_mask(I8259_IRQ_KEYBOARD);
+    while (next == -1) {}                   /* Wait for IRQ */
+    i8259_set_mask(I8259_IRQ_KEYBOARD);
+    char c = next;
+    next = -1;      /* Reset buffer */
     return c;
 }

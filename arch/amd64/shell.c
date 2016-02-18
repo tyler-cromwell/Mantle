@@ -20,7 +20,6 @@
 /* Kernel header(s) */
 #include <amd64/console.h>
 #include <amd64/cpuid.h>
-#include <amd64/i8259.h>
 #include <amd64/multiboot.h>
 #include <amd64/shell.h>
 #include <kernel/kernel.h>
@@ -47,7 +46,6 @@ char* shell_readline(char *prompt) {
 
     console_printf(FG_WHITE, "%s", prompt);
     memset(input, '\0', SHELL_BUFSIZ);
-    i8259_clear_mask(I8259_IRQ_KEYBOARD);   /* Enable keyboard */
 
     while (1) {
         char letter = keyboard_getchar();
@@ -74,7 +72,6 @@ char* shell_readline(char *prompt) {
         }
     }
 
-    i8259_set_mask(I8259_IRQ_KEYBOARD); /* Disable keyboard */
     return input;
 }
 
