@@ -7,7 +7,7 @@ This directory contains all AMD64 specific code.
 - `boot` -  AMD64 bootup code.
 - `drivers` - Drivers for hardware found on an AMD64 machine.
 - `interrupts` - Interrupt handlers and the IDT.
-- `mem` - Memory management and Virtual memory.
+- `memory` - Memory management and Virtual memory.
 
 #### Files
 - `cpuid.c` - Functions that make use of the CPUID instruction.
