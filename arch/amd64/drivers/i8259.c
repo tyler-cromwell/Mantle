@@ -33,28 +33,6 @@
 #define SLAVE_DATA  0xA1
 
 /*
- * Initializes the Intel 8259
- * Programmable Interrupt Controller.
- */
-void i8259_init(void) {
-    outb(MASTER_CMD, 0x11);
-    outb(SLAVE_CMD,  0x11);
-
-    outb(MASTER_DATA, 0x20);
-    outb(SLAVE_DATA,  0x28);
-
-    outb(MASTER_DATA, 0x00);
-    outb(SLAVE_DATA,  0x00);
-
-    outb(MASTER_DATA, 0x01);
-    outb(SLAVE_DATA,  0x01);
-
-    /* Mask all interrupts */
-    outb(MASTER_DATA, 0xff);
-    outb(SLAVE_DATA,  0xff);
-}
-
-/*
  * Masks the given IRQ.
  * Arugment:
  *   byte_t irq: The IRQ number to mask.

@@ -156,7 +156,22 @@ void idt_configure(void) {
 
     /* Initialize controller (using i8259) */
     disable_apic();
-    i8259_init();
+
+    outb(I8259_MASTER_CMD, 0x11);
+    outb(I8259_SLAVE_CMD,  0x11);
+
+    outb(I8259_MASTER_DATA, 0x20);
+    outb(I8259_SLAVE_DATA,  0x28);
+
+    outb(I8259_MASTER_DATA, 0x00);
+    outb(I8259_SLAVE_DATA,  0x00);
+
+    outb(I8259_MASTER_DATA, 0x01);
+    outb(I8259_SLAVE_DATA,  0x01);
+
+    i8259_mask();
+
+    /* Enable what we need */
     i8259_clear_mask(I8259_IRQ_TIMER);
     i8259_clear_mask(I8259_IRQ_KEYBOARD);
 
