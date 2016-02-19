@@ -17,8 +17,8 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-#ifndef AMD64_INTERRUPTS_H
-#define AMD64_INTERRUPTS_H
+#ifndef AMD64_HANDLERS_H
+#define AMD64_HANDLERS_H
 
 /* Name of each interrupt */
 static char *interrupts[] = {

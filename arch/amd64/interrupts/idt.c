@@ -26,8 +26,8 @@
 #include <lib/string.h>
 
 /* Local kernel header(s) */
+#include "handlers.h"
 #include "idt.h"
-#include "interrupts.h"
 
 /* The Interrupt Descriptor Table */
 static struct IdtGate idt[256];
