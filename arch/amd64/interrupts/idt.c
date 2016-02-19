@@ -26,53 +26,8 @@
 #include <lib/string.h>
 
 /* Local kernel header(s) */
+#include "idt.h"
 #include "interrupts.h"
-
-/* A Long Mode IDT interrupt gate */
-struct IdtGate {
-    word_t offset_low;      /* Lower portion of the offset */
-    word_t selector;        /* Interrupt selector */
-    byte_t zero1;           /* Always zero */
-    byte_t type_attr;       /* Type attributes */
-    word_t offset_middle;   /* Middle portion of the offset */
-    dword_t offset_high;    /* Upper portion of the offset */
-    dword_t zero2;          /* Always zero */
-} __attribute__((__packed__));
-
-/* The Long Mode IDTR register */
-struct Idtr {
-    word_t limit;   /* The length of the IDT */
-    qword_t base;   /* IDT base address */
-} __attribute__((__packed__));
-
-/* Selector Error code */
-struct SelectorError {
-    dword_t ext         : 1;
-    dword_t idt         : 1;
-    dword_t ti          : 1;
-    dword_t index       : 13;
-    dword_t reserved    : 16;
-} __attribute__((__packed__));
-
-/* Page Fault Error code */
-struct PageFaultError {
-    dword_t p           : 1;
-    dword_t rw          : 1;
-    dword_t us          : 1;
-    dword_t rsv         : 1;
-    dword_t id          : 1;
-    dword_t reserved    : 27;
-} __attribute__((__packed__));
-
-/* Register states before Interrupt */
-struct Registers {
-    qword_t ds;
-    qword_t r15, r14, r13, r12, r11, r10, r9, r8;
-    qword_t rdi, rsi, rbp, rsp;
-    qword_t rdx, rcx, rbx, rax;
-    qword_t vector, error;
-    qword_t rip, cs, rflags, retrsp, retss;
-} __attribute__((__packed__));
 
 /* The Interrupt Descriptor Table */
 static struct IdtGate idt[256];
@@ -175,20 +130,20 @@ static void idt_install_handlers(void) {
 /*
  * Dumps the register contents before the Interrupt.
  * Argument:
- *   const struct Registers *const registers:
+ *   const struct InterruptStack *const is:
  *     Pointer to the area on the stack
  *     containing the pushed registers.
  */
-static void dump_registers(const struct Registers *const r) {
-    console_printf(FG_WHITE | BG_RED, "[SS:RSP] %x:%X\n", r->retss, r->retrsp);
-    console_printf(FG_WHITE | BG_RED, "rflags=%B\n", r->rflags);
-    console_printf(FG_WHITE | BG_RED, "rip=%X\tcs=%X\tds=%X\n", r->rip, r->cs, r->ds);
-    console_printf(FG_WHITE | BG_RED, "rax=%X\trbx=%X\trcx=%X\n", r->rax, r->rbx, r->rcx);
-    console_printf(FG_WHITE | BG_RED, "rdx=%X\trdi=%X\trsi=%X\n", r->rdx, r->rdi, r->rsi);
-    console_printf(FG_WHITE | BG_RED, "rbp=%X\trsp=%X\tr8=%X\n", r->rbp, r->rsp, r->r8);
-    console_printf(FG_WHITE | BG_RED, "r9=%X\tr10=%X\tr11=%X\n", r->r9, r->r10, r->r11);
-    console_printf(FG_WHITE | BG_RED, "r12=%X\tr13=%X\tr14=%X\n", r->r12, r->r13, r->r14);
-    console_printf(FG_WHITE | BG_RED, "r15=%X\n", r->r15);
+static void dump_registers(const struct InterruptStack *const is) {
+    console_printf(FG_WHITE | BG_RED, "[SS:RSP] %x:%X\n", is->retss, is->retrsp);
+    console_printf(FG_WHITE | BG_RED, "rflags=%B\n", is->rflags);
+    console_printf(FG_WHITE | BG_RED, "rip=%X\tcs=%X\tds=%X\n", is->rip, is->cs, is->ds);
+    console_printf(FG_WHITE | BG_RED, "rax=%X\trbx=%X\trcx=%X\n", is->rax, is->rbx, is->rcx);
+    console_printf(FG_WHITE | BG_RED, "rdx=%X\trdi=%X\trsi=%X\n", is->rdx, is->rdi, is->rsi);
+    console_printf(FG_WHITE | BG_RED, "rbp=%X\trsp=%X\tr8=%X\n", is->rbp, is->rsp, is->r8);
+    console_printf(FG_WHITE | BG_RED, "r9=%X\tr10=%X\tr11=%X\n", is->r9, is->r10, is->r11);
+    console_printf(FG_WHITE | BG_RED, "r12=%X\tr13=%X\tr14=%X\n", is->r12, is->r13, is->r14);
+    console_printf(FG_WHITE | BG_RED, "r15=%X\n", is->r15);
 }
 
 /*
@@ -225,35 +180,35 @@ void idt_configure(void) {
  * Only called in "exceptions.asm"
  *
  * Argument:
- *   const struct Registers *const registers:
+ *   const struct InterruptStack *const is:
  *     Pointer to the area on the stack
  *     containing the pushed registers.
  */
-void idt_exception_handler(const struct Registers *const registers) {
-    console_printf(FG_WHITE | BG_RED, "%s\n", interrupts[registers->vector]);
+void idt_exception_handler(const struct InterruptStack *const is) {
+    console_printf(FG_WHITE | BG_RED, "%s\n", interrupts[is->vector]);
 
     /* If Page Fault */
-    if (registers->vector == 14) {
+    if (is->vector == 14) {
         struct PageFaultError pfe = {0};
         qword_t cr2 = rdcr(CR2);
 
         memset(&pfe, 0, sizeof(struct PageFaultError));
-        memcpy(&pfe, &registers->error, sizeof(struct PageFaultError));
+        memcpy(&pfe, &is->error, sizeof(struct PageFaultError));
 
         console_printf(FG_WHITE | BG_RED, "PFLA: %x\n", cr2);
         console_printf(FG_WHITE | BG_RED, "P: %u, R/W: %u, U/S: %u, RSV: %u, I/D: %u\n", pfe.p, pfe.rw, pfe.us, pfe.rsv, pfe.id);
     }
     /* If Error Code */
-    else if (registers->error > 0) {
+    else if (is->error > 0) {
         struct SelectorError se = {0};
 
         memset(&se, 0, sizeof(struct SelectorError));
-        memcpy(&se, &registers->error, sizeof(struct SelectorError));
+        memcpy(&se, &is->error, sizeof(struct SelectorError));
 
         console_printf(FG_WHITE | BG_RED, "EXT: %u, IDT: %u, TI: %u, Index: %u\n", se.ext, se.idt, se.ti, se.index);
     }
 
-    dump_registers(registers);
+    dump_registers(is);
     console_printf(FG_WHITE | BG_RED, "System halted");
 }
 
@@ -263,19 +218,19 @@ void idt_exception_handler(const struct Registers *const registers) {
  * Only called in "irqs.asm"
  *
  * Argument:
- *   const struct Registers *const registers:
+ *   const struct InterruptStack *const is:
  *     Pointer to the area on the stack
  *     containing the pushed registers.
  */
-void idt_irq_handler(const struct Registers *const registers) {
+void idt_irq_handler(const struct InterruptStack *const is) {
     /* Send reset signal */
-    if (registers->vector >= 40) {
+    if (is->vector >= 40) {
         outb(I8259_SLAVE_CMD, 0x20);
     }
     outb(I8259_MASTER_CMD, 0x20);
 
     /* Determine specific handler */
-    switch (registers->vector) {
+    switch (is->vector) {
         case 32: break;
         case 33: keyboard_handler(); break;
     }
