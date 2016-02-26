@@ -70,5 +70,6 @@ SECTIONS {
        *(.comment)
     }
 
+    KERNEL_END = .;
     KERNEL_SIZE = . - KERNEL_VMA - KERNEL_LMA;
 }

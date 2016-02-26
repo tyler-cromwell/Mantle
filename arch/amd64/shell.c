@@ -87,6 +87,7 @@ void shell_cmd_kinfo(void) {
     console_printf(FG_WHITE, "Text section:\t\t%x\n", &SECTION_TEXT);
     console_printf(FG_WHITE, "Data section:\t\t%x\n", &SECTION_DATA);
     console_printf(FG_WHITE, "BSS section:\t\t%x\n", &SECTION_BSS);
+    console_printf(FG_WHITE, "Free memory:\t\t%x\n", &KERNEL_END);
 }
 
 /*
