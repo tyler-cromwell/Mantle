@@ -22,6 +22,7 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`).
 
 ## Toolchain
+- Linux x86_64 GCC Cross Compiler - Download [here][cross].
 - `Makefile` - [GNU] Makefile used to build the kernel.
   - `[g]make` - Builds the kernel image file.
   - `[g]make iso` - Builds an iso image with GRUB as the bootloader.
@@ -44,4 +45,5 @@ For syntax highlighting of the types in `kernel/types.h`, create a file called `
 - `syn keyword cType uchar_t ushort_t uint_t ulong_t`
 - `syn keyword cType byte_t word_t dword_t qword_t`
 
+[cross]: http://newos.org/toolchains/x86_64-elf-4.9.1-Linux-x86_64.tar.xz
 [dmr]: http://en.wikipedia.org/wiki/Dennis_Ritchie
