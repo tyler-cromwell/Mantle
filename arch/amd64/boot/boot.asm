@@ -90,7 +90,26 @@ kernel_boot:
     test edx, (1 << 29)
     jz .NoLongMode
 
-    ;;;;;;;;;;;;;;;;;;;;; Clear Screen ;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;; Clear Guaranteed Free Memory ;;;;;;;;;;;;;
+    ; 0x00000500 -> 0x00007bff
+    mov edi, 0x00000500
+    mov eax, 0x00000000
+    mov ecx, 7616
+    rep stosd
+
+    ; 0x00007e00 -> 0x0000ffff
+    mov edi, 0x00007e00
+    mov eax, 0x00000000
+    mov ecx, 8320
+    rep stosd
+
+    ; 0x00011000 -> 0x0005ffff
+    mov edi, 0x00011000
+    mov eax, 0x00000000
+    mov ecx, 80896
+    rep stosd
+
+    ; 0x000b8000 -> 0x000b8fa0
     mov edi, 0x000b8000
     mov eax, 0x0f000f00
     mov ecx, 1000
