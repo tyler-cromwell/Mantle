@@ -71,8 +71,8 @@ void multiboot_dump(void) {
         console_printf(FG_WHITE, "Lower Memory: %uKB\n", info->mem_lower);
 
         if (info->mem_upper >= CONVERT_NUM) {
-            info->mem_upper /= CONVERT_NUM;
-            console_printf(FG_WHITE, "Upper Memory: %uMB\n", info->mem_upper);
+            dword_t mem = info->mem_upper / CONVERT_NUM;
+            console_printf(FG_WHITE, "Upper Memory: %uMB\n", mem);
         } else {
             console_printf(FG_WHITE, "Upper Memory: %uKB\n", info->mem_upper);
         }
