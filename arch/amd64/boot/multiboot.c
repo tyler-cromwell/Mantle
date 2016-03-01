@@ -31,6 +31,7 @@
 #define CONVERT_UP(number) (number) / CONVERT_NUM
 #define CONVERT_DOWN(number) (number) * CONVERT_NUM
 
+/* Memory Map entry types */
 #define MMAP_AVAILABLE          1   /* Memory available for use */
 #define MMAP_RESERVED           2   /* Unusable memory */
 #define MMAP_ACPI_RECLAIMABLE   3   /* Ususable once finished with ACPI tables */
@@ -48,7 +49,10 @@ static struct MultibootMmap *mmap;
  */
 void multiboot_init(struct MultibootInfo *mbinfo) {
     info = mbinfo;
-    mmap = (struct MultibootMmap*) (ulong_t) info->mmap_addr;
+
+    if (info->flags & MULTIBOOT_MMAP) {
+        mmap = (struct MultibootMmap*) (ulong_t) info->mmap_addr;
+    }
 }
 
 /*
@@ -140,13 +144,12 @@ void multiboot_dump(void) {
 }
 
 /*
- * Returns the total amount of system memory (the sum
- * of lower and upper memory), measured in KILOBYTES.
+ * Returns the total amount of system memory, measured in KILOBYTES.
  * Returns:
  *   the total memory or 0 if not passed from bootloader.
  */
 size_t multiboot_memsize(void) {
-    if (info->flags & MULTIBOOT_MEMORY) {
+    if (info->flags & MULTIBOOT_MMAP) {
         return info->mem_lower + info->mem_upper;
     } else {
         return 0;
