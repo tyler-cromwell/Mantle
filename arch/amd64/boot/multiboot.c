@@ -31,7 +31,11 @@
 #define CONVERT_UP(number) (number) / CONVERT_NUM
 #define CONVERT_DOWN(number) (number) * CONVERT_NUM
 
-#define MMAP_AVAILABLE  1   /* Memory available for use */
+#define MMAP_AVAILABLE          1   /* Memory available for use */
+#define MMAP_RESERVED           2   /* Unusable memory */
+#define MMAP_ACPI_RECLAIMABLE   3   /* Ususable once finished with ACPI tables */
+#define MMAP_NVSRAM             4   /* Non-volatile static RAM */
+#define MMAP_BAD_RAM            5   /* Faulty RAM */
 
 /* Multiboot information structures */
 static struct MultibootInfo *info;
@@ -112,10 +116,22 @@ void multiboot_dump(void) {
             }
 
             /* Region type */
-            if (mmap[i].type == MMAP_AVAILABLE) {
-                console_printf(FG_WHITE, "Available");
-            } else {
-                console_printf(FG_GREY, "Reserved");
+            switch (mmap[i].type) {
+                case MMAP_AVAILABLE:
+                    console_printf(FG_WHITE, "Available");
+                    break;
+                case MMAP_RESERVED:
+                    console_printf(FG_GREY, "Reserved");
+                    break;
+                case MMAP_ACPI_RECLAIMABLE:
+                    console_printf(FG_BROWN_L, "ACPI Reclaimable");
+                    break;
+                case MMAP_NVSRAM:
+                    console_printf(FG_GREY, "NVSRAM");
+                    break;
+                case MMAP_BAD_RAM:
+                    console_printf(FG_RED, "Bad RAM");
+                    break;
             }
 
             console_printf(FG_WHITE, ")\n");
