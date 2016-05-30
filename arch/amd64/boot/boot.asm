@@ -51,7 +51,7 @@ extern init_kernel
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [section .data]
 
-fail_msg:   db 'Long Mode not supported. Halting!', 0
+fail_msg:       db 'Long Mode not supported. Halting!', 0
 fail_msg_len:   equ $ - fail_msg
 
 ; Define a Long Mode Global Descriptor Table
@@ -125,23 +125,25 @@ kernel_boot:
     mov edx, 0
     mov eax, KERNEL_SIZE
     mov ebx, 4096
-    div ebx         ; EAX = Page amount, EDX = Remainder
+    div ebx                 ; EAX = Page amount
+                            ; EDX = Remainder
     cmp edx, 0
     je .end1
-    inc eax         ; Add a page to account for remainder
+    inc eax                 ; Account for remainder
     .end1:
-    push eax        ; Store page amount
+    push eax                ; Store page amount
 
     ; Determine number of Pages Tables for the kernel
     mov edx, 0
     ; EAX already contains page amount
     mov ebx, 512
-    div ebx         ; EAX = Page table amount, EDX = Remainder
+    div ebx                 ; EAX = Page table amount
+                            ; EDX = Remainder
     cmp edx, 0
     je .end2
-    inc eax         ; Add a page table to account for remainder
+    inc eax                 ; Account for remainder
     .end2:
-    push eax        ; Store page table amount
+    push eax                ; Store page table amount
 
     ; Setup PML4T and CR3
     mov edi, 0x00011000     ; PML4T base address
@@ -198,24 +200,24 @@ kernel_boot:
 
     ; Enable PAE
     mov eax, cr4
-    or eax, (1 << 5)    ; CR4.PAE
+    or eax, (1 << 5)        ; CR4.PAE
     mov cr4, eax
 
     ; Enable Long Mode
-    mov ecx, 0xc0000080 ; Specify MSR (EFER)
+    mov ecx, 0xc0000080     ; Specify MSR (EFER)
     rdmsr
-    or eax, (1 << 8)    ; EFER.LME
+    or eax, (1 << 8)        ; EFER.LME
     wrmsr
 
     ; Enable Paging
     mov eax, cr0
-    or eax, (1 << 31)   ; CR0.PG
+    or eax, (1 << 31)       ; CR0.PG
     mov cr0, eax
 
     ; Load GDT and far jump
-    pop ecx     ; Kernel Page amount
-    pop eax     ; Bootloader magic number
-    pop ebx     ; Multiboot address
+    pop ecx                 ; Kernel Page amount
+    pop eax                 ; Bootloader magic number
+    pop ebx                 ; Multiboot address
     lgdt [GDT64.Pointer]
     jmp GDT64.Code:kernel_jump  ; Activates Long Mode
 
@@ -261,9 +263,9 @@ kernel_jump:
     mov rbp, stack_top
 
     ; Setup arguments (x86-64 CC)
-    mov rdi, rax    ; Bootloader magic number
-    mov rsi, rbx    ; Multiboot address
-    mov rdx, rcx    ; Page amount
+    mov rdi, rax        ; Bootloader magic number
+    mov rsi, rbx        ; Multiboot address
+    mov rdx, rcx        ; Page amount
 
     call init_kernel    ; Enter the Kernel
 
