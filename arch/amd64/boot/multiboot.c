@@ -84,39 +84,34 @@ void multiboot_dump(void) {
 
     /* Dump the Memory Map */
     if (info->flags & MULTIBOOT_MMAP) {
+        ulong_t ents = info->mmap_length / sizeof(struct MultibootMmap);
         console_printf(FG_WHITE, "\nMemory Map:\n");
 
-        ulong_t ents = info->mmap_length / sizeof(struct MultibootMmap);
-
         for (ulong_t i = 0; i < ents; i++) {
-            struct ItoaOptions opts = {0};
-            memset(&opts, 0, sizeof(struct ItoaOptions));
-            opts.pad = 1;
-            opts.hex = 1;
+            struct ItoaOptions opts = {.pad = 1, .hex = 1};
+            ulong_t addr = mmap[i].base;
+            char str[17];
 
             /* Region Base Address */
-            ulong_t n = mmap[i].base_addr;
-            char addr[17] = {0};
-
-            memcpy(addr, itoa(&opts, n), 17);
+            memcpy(str, itoa(&opts, addr), 17);
             if (ents >= 10 && i < 10) {
-                console_printf(FG_WHITE, "[ %u]: 0x%s - ", i, addr);
+                console_printf(FG_WHITE, "[ %u]: 0x%s - ", i, str);
             } else {
-                console_printf(FG_WHITE, "[%u]: 0x%s - ", i, addr);
+                console_printf(FG_WHITE, "[%u]: 0x%s - ", i, str);
             }
 
             /* Region Ending Address */
-            n = mmap[i].base_addr + mmap[i].length - 1;
-            memcpy(addr, itoa(&opts, n), 17);
-            console_printf(FG_WHITE, "0x%s (", addr);
+            addr = mmap[i].base + mmap[i].length - 1;
+            memcpy(str, itoa(&opts, addr), 17);
+            console_printf(FG_WHITE, "0x%s (", str);
 
             /* Region length */
-            n = CONVERT_UP(mmap[i].length);
-            if (n >= CONVERT_NUM) {
-                n = CONVERT_UP(n);
-                console_printf(FG_WHITE, "%uMB, ", n);
+            addr = CONVERT_UP(mmap[i].length);
+            if (addr >= CONVERT_NUM) {
+                addr = CONVERT_UP(addr);
+                console_printf(FG_WHITE, "%uMB, ", addr);
             } else {
-                console_printf(FG_WHITE, "%uKB, ", n);
+                console_printf(FG_WHITE, "%uKB, ", addr);
             }
 
             /* Region type */

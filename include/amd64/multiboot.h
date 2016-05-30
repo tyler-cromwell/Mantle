@@ -119,10 +119,10 @@ struct MultibootModules {
  * May be used if mutliboot_info.flags bit 6 is set
  */
 struct MultibootMmap {
-    dword_t size;       /* Size of this struct */
-    qword_t base_addr;  /* Starting address of the region */
-    qword_t length;     /* Length of the region (in bytes) */
-    dword_t type;       /* Type of region (1 for available, else reserved) */
+    dword_t size;   /* Size of this struct */
+    qword_t base;   /* Starting address of the region */
+    qword_t length; /* Length of the region (in bytes) */
+    dword_t type;   /* Type of region (1 for available, else reserved) */
 } __attribute__((__packed__));
 
 /* May be used if mutliboot_info.flags bit 7 is set */
