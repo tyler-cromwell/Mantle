@@ -47,14 +47,13 @@ static ulong_t unmapped_frames = 0;
  *   ulong_t page_num: Total number of in-use pages.
  */
 void paging_configure(size_t memory, ulong_t page_num) {
-    /* Count structures */
+    size_t max_frames = memory / 4;     /* 4KB per page/frame */
+
+    /* Setup counters */
     pages = page_num;
     tables = (pages + 512 - (pages % 512)) / 512;
     directories = (tables + 512 - (tables % 512)) / 512;
     pointers = (directories + 512 - (directories % 512)) / 512;
-
-    /* Determine available frames */
-    size_t max_frames = memory / 4;         /* 4KB per page/frame */
     unmapped_frames = max_frames - pages;
 
     console_printf(FG_WHITE, "Paging setup\n");

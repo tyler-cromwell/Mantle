@@ -23,7 +23,7 @@
 /*
  * Obtains the CPU vendor string.
  * Argument:
- *   char *id: Pointer to the location to save the vendor id.
+ *   char *id: Location to save the vendor id.
  */
 void cpuid_vendor(char *id) {
     dword_t register eax asm("eax") = 0, ebx asm("ebx") = 0;
@@ -35,7 +35,7 @@ void cpuid_vendor(char *id) {
         : "a" (eax)
     );
 
-    /* Get the vendor_id of the CPU */
+    /* Construct the vendor string */
     for (byte_t i = 0; i < 4; i++) {
         id[i+0] = ebx >> (i * 8);
         id[i+4] = edx >> (i * 8);
@@ -45,8 +45,6 @@ void cpuid_vendor(char *id) {
 
 /*
  * Obtains the number of processors.
- * Returns:
- *   The number of processors.
  */
 dword_t cpuid_cpus(void) {
     dword_t register eax asm("eax") = 1, ebx asm("ebx") = 0;

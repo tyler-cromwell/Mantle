@@ -27,7 +27,7 @@
 #include <lib/string.h>
 
 /* External functions / variables */
-extern char keyboard_getchar(void); /* Defined in "keyboard.c" */
+extern char keyboard_getchar(void);     /* Defined in "keyboard.c" */
 
 /* Internal variables */
 static char input[SHELL_BUFSIZ] = {0};
@@ -118,7 +118,6 @@ void shell_cmd_cpuinfo(void) {
  *   ulong_t magic: Bootloader magic number.
  */
 void shell_cmd_multiboot(ulong_t magic) {
-    /* Was the kernel booted by a Multiboot bootloader? */
     if (magic == MULTIBOOT_BOOT_MAGIC) {
         multiboot_dump();
     } else {

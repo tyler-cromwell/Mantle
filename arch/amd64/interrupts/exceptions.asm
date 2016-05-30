@@ -49,56 +49,56 @@ extern idt_exception_handler
 
 exc00:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 0  ; Interrupt Vector
     jmp common_handler
 
 
 exc01:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 1  ; Interrupt Vector
     jmp common_handler
 
 
 exc02:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 2  ; Interrupt Vector
     jmp common_handler
 
 
 exc03:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 3  ; Interrupt Vector
     jmp common_handler
 
 
 exc04:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 4  ; Interrupt Vector
     jmp common_handler
 
 
 exc05:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 5  ; Interrupt Vector
     jmp common_handler
 
 
 exc06:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 6  ; Interrupt Vector
     jmp common_handler
 
 
 exc07:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 7  ; Interrupt Vector
     jmp common_handler
 
@@ -147,7 +147,7 @@ exc14:
 
 exc16:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 16 ; Interrupt Vector
     jmp common_handler
 
@@ -161,14 +161,14 @@ exc17:
 
 exc18:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 18 ; Interrupt Vector
     jmp common_handler
 
 
 exc19:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 19 ; Interrupt Vector
     jmp common_handler
 

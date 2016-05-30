@@ -60,8 +60,7 @@ static void move_cursor(uchar_t color) {
 
 /*
  * Clears the console by zero-ing the screen buffer.
- * Side Effect:
- *   Resets the video pointer.
+ * Resets the video pointer.
  */
 void console_clear(void) {
     next = CONSOLE_START;
@@ -72,7 +71,7 @@ void console_clear(void) {
 /*
  * Sets the background to a specific color.
  * Argument:
- *   uchar_t color: The color.
+ *   uchar_t color: The color attribute.
  */
 void console_set_background(uchar_t color) {
     next = CONSOLE_START;
@@ -94,7 +93,7 @@ void console_set_background(uchar_t color) {
  * Arguments:
  *   uchar_t color: The color attribute.
  *   char *message:  The message to write.
- *   uint16_t length: The number of bytes to write.
+ *   size_t length: The number of bytes to write.
  * Returns:
  *   The number of characters written.
  */
@@ -197,7 +196,7 @@ size_t console_printf(uchar_t color, char *format, ...) {
             c += console_write(color, format, 1);
         }
         else {
-            struct ItoaOptions opts = {0};
+            struct ItoaOptions opts;
             memset(&opts, 0, sizeof(struct ItoaOptions));
 
             /* Increment again for tag character */

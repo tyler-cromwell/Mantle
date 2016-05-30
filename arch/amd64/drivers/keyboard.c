@@ -28,40 +28,40 @@
 
 /* US QWERTY keyboard map */
 static byte_t keymap[128] = {
-    0,      /* <NOTHING> */
-    27,     /* Escape */
+    0,          /* <NOTHING> */
+    27,         /* Escape */
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
     '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',
-    '\n',   /* Enter / Keypad - Enter */
-    0,      /* L-CTRL */
+    '\n',       /* Enter / Keypad - Enter */
+    0,          /* L-CTRL */
     'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`',
-    0,      /* L-SHIFT */
-    '\\',   /* Backslash */
+    0,          /* L-SHIFT */
+    '\\',       /* Backslash */
     'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/',
-    0,      /* R-SHIFT */
-    '*',    /* Keypad - * */
-    0,      /* L-ALT */
-    ' ',    /* Space bar */
-    0,      /* Caps lock */
+    0,          /* R-SHIFT */
+    '*',        /* Keypad - * */
+    0,          /* L-ALT */
+    ' ',        /* Space bar */
+    0,          /* Caps lock */
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   /* F1 - F10 */
-    0,      /* Num lock */
-    0,      /* Scroll Lock */
-    0,      /* Keypad - 7 / Home */
-    0,      /* Keypad - 8 / Up */
-    0,      /* Keypad - 9 / Page Up */
-    '-',    /* Keypad - Dash (-) */
-    0,      /* Keypad - 4 / Left */
-    0,      /* Keypad - 5 */
-    0,      /* Keypad - 6 / Right */
-    '+',    /* Keypad - Plus (+) */
-    0,      /* Keypad - 1 / End */
-    0,      /* Keypad - 2 / Down */
-    0,      /* Keypad - 3 / Page Down */
-    0,      /* Keypad - 0 / Insert */
-    0,      /* Keypad - Period (.) / Delete */
+    0,          /* Num lock */
+    0,          /* Scroll Lock */
+    0,          /* Keypad - 7 / Home */
+    0,          /* Keypad - 8 / Up */
+    0,          /* Keypad - 9 / Page Up */
+    '-',        /* Keypad - Dash (-) */
+    0,          /* Keypad - 4 / Left */
+    0,          /* Keypad - 5 */
+    0,          /* Keypad - 6 / Right */
+    '+',        /* Keypad - Plus (+) */
+    0,          /* Keypad - 1 / End */
+    0,          /* Keypad - 2 / Down */
+    0,          /* Keypad - 3 / Page Down */
+    0,          /* Keypad - 0 / Insert */
+    0,          /* Keypad - Period (.) / Delete */
     0, 0, 0,    /* <NOTHING> */
-    0, 0,   /* F11 - F12 Key */
-    0,      /* All other keys are undefined */
+    0, 0,       /* F11 - F12 Key */
+    0,          /* All other keys are undefined */
 };
 
 /* Newest character read from the keyboard */
@@ -79,7 +79,7 @@ void keyboard_handler(void) {
         char scan = inb(KEYBOARD_DATA);
 
         if (scan < 0) {
-            goto stop;
+            return;
         }
 
         char key = keymap[scan];
@@ -93,9 +93,6 @@ void keyboard_handler(void) {
             next = key;
         }
     }
-
-stop:
-    return;
 }
 
 /*
@@ -108,6 +105,6 @@ char keyboard_getchar(void) {
     while (next == -1) {}                   /* Wait for IRQ */
     i8259_set_mask(I8259_IRQ_KEYBOARD);
     char c = next;
-    next = -1;      /* Reset buffer */
+    next = -1;                              /* Reset buffer */
     return c;
 }

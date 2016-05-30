@@ -38,8 +38,10 @@
 
 /*
  * Copies the value of a Control Register.
+ * Argument:
+ *   byte_t cr: The number of the register to write to.
  * Returns:
- *   the value of a Control Register.
+ *   The value of a Control Register.
  */
 static inline qword_t rdcr(byte_t n) {
     qword_t cr = 0;
@@ -89,7 +91,7 @@ static inline void wrcr(byte_t cr, qword_t value) {
  * Arguments:
  *   word_t port: The port to read from.
  * Returns:
- *   the byte read from the port.
+ *   The byte read from the port.
  */
 static inline byte_t inb(word_t port) {
     byte_t value = 0;

@@ -45,105 +45,105 @@ extern idt_irq_handler
 
 irq00:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 32 ; Interrupt Vector
     jmp common_handler
 
 
 irq01:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 33 ; Interrupt Vector
     jmp common_handler
 
 
 irq03:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 35 ; Interrupt Vector
     jmp common_handler
 
 
 irq04:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 36 ; Interrupt Vector
     jmp common_handler
 
 
 irq05:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 37 ; Interrupt Vector
     jmp common_handler
 
 
 irq06:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 38 ; Interrupt Vector
     jmp common_handler
 
 
 irq07:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 39 ; Interrupt Vector
     jmp common_handler
 
 
 irq08:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 40 ; Interrupt Vector
     jmp common_handler
 
 
 irq09:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 41 ; Interrupt Vector
     jmp common_handler
 
 
 irq10:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 42 ; Interrupt Vector
     jmp common_handler
 
 
 irq11:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 43 ; Interrupt Vector
     jmp common_handler
 
 
 irq12:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 44 ; Interrupt Vector
     jmp common_handler
 
 
 irq13:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 45 ; Interrupt Vector
     jmp common_handler
 
 
 irq14:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 46 ; Interrupt Vector
     jmp common_handler
 
 
 irq15:
     cli
-    push 0  ; (Dummy) Error Code
+    push 0  ; Dummy Error Code
     push 47 ; Interrupt Vector
     jmp common_handler
 

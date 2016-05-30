@@ -75,7 +75,7 @@ void i8259_clear_mask(byte_t irq) {
 }
 
 /*
- * Disables all IRQS (masks them).
+ * Disables all IRQs (masks them).
  */
 void i8259_mask(void) {
     outb(MASTER_DATA, 0xff);
@@ -83,7 +83,7 @@ void i8259_mask(void) {
 }
 
 /*
- * Enables all IRQS (unmasks them).
+ * Enables all IRQs (unmasks them).
  */
 void i8259_unmask(void) {
     outb(MASTER_DATA, 0x00);

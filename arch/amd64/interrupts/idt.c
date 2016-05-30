@@ -88,47 +88,47 @@ static void idt_set_gate(byte_t index, qword_t base, word_t selector, byte_t typ
  * exc 20-29, 31 - RESERVED
  */
 static void idt_install_handlers(void) {
-    idt_set_gate( 0, (qword_t) exc00, 0x08, 0x8e); /* Division by Zero (Fault - Precise) */
-    idt_set_gate( 1, (qword_t) exc01, 0x08, 0x8e); /* Debug (Fault/Trap - Precise) */
-    idt_set_gate( 2, (qword_t) exc02, 0x08, 0x8e); /* Non-maskable Interrupt */
-    idt_set_gate( 3, (qword_t) exc03, 0x08, 0x8e); /* Breakpoint (Trap - Precise) */
-    idt_set_gate( 4, (qword_t) exc04, 0x08, 0x8e); /* Overflow (Trap - Precise) */
-    idt_set_gate( 5, (qword_t) exc05, 0x08, 0x8e); /* Bounds Check (Fault - Precise) */
-    idt_set_gate( 6, (qword_t) exc06, 0x08, 0x8e); /* Invalid Opcode (Fault - Precise) */
-    idt_set_gate( 7, (qword_t) exc07, 0x08, 0x8e); /* Device Not Available (Fault - Precise) */
-    idt_set_gate( 8, (qword_t) exc08, 0x08, 0x8e); /* Double Fault (Abort - Imprecise) */
-    idt_set_gate(10, (qword_t) exc10, 0x08, 0x8e); /* Invalid TSS (Fault - Precise) */
-    idt_set_gate(11, (qword_t) exc11, 0x08, 0x8e); /* Segment Not Present (Fault - Precise) */
-    idt_set_gate(12, (qword_t) exc12, 0x08, 0x8e); /* Stack Fault (Fault - Precise) */
-    idt_set_gate(13, (qword_t) exc13, 0x08, 0x8e); /* General Protect (Fault - Precise) */
-    idt_set_gate(14, (qword_t) exc14, 0x08, 0x8e); /* Page Fault (Fault - Precise) */
-    idt_set_gate(16, (qword_t) exc16, 0x08, 0x8e); /* x87 Floating Point (Fault - Imprecise) */
-    idt_set_gate(17, (qword_t) exc17, 0x08, 0x8e); /* Alignment Check (Fault - Precise) */
-    idt_set_gate(18, (qword_t) exc18, 0x08, 0x8e); /* Machine Check (Abort - Imprecise) */
-    idt_set_gate(19, (qword_t) exc19, 0x08, 0x8e); /* SIMD Floating-Point (Fault - Precise) */
-    idt_set_gate(30, (qword_t) exc30, 0x08, 0x8e); /* Security (- Precise) */
+    idt_set_gate( 0, (qword_t) exc00, 0x08, 0x8e);      /* Division by Zero (Fault - Precise) */
+    idt_set_gate( 1, (qword_t) exc01, 0x08, 0x8e);      /* Debug (Fault/Trap - Precise) */
+    idt_set_gate( 2, (qword_t) exc02, 0x08, 0x8e);      /* Non-maskable Interrupt */
+    idt_set_gate( 3, (qword_t) exc03, 0x08, 0x8e);      /* Breakpoint (Trap - Precise) */
+    idt_set_gate( 4, (qword_t) exc04, 0x08, 0x8e);      /* Overflow (Trap - Precise) */
+    idt_set_gate( 5, (qword_t) exc05, 0x08, 0x8e);      /* Bounds Check (Fault - Precise) */
+    idt_set_gate( 6, (qword_t) exc06, 0x08, 0x8e);      /* Invalid Opcode (Fault - Precise) */
+    idt_set_gate( 7, (qword_t) exc07, 0x08, 0x8e);      /* Device Not Available (Fault - Precise) */
+    idt_set_gate( 8, (qword_t) exc08, 0x08, 0x8e);      /* Double Fault (Abort - Imprecise) */
+    idt_set_gate(10, (qword_t) exc10, 0x08, 0x8e);      /* Invalid TSS (Fault - Precise) */
+    idt_set_gate(11, (qword_t) exc11, 0x08, 0x8e);      /* Segment Not Present (Fault - Precise) */
+    idt_set_gate(12, (qword_t) exc12, 0x08, 0x8e);      /* Stack Fault (Fault - Precise) */
+    idt_set_gate(13, (qword_t) exc13, 0x08, 0x8e);      /* General Protect (Fault - Precise) */
+    idt_set_gate(14, (qword_t) exc14, 0x08, 0x8e);      /* Page Fault (Fault - Precise) */
+    idt_set_gate(16, (qword_t) exc16, 0x08, 0x8e);      /* x87 Floating Point (Fault - Imprecise) */
+    idt_set_gate(17, (qword_t) exc17, 0x08, 0x8e);      /* Alignment Check (Fault - Precise) */
+    idt_set_gate(18, (qword_t) exc18, 0x08, 0x8e);      /* Machine Check (Abort - Imprecise) */
+    idt_set_gate(19, (qword_t) exc19, 0x08, 0x8e);      /* SIMD Floating-Point (Fault - Precise) */
+    idt_set_gate(30, (qword_t) exc30, 0x08, 0x8e);      /* Security (- Precise) */
     console_printf(FG_WHITE, "Exception handlers installed\n");
 
-    idt_set_gate(32, (qword_t) irq00, 0x08, 0x8e); /* i8253 PIT */
-    idt_set_gate(33, (qword_t) irq01, 0x08, 0x8e); /* PS/2 Keyboard */
-    idt_set_gate(35, (qword_t) irq03, 0x08, 0x8e); /* COM2 */
-    idt_set_gate(36, (qword_t) irq04, 0x08, 0x8e); /* COM1 */
-    idt_set_gate(37, (qword_t) irq05, 0x08, 0x8e); /* LPT2 */
-    idt_set_gate(38, (qword_t) irq06, 0x08, 0x8e); /* Floppy Disk */
-    idt_set_gate(39, (qword_t) irq07, 0x08, 0x8e); /* LPT1 */
-    idt_set_gate(40, (qword_t) irq08, 0x08, 0x8e); /* CMOS RTC */
-    idt_set_gate(41, (qword_t) irq09, 0x08, 0x8e); /* Free for peripherals */
-    idt_set_gate(42, (qword_t) irq10, 0x08, 0x8e); /* Free for peripherals */
-    idt_set_gate(43, (qword_t) irq11, 0x08, 0x8e); /* Free for peripherals */
-    idt_set_gate(44, (qword_t) irq12, 0x08, 0x8e); /* PS/2 Mouse */
-    idt_set_gate(45, (qword_t) irq13, 0x08, 0x8e); /* FPU / Coprocessor / Inter-processors */
-    idt_set_gate(46, (qword_t) irq14, 0x08, 0x8e); /* Primary ATA HDD */
-    idt_set_gate(47, (qword_t) irq15, 0x08, 0x8e); /* Secondary ATA HDD */
+    idt_set_gate(32, (qword_t) irq00, 0x08, 0x8e);      /* i8253 PIT */
+    idt_set_gate(33, (qword_t) irq01, 0x08, 0x8e);      /* PS/2 Keyboard */
+    idt_set_gate(35, (qword_t) irq03, 0x08, 0x8e);      /* COM2 */
+    idt_set_gate(36, (qword_t) irq04, 0x08, 0x8e);      /* COM1 */
+    idt_set_gate(37, (qword_t) irq05, 0x08, 0x8e);      /* LPT2 */
+    idt_set_gate(38, (qword_t) irq06, 0x08, 0x8e);      /* Floppy Disk */
+    idt_set_gate(39, (qword_t) irq07, 0x08, 0x8e);      /* LPT1 */
+    idt_set_gate(40, (qword_t) irq08, 0x08, 0x8e);      /* CMOS RTC */
+    idt_set_gate(41, (qword_t) irq09, 0x08, 0x8e);      /* Free for peripherals */
+    idt_set_gate(42, (qword_t) irq10, 0x08, 0x8e);      /* Free for peripherals */
+    idt_set_gate(43, (qword_t) irq11, 0x08, 0x8e);      /* Free for peripherals */
+    idt_set_gate(44, (qword_t) irq12, 0x08, 0x8e);      /* PS/2 Mouse */
+    idt_set_gate(45, (qword_t) irq13, 0x08, 0x8e);      /* FPU / Coprocessor / Inter-processors */
+    idt_set_gate(46, (qword_t) irq14, 0x08, 0x8e);      /* Primary ATA HDD */
+    idt_set_gate(47, (qword_t) irq15, 0x08, 0x8e);      /* Secondary ATA HDD */
     console_printf(FG_WHITE, "IRQ handlers installed\n");
 }
 
 /*
- * Dumps the register contents before the Interrupt.
+ * Dumps the register contents from the stack after the interrupt.
  * Argument:
  *   const struct InterruptStack *const is:
  *     Pointer to the area on the stack
@@ -204,22 +204,18 @@ void idt_exception_handler(const struct InterruptStack *const is) {
 
     /* If Page Fault */
     if (is->vector == 14) {
-        struct PageFaultError pfe = {0};
+        struct PageFaultError pfe;
         qword_t cr2 = rdcr(CR2);
 
-        memset(&pfe, 0, sizeof(struct PageFaultError));
         memcpy(&pfe, &is->error, sizeof(struct PageFaultError));
-
         console_printf(FG_WHITE | BG_RED, "PFLA: %x\n", cr2);
         console_printf(FG_WHITE | BG_RED, "P: %u, R/W: %u, U/S: %u, RSV: %u, I/D: %u\n", pfe.p, pfe.rw, pfe.us, pfe.rsv, pfe.id);
     }
     /* If Error Code */
     else if (is->error > 0) {
-        struct SelectorError se = {0};
+        struct SelectorError se;
 
-        memset(&se, 0, sizeof(struct SelectorError));
         memcpy(&se, &is->error, sizeof(struct SelectorError));
-
         console_printf(FG_WHITE | BG_RED, "EXT: %u, IDT: %u, TI: %u, Index: %u\n", se.ext, se.idt, se.ti, se.index);
     }
 
