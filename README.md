@@ -45,5 +45,5 @@ For syntax highlighting of the types in `kernel/types.h`, create a file called `
 - `syn keyword cType uchar_t ushort_t uint_t ulong_t`
 - `syn keyword cType byte_t word_t dword_t qword_t`
 
-[cross]: http://newos.org/toolchains/x86_64-elf-4.9.1-Linux-x86_64.tar.xz
+[cross]: http://newos.org/toolchains/x86_64-elf-5.3.0-Linux-x86_64.tar.xz
 [dmr]: http://en.wikipedia.org/wiki/Dennis_Ritchie
