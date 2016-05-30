@@ -40,9 +40,9 @@ extern init_kernel
 ;; BSS Section
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [section .bss]
-    align 16
+    align 4
     stack_bottom:
-    resb 32768
+    resb 16384
     stack_top:
 
 
