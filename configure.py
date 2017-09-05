@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  Copyright (C) 2015 Tyler Cromwell <tyler@csh.rit.edu>
+  Copyright (C) 2015 Tyler Cromwell <tjc6185@gmail.com>
 
   This file is part of Ritchie.
 
