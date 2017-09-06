@@ -32,6 +32,7 @@ extern char keyboard_getchar(void);     /* Defined in "keyboard.c" */
 /* Internal variables */
 static char input[SHELL_BUFSIZ] = {0};
 
+
 /*
  * Basic text input function.
  * Argument:
@@ -75,6 +76,7 @@ char* shell_readline(char *prompt) {
     return input;
 }
 
+
 /*
  * Dump information about the Kernel binary.
  */
@@ -89,6 +91,7 @@ void shell_cmd_kinfo(void) {
     console_printf(FG_WHITE, "BSS section:\t\t%x\n", &SECTION_BSS);
     console_printf(FG_WHITE, "Free memory:\t\t%x\n", &KERNEL_END);
 }
+
 
 /*
  * Dump information about the Processor.
@@ -111,6 +114,7 @@ void shell_cmd_cpuinfo(void) {
     /* Get and print number of processors */
     console_printf(FG_WHITE, "processors: %u\n", cpuid_cpus());
 }
+
 
 /*
  * Dump Multiboot information (if available).

@@ -25,10 +25,10 @@
 #include <kernel/version.h>
 #include <lib/string.h>
 
-/* External */
 void idt_configure(void);                               /* Defined in "idt.c" */
 void paging_configure(size_t memory, ulong_t pages);    /* Defined in "paging.c" */
 void paging_pageinfo(void);                             /* Defined in "paging.c" */
+
 
 /*
  * Early kernel setup, initializes critical components.

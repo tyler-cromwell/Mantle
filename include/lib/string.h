@@ -26,6 +26,7 @@
 /* Kernel header(s) */
 #include <kernel/types.h>
 
+
 /* Itoa conversion structure */
 struct ItoaOptions {
     byte_t pad      : 1;
@@ -34,6 +35,7 @@ struct ItoaOptions {
     byte_t hex      : 1;
     byte_t reserved : 4;
 } __attribute__((__packed__));
+
 
 /* Function prototypes */
 char* itoa(struct ItoaOptions *opts, long number);

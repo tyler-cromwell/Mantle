@@ -67,6 +67,7 @@ static byte_t keymap[128] = {
 /* Newest character read from the keyboard */
 static volatile char next = -1;
 
+
 /*
  * Basic PS/2 keyboard IRQ handler.
  *
@@ -94,6 +95,7 @@ void keyboard_handler(void) {
         }
     }
 }
+
 
 /*
  * Basic getchar function.

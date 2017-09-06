@@ -42,6 +42,7 @@
 static struct MultibootInfo *info;
 static struct MultibootMmap *mmap;
 
+
 /*
  * Saves pointers to Multiboot structures.
  * Argument(s):
@@ -54,6 +55,7 @@ void multiboot_init(struct MultibootInfo *mbinfo) {
         mmap = (struct MultibootMmap*) (ulong_t) info->mmap_addr;
     }
 }
+
 
 /*
  * Dumps Multiboot information to the console
@@ -137,6 +139,7 @@ void multiboot_dump(void) {
         }
     }
 }
+
 
 /*
  * Returns the total amount of system memory, measured in KILOBYTES.

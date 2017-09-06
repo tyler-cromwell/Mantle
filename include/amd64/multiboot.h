@@ -39,6 +39,7 @@
 #define MULTIBOOT_DRIVE         1 << 7      /* Drives flag */
 #define MULTIBOOT_BOOTLOADER    1 << 9      /* Bootloader Name flag */
 
+
 /* Signifies that the Kernel complies with Multiboot */
 struct MultibootHeader {
     dword_t magic;              /* The header identifier, must be 0x1badb002 */
@@ -59,6 +60,7 @@ struct MultibootHeader {
     dword_t height;             /* Number of lines, pixels in graphics mode, 0 in text */
     dword_t depth;              /* Bits per pixel in graphics mode, 0 in text */
 } __attribute__((__packed__));
+
 
 /* Information passed to the Kernel by the Bootloader */
 struct MultibootInfo {
@@ -103,6 +105,7 @@ struct MultibootInfo {
     word_t vbe_interface_len;   /* If bit 11 & bit 2 in header: */
 } __attribute__((__packed__));
 
+
 /*
  * Boot Module structure.
  * May be used if multiboot_info.flags bit 3 is set
@@ -113,6 +116,7 @@ struct MultibootModules {
     dword_t string;     /**/
     dword_t reserved;   /* Must be zero */
 } __attribute__((__packed__));
+
 
 /* 
  * A region of memory.
@@ -125,6 +129,7 @@ struct MultibootMmap {
     dword_t type;   /* Type of region (1 for available, else reserved) */
 } __attribute__((__packed__));
 
+
 /* May be used if mutliboot_info.flags bit 7 is set */
 struct MultibootDrive {
     dword_t  size;                      /* Size this struct */
@@ -135,6 +140,7 @@ struct MultibootDrive {
     byte_t   drive_sectors     : 1;     /* Number of sectors per track */
     word_t *drive_ports;                /* Null terminated array */
 } __attribute__((__packed__));
+
 
 /* Function prototypes */
 void multiboot_init(struct MultibootInfo *mbinfo);

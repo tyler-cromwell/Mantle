@@ -26,6 +26,7 @@
 
 #define ITOA_BUFSIZ 65
 
+
 /*
  * Creates the string representation of a number.
  * Argument:
@@ -87,6 +88,7 @@ char* itoa(struct ItoaOptions *opts, long number) {
     return string;
 }
 
+
 /*
  * Copies the contents of one buffer to another.
  * Arguments:
@@ -104,6 +106,7 @@ void *memcpy(void *dest, const void *src, size_t n) {
     return dest;
 }
 
+
 /*
  * Fills the first 'n' bytes of 'dest' with 'c'.
  * Arguments:
@@ -120,6 +123,7 @@ void *memset(void *dest, int c, size_t n) {
     }
     return dest;
 }
+
 
 /*
  * Compares the contents of 2 strings, taking length into account.
@@ -154,6 +158,7 @@ int8_t strlcmp(const char *s1, const char *s2) {
     }
 }
 
+
 /*
  * Compares the contents of 2 strings. Returns 0 if they are equal.
  * If they are not equal, returns the first character in s1 that is different.
@@ -171,6 +176,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
     }
     return 0;
 }
+
 
 /*
  * Copies a string.
@@ -202,6 +208,7 @@ size_t strlen(const char *string) {
     return length;
 }
 
+
 /*
  * Calculates the length of a string, up to a given size.
  * Argument:
@@ -217,6 +224,7 @@ size_t strnlen(const char *string, size_t n) {
     }
     return length;
 }
+
 
 /*
  * Converts the alphabetical characters
@@ -235,6 +243,7 @@ void strlower(char *string) {
         }
     }
 }
+
 
 /*
  * Converts the alphabetical characters

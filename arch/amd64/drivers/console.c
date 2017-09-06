@@ -40,6 +40,7 @@
 /* Pointer to the next "empty" character byte */
 static char *next = CONSOLE_START;
 
+
 /*
  * Moves cursor to the location of the
  * next available character.
@@ -58,6 +59,7 @@ static void move_cursor(uchar_t color) {
     *(next+1) = *(next+1) | (color & 0x0f);
 }
 
+
 /*
  * Clears the console by zero-ing the screen buffer.
  * Resets the video pointer.
@@ -67,6 +69,7 @@ void console_clear(void) {
     memset(CONSOLE_START, 0, BYTES);
     move_cursor(0x00);
 }
+
 
 /*
  * Sets the background to a specific color.
@@ -86,6 +89,7 @@ void console_set_background(uchar_t color) {
 
     move_cursor(color);
 }
+
 
 /*
  * Writes a string of characters to the console.
@@ -175,6 +179,7 @@ size_t console_write(uchar_t color, char *message, size_t length) {
     move_cursor(color);
     return c;
 }
+
 
 /*
  * Printf style function that writes a string of characters to the console.

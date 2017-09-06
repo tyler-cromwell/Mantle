@@ -32,6 +32,7 @@
 #define SLAVE_CMD   0xA0
 #define SLAVE_DATA  0xA1
 
+
 /*
  * Masks the given IRQ.
  * Arugment:
@@ -52,6 +53,7 @@ void i8259_set_mask(byte_t irq) {
     value = inb(port) | (1 << irq);
     outb(port, value);
 }
+
 
 /*
  * Unmasks the given IRQ.
@@ -74,6 +76,7 @@ void i8259_clear_mask(byte_t irq) {
     outb(port, value);
 }
 
+
 /*
  * Disables all IRQs (masks them).
  */
@@ -81,6 +84,7 @@ void i8259_mask(void) {
     outb(MASTER_DATA, 0xff);
     outb(SLAVE_DATA,  0xff);
 }
+
 
 /*
  * Enables all IRQs (unmasks them).

@@ -20,6 +20,7 @@
 /* Kernel header(s) */
 #include <kernel/types.h>
 
+
 /*
  * Obtains the CPU vendor string.
  * Argument:
@@ -42,6 +43,7 @@ void cpuid_vendor(char *id) {
         id[i+8] = ecx >> (i * 8);
     }
 }
+
 
 /*
  * Obtains the number of processors.

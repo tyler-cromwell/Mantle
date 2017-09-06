@@ -32,8 +32,8 @@
 /* The Interrupt Descriptor Table */
 static struct IdtGate idt[256];
 
-/* External functions */
 void keyboard_handler(void);    /* Defined in "keyboard.c" */
+
 
 /*
  * Disables the APIC.
@@ -47,6 +47,7 @@ static void disable_apic(void) {
     asm volatile ("wrmsr\n\t" : : "A" (msr));
 }
 
+
 /*
  * Installs the given IDT pointer.
  * Argument:
@@ -59,6 +60,7 @@ static void lidt(struct Idtr *idtr) {
         : : "p" (idtr)
     );
 }
+
 
 /*
  * Creates a new interrupt gate.
@@ -81,6 +83,7 @@ static void idt_set_gate(byte_t index, qword_t base, word_t selector, byte_t typ
 
     idt[index] = gate;
 }
+
 
 /*
  * Installs the system Exception and IRQ handlers.
@@ -127,6 +130,7 @@ static void idt_install_handlers(void) {
     console_printf(FG_WHITE, "IRQ handlers installed\n");
 }
 
+
 /*
  * Dumps the register contents from the stack after the interrupt.
  * Argument:
@@ -145,6 +149,7 @@ static void dump_registers(const struct InterruptStack *const is) {
     console_printf(FG_WHITE | BG_RED, "r12=%X\tr13=%X\tr14=%X\n", is->r12, is->r13, is->r14);
     console_printf(FG_WHITE | BG_RED, "r15=%X\n", is->r15);
 }
+
 
 /*
  * Installs the Interrupt Descriptor Table.
@@ -189,6 +194,7 @@ void idt_configure(void) {
     console_printf(FG_WHITE, "IDT setup, interrupts enabled\n");
 }
 
+
 /*
  * Common (C level) Exception handler.
  *
@@ -222,6 +228,7 @@ void idt_exception_handler(const struct InterruptStack *const is) {
     dump_registers(is);
     console_printf(FG_WHITE | BG_RED, "System halted");
 }
+
 
 /*
  * Common (C level) IRQ handler.

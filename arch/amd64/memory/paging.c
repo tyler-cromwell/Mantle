@@ -37,6 +37,7 @@ static uint_t tables = 0;
 static ulong_t pages = 0;
 static ulong_t unmapped_frames = 0;
 
+
 /*
  * Initializes the paging tree.
  *
@@ -58,6 +59,7 @@ void paging_configure(size_t memory, ulong_t page_num) {
 
     console_printf(FG_WHITE, "Paging setup\n");
 }
+
 
 /*
  * Prints some basic info about the Paging system.

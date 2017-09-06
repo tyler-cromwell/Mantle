@@ -28,6 +28,7 @@ import sys
 FILES = ['grub.cfg', 'include/kernel/version.h', 'make.conf', 'ritchie.conf']
 ARCHES = ['amd64']
 
+
 """
 Replaces the matched contents of a file with the given string.
 Arguments:

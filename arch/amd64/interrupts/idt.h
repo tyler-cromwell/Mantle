@@ -23,6 +23,7 @@
 /* Kernel header(s) */
 #include <kernel/types.h>
 
+
 /* A Long Mode IDT interrupt gate */
 struct IdtGate {
     word_t offset_low;      /* Lower portion of the offset */
@@ -34,11 +35,13 @@ struct IdtGate {
     dword_t zero2;          /* Always zero */
 } __attribute__((__packed__));
 
+
 /* The Long Mode IDTR register */
 struct Idtr {
     word_t limit;   /* The length of the IDT */
     qword_t base;   /* IDT base address */
 } __attribute__((__packed__));
+
 
 /* Selector Error code */
 struct SelectorError {
@@ -49,6 +52,7 @@ struct SelectorError {
     dword_t reserved    : 16;
 } __attribute__((__packed__));
 
+
 /* Page Fault Error code */
 struct PageFaultError {
     dword_t p           : 1;
@@ -58,6 +62,7 @@ struct PageFaultError {
     dword_t id          : 1;
     dword_t reserved    : 27;
 } __attribute__((__packed__));
+
 
 /* Register states before Interrupt */
 struct InterruptStack {

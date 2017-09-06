@@ -36,6 +36,7 @@
 #define CR4_MASK    0x00000000507ff
 #define CR8_MASK    0x00000003f7fd7
 
+
 /*
  * Copies the value of a Control Register.
  * Argument:
@@ -56,6 +57,7 @@ static inline qword_t rdcr(byte_t n) {
 
     return cr;
 }
+
 
 /*
  * Writes a value into a Control Register.
@@ -86,6 +88,7 @@ static inline void wrcr(byte_t cr, qword_t value) {
     }
 }
 
+
 /*
  * Read a byte from an I/O port.
  * Arguments:
@@ -98,6 +101,7 @@ static inline byte_t inb(word_t port) {
     asm volatile ("inb %1, %0": "=a"(value): "Nd"(port));
     return value;
 }
+
 
 /*
  * Write a byte to an I/O port.
