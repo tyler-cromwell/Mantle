@@ -29,10 +29,11 @@
 #include "handlers.h"
 #include "idt.h"
 
+/* External functions / variables */
+extern void keyboard_handler(void); /* Defined in "keyboard.c" */
+
 /* The Interrupt Descriptor Table */
 static struct IdtGate idt[256];
-
-void keyboard_handler(void);    /* Defined in "keyboard.c" */
 
 
 /*
