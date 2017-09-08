@@ -72,8 +72,8 @@ def clean():
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
         print('usage: ./configure.py [arch | cmd]')
-        print('    arch = [\'amd64\'')
-        print('    cmd = [\'clean\'')
+        print('Architectures:', ARCHES)
+        print('Subcommands:', ['clean'])
         sys.exit()
 
     elif sys.argv[1] == 'clean':
