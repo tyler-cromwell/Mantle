@@ -22,9 +22,9 @@ include make.conf
 LD_SCRIPT = link.ld
 
 # Programs for building
+# CC specified in make.conf
+# LD specified in make.conf
 AS = nasm
-CC = x86_64-elf-gcc
-LD = x86_64-elf-gcc
 
 INCLUDE = -I ./include/
 
