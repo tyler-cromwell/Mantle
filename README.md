@@ -12,15 +12,6 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `include` - All header files used by the kernel.
 - `lib` - Platform independent library functions.
 
-## Branches
-- `master` - Mainline branch. Documentation, and feature/subsystem merges are committed to this branch. 
-- `<branch>` - Branches meant for development of specific features/subsystems (i.e. `paging`).
-
-## Coding Convention
-- All uppercase for Macros and Constants with underscores for spaces (i.e. `FG_WHITE`).
-- Camelcase for Structs and Struct Typedefs (i.e. `IdtDescriptor`).
-- All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`).
-
 ## Toolchain
 - Linux x86_64 GCC Cross Compiler - Download [here][cross].
 - `Makefile` - [GNU] Makefile used to build the kernel.
@@ -39,6 +30,26 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `make.conf` - File containing Makefile variables (populated by `configure.py`).
   - `ARCH`: The architecture to build.
   - `IMAGE`: The kernel binary image.
+
+## Dependencies
+- GCC Cross Compiler
+- Python 3
+- NASM
+- grub2
+- xorriso (>= 1.2.9)
+
+## Building / Testing
+1. `make iso`
+2. Either burn to USB or `qemu-system-x86_64 -cdrom <ISO> -m 2G`
+
+## Branches
+- `master` - Mainline branch. Documentation, and feature/subsystem merges are committed to this branch.
+- `<branch>` - Branches meant for development of specific features/subsystems (i.e. `paging`).
+
+## Coding Convention
+- All uppercase for Macros and Constants with underscores for spaces (i.e. `FG_WHITE`).
+- Camelcase for Structs and Struct Typedefs (i.e. `IdtDescriptor`).
+- All lowercase, underscores for spaces, and subsystem prefix for function names (i.e. `cpuid_vendor`).
 
 ## Editing
 For syntax highlighting of the types in `kernel/types.h`, create a file called `~/.vim/after/syntax/c.vim` and add the following lines:
