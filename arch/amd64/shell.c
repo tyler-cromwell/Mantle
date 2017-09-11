@@ -33,13 +33,6 @@ extern char keyboard_getchar(void);     /* Defined in "keyboard.c" */
 static char input[SHELL_BUFSIZ] = {0};
 
 
-/*
- * Basic text input function.
- * Argument:
- *   char *prompt: The prompt to display.
- * Returns:
- *   a pointer to the input buffer.
- */
 char* shell_readline(char *prompt) {
     char *next = input;
     char *end = input + SHELL_BUFSIZ - 1;
@@ -77,9 +70,6 @@ char* shell_readline(char *prompt) {
 }
 
 
-/*
- * Dump information about the Kernel binary.
- */
 void shell_cmd_kinfo(void) {
     /* Get Kernel size */
     ulong_t size = ((ulong_t) &KERNEL_SIZE) / 1024;
@@ -93,9 +83,6 @@ void shell_cmd_kinfo(void) {
 }
 
 
-/*
- * Dump information about the Processor.
- */
 void shell_cmd_cpuinfo(void) {
     /* Get CPU vendor name */
     char id[13] = {0};
@@ -116,11 +103,6 @@ void shell_cmd_cpuinfo(void) {
 }
 
 
-/*
- * Dump Multiboot information (if available).
- * Arguments:
- *   ulong_t magic: Bootloader magic number.
- */
 void shell_cmd_multiboot(ulong_t magic) {
     if (magic == MULTIBOOT_BOOT_MAGIC) {
         multiboot_dump();

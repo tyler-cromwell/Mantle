@@ -31,10 +31,34 @@
 /* Macro Constants */
 #define SHELL_BUFSIZ    16
 
-/* Function Prototypes */
+
+/*
+ * Basic text input function.
+ * Argument:
+ *   char *prompt: The prompt to display.
+ * Returns:
+ *   a pointer to the input buffer.
+ */
 char* shell_readline(char *prompt);
+
+
+/*
+ * Dump information about the Kernel binary.
+ */
 void shell_cmd_kinfo(void);
+
+
+/*
+ * Dump information about the Processor.
+ */
 void shell_cmd_cpuinfo(void);
+
+
+/*
+ * Dump Multiboot information (if available).
+ * Arguments:
+ *   ulong_t magic: Bootloader magic number.
+ */
 void shell_cmd_multiboot(ulong_t magic);
 
 #endif

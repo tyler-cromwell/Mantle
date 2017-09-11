@@ -25,10 +25,6 @@
 #include <kernel/types.h>
 
 
-/*
- * Initializes the Intel 8253
- * Programmable Interval Timer.
- */
 void i8253_init(byte_t frequency) {
     dword_t d = 1193180 / frequency;
     byte_t l = d & 0xff;

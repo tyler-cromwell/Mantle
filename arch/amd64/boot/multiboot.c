@@ -43,11 +43,6 @@ static struct MultibootInfo *info;
 static struct MultibootMmap *mmap;
 
 
-/*
- * Saves pointers to Multiboot structures.
- * Argument(s):
- *   struct MultibootInfo* mbinfo: Pointer to the info struct.
- */
 void multiboot_init(struct MultibootInfo *mbinfo) {
     info = mbinfo;
 
@@ -57,9 +52,6 @@ void multiboot_init(struct MultibootInfo *mbinfo) {
 }
 
 
-/*
- * Dumps Multiboot information to the console
- */
 void multiboot_dump(void) {
     /* Dump the Bootloader name */
     if (info->flags & MULTIBOOT_BOOTLOADER) {
@@ -141,11 +133,6 @@ void multiboot_dump(void) {
 }
 
 
-/*
- * Returns the total amount of system memory, measured in KILOBYTES.
- * Returns:
- *   the total memory or 0 if not passed from bootloader.
- */
 size_t multiboot_memsize(void) {
     if (info->flags & MULTIBOOT_MMAP) {
         return info->mem_lower + info->mem_upper;

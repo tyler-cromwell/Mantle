@@ -33,11 +33,6 @@
 #define SLAVE_DATA  0xA1
 
 
-/*
- * Masks the given IRQ.
- * Arugment:
- *   byte_t irq: The IRQ number to mask.
- */
 void i8259_set_mask(byte_t irq) {
     word_t port;
     byte_t value;
@@ -55,11 +50,6 @@ void i8259_set_mask(byte_t irq) {
 }
 
 
-/*
- * Unmasks the given IRQ.
- * Argument:
- *   byte_t irq: The IRQ number to unmask.
- */
 void i8259_clear_mask(byte_t irq) {
     word_t port;
     byte_t value;
@@ -77,18 +67,12 @@ void i8259_clear_mask(byte_t irq) {
 }
 
 
-/*
- * Disables all IRQs (masks them).
- */
 void i8259_mask(void) {
     outb(MASTER_DATA, 0xff);
     outb(SLAVE_DATA,  0xff);
 }
 
 
-/*
- * Enables all IRQs (unmasks them).
- */
 void i8259_unmask(void) {
     outb(MASTER_DATA, 0x00);
     outb(SLAVE_DATA,  0x00);

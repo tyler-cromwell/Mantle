@@ -35,10 +35,32 @@
 #define I8259_IRQ_TIMER     0x00
 #define I8259_IRQ_KEYBOARD  0x01
 
-/* Function prototypes */
+
+/*
+ * Masks the given IRQ.
+ * Arugment:
+ *   byte_t irq: The IRQ number to mask.
+ */
 void i8259_set_mask(byte_t irq);
+
+
+/*
+ * Unmasks the given IRQ.
+ * Argument:
+ *   byte_t irq: The IRQ number to unmask.
+ */
 void i8259_clear_mask(byte_t irq);
+
+
+/*
+ * Disables all IRQs (masks them).
+ */
 void i8259_mask(void);
+
+
+/*
+ * Enables all IRQs (unmasks them).
+ */
 void i8259_unmask(void);
 
 #endif

@@ -23,7 +23,11 @@
 /* Kernel header(s) */
 #include <kernel/types.h>
 
-/* Function prototypes */
+
+/*
+ * Initializes the Intel 8253
+ * Programmable Interval Timer.
+ */
 void i8253_init(byte_t frequency);
 
 #endif

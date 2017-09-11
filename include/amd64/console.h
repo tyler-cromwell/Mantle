@@ -62,10 +62,44 @@
 #define BG_BROWN_L      0xe0
 #define BG_WHITE        0xf0
 
-/* Function prototypes */
+
+/*
+ * Clears the console by zero-ing the screen buffer.
+ * Resets the video pointer.
+ */
 void console_clear(void);
+
+
+/*
+ * Sets the background to a specific color.
+ * Argument:
+ *   uchar_t color: The color attribute.
+ */
 void console_set_background(uchar_t color);
+
+
+/*
+ * Writes a string of characters to the console.
+ * Interprets the newline, backspace, and carriage return.
+ * Arguments:
+ *   uchar_t color: The color attribute.
+ *   char *message:  The message to write.
+ *   size_t length: The number of bytes to write.
+ * Returns:
+ *   The number of characters written.
+ */
 size_t console_write(uchar_t color, char *message, size_t length);
+
+
+/*
+ * Printf style function that writes a string of characters to the console.
+ * Arguments:
+ *   uchar_t color: The color attribute.
+ *   char *format: The format string.
+ *   ... : A variable length list of other arguments.
+ * Returns:
+ *   The number of characters written.
+ */
 size_t console_printf(uchar_t color, char *format, ...);
 
 #endif

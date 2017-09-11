@@ -27,8 +27,18 @@
 #define VENDOR_AMD      "AuthenticAMD"
 #define VENDOR_INTEL    "GenuineIntel"
 
-/* Function prototypes */
+
+/*
+ * Obtains the CPU vendor string.
+ * Argument:
+ *   char *id: Location to save the vendor id.
+ */
 void cpuid_vendor(char *id);
+
+
+/*
+ * Obtains the number of processors.
+ */
 dword_t cpuid_cpus(void);
 
 #endif

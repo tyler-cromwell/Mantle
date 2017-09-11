@@ -21,11 +21,6 @@
 #include <kernel/types.h>
 
 
-/*
- * Obtains the CPU vendor string.
- * Argument:
- *   char *id: Location to save the vendor id.
- */
 void cpuid_vendor(char *id) {
     dword_t register eax asm("eax") = 0, ebx asm("ebx") = 0;
     dword_t register ecx asm("ecx") = 0, edx asm("edx") = 0;
@@ -45,9 +40,6 @@ void cpuid_vendor(char *id) {
 }
 
 
-/*
- * Obtains the number of processors.
- */
 dword_t cpuid_cpus(void) {
     dword_t register eax asm("eax") = 1, ebx asm("ebx") = 0;
 

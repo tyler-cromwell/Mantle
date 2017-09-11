@@ -37,16 +37,117 @@ struct ItoaOptions {
 } __attribute__((__packed__));
 
 
-/* Function prototypes */
+/*
+ * Creates the string representation of a number.
+ * Argument:
+ *   struct ItoaOptions *opts:
+ *     Pointer to the options that determine
+ *     how the number should be converted.
+ *   long_t number: The number to convert.
+ * Returns:
+ *   The string representation of number.
+ */
 char* itoa(struct ItoaOptions *opts, long number);
+
+
+/*
+ * Copies the contents of one buffer to another.
+ * Arguments:
+ *   void *dest: The destination buffer.
+ *   const void *src: The source buffer.
+ *   size_t n: The number of bytes to copy.
+ * Returns:
+ *   A pointer to the destination buffer.
+ */
 void* memcpy(void *dest, const void *src, size_t n);
+
+
+/*
+ * Fills the first 'n' bytes of 'dest' with 'c'.
+ * Arguments:
+ *   void *dest: The region of memory to be over-written.
+ *   int c: The value to write with.
+ *   size_t n: The number of bytes to write.
+ * Returns:
+ *   A pointer to the destination buffer.
+ */
 void* memset(void *dest, int c, size_t n);
+
+
+/*
+ * Compares the contents of 2 strings, taking length into account.
+ * Mostly a wrapper for strncmp.
+ * Arguments:
+ *   const char *s1: The first string.
+ *   const char *s2: The second string.
+ * Returns:
+ *   A status/error code:
+ *     1 if equal, 0 if unequal
+ *     -1 if s1 is NULL, -2 if s2 is
+ */
 int8_t strlcmp(const char *s1, const char *s2);
+
+
+/*
+ * Compares the contents of 2 strings. Returns 0 if they are equal.
+ * If they are not equal, returns the first character in s1 that is different.
+ * Arguments:
+ *   const char *s1: The first string.
+ *   const char *s2: The second string.
+ *   size_t n: The number of bytes to compare.
+ * Returns (see above)
+ */
 int strncmp(const char *s1, const char *s2, size_t n);
+
+
+/*
+ * Copies a string.
+ * Arguments:
+ *   char *dest: The new string.
+ *   const char *src: The source string.
+ *   size_t n: The number of bytes to copy.
+ * Returns:
+ *   A pointer to the new string.
+ */
 char* strncpy(char *dest, const char *src, size_t n);
+
+
+/*
+ * Calculates the length of a string.
+ * Argument:
+ *   const char *string: The string to find the length of.
+ * Returns:
+ *   The length of string.
+ */
 size_t strlen(const char *string);
+
+
+/*
+ * Calculates the length of a string, up to a given size.
+ * Argument:
+ *   const char *string: The string to find the length of.
+ *   size_t n: The counting limit
+ * Returns:
+ *   The length of string.
+ */
 size_t strnlen(const char *string, size_t n);
+
+
+/*
+ * Converts the alphabetical characters
+ * in a string to lowercase.
+ * Argument:
+ *   char *string: The string to be modified.
+ */
 void strlower(char *string);
+
+
+/*
+ * Converts the alphabetical characters
+ * in a string to uppercase.
+ * Argument:
+ *   char *string: The string to be modified.
+ */
 void strupper(char *string);
 
 #endif

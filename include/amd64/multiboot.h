@@ -142,9 +142,26 @@ struct MultibootDrive {
 } __attribute__((__packed__));
 
 
-/* Function prototypes */
+
+/*
+ * Saves pointers to Multiboot structures.
+ * Argument(s):
+ *   struct MultibootInfo* mbinfo: Pointer to the info struct.
+ */
 void multiboot_init(struct MultibootInfo *mbinfo);
+
+
+/*
+ * Dumps Multiboot information to the console
+ */
 void multiboot_dump(void);
+
+
+/*
+ * Returns the total amount of system memory, measured in KILOBYTES.
+ * Returns:
+ *   the total memory or 0 if not passed from bootloader.
+ */
 size_t multiboot_memsize(void);
 
 #endif

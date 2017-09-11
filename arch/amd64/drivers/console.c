@@ -30,15 +30,15 @@
 /* Macro constants */
 #define CONSOLE_START   (char*) 0xb8000 /* The starting address for video memory */
 #define CONSOLE_END     (char*) 0xb8fa0 /* The ending address for video memory */
-#define TAB_WIDTH   4       /* The number of characters to advance by for indentation */
-#define CHAR_WIDTH  2       /* The number of bytes used per character */
-#define LINES       25      /* The number of lines on the screen */
-#define LINE_CHARS  80      /* The number of characters per line */
-#define LINE_BYTES  160     /* The number of bytes per line */
-#define BYTES       4000    /* The number of usable bytes in video memory */
+#define TAB_WIDTH       4       /* The number of characters to advance by for indentation */
+#define CHAR_WIDTH      2       /* The number of bytes used per character */
+#define LINES           25      /* The number of lines on the screen */
+#define LINE_CHARS      80      /* The number of characters per line */
+#define LINE_BYTES      160     /* The number of bytes per line */
+#define BYTES           4000    /* The number of usable bytes in video memory */
 
-/* Pointer to the next "empty" character byte */
-static char *next = CONSOLE_START;
+/* Internal variables */
+static char *next = CONSOLE_START;  /* Pointer to the next "empty" character byte */
 
 
 /*
@@ -60,10 +60,6 @@ static void move_cursor(uchar_t color) {
 }
 
 
-/*
- * Clears the console by zero-ing the screen buffer.
- * Resets the video pointer.
- */
 void console_clear(void) {
     next = CONSOLE_START;
     memset(CONSOLE_START, 0, BYTES);
@@ -71,11 +67,6 @@ void console_clear(void) {
 }
 
 
-/*
- * Sets the background to a specific color.
- * Argument:
- *   uchar_t color: The color attribute.
- */
 void console_set_background(uchar_t color) {
     next = CONSOLE_START;
     uint16_t offset = 0;
@@ -91,16 +82,6 @@ void console_set_background(uchar_t color) {
 }
 
 
-/*
- * Writes a string of characters to the console.
- * Interprets the newline, backspace, and carriage return.
- * Arguments:
- *   uchar_t color: The color attribute.
- *   char *message:  The message to write.
- *   size_t length: The number of bytes to write.
- * Returns:
- *   The number of characters written.
- */
 size_t console_write(uchar_t color, char *message, size_t length) {
     size_t c = 0;
 
@@ -181,15 +162,6 @@ size_t console_write(uchar_t color, char *message, size_t length) {
 }
 
 
-/*
- * Printf style function that writes a string of characters to the console.
- * Arguments:
- *   uchar_t color: The color attribute.
- *   char *format: The format string.
- *   ... : A variable length list of other arguments.
- * Returns:
- *   The number of characters written.
- */
 size_t console_printf(uchar_t color, char *format, ...) {
     __builtin_va_list arguments;
     __builtin_va_start(arguments, format);

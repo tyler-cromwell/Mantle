@@ -23,6 +23,11 @@
 /* Kernel header(s) */
 #include <kernel/types.h>
 
+
+/*
+ * Calculate the result of a number raised to a power.
+ * DOES NOT HANDLE NEGATIVE POWERS, that requires floating point math.
+ */
 long pow(long base, ulong_t power);
 
 #endif
