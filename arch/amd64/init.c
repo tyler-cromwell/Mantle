@@ -17,7 +17,7 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* Kernel header(s) */
+// Kernel headers
 #include <amd64/console.h>
 #include <amd64/multiboot.h>
 #include <amd64/shell.h>
@@ -25,10 +25,9 @@
 #include <kernel/version.h>
 #include <lib/string.h>
 
-/* External functions / variables */
-extern void idt_configure(void);                            /* Defined in "idt.c" */
-extern void paging_configure(size_t memory, ulong_t pages); /* Defined in "paging.c" */
-extern void paging_pageinfo(void);                          /* Defined in "paging.c" */
+// Local headers
+#include "interrupts/api.h"
+#include "memory/api.h"
 
 
 /*
