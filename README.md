@@ -39,8 +39,9 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - xorriso (>= 1.2.9)
 
 ## Building / Testing
-1. `make iso`
-2. Either burn to USB or `qemu-system-x86_64 -cdrom <ISO> -m 2G`
+1. `./configure.py amd64`
+2. `make iso`
+3. Either burn to USB or `qemu-system-x86_64 -cdrom <ISO> -m 2G`
 
 ## Branches
 - `master` - Mainline branch. Documentation, and feature/subsystem merges are committed to this branch.
