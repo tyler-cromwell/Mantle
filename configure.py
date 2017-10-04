@@ -20,14 +20,26 @@
 ######################################################################
 
 import configparser
+import getopt
 import os
 import re
 import subprocess
 import sys
 
-FILES = ['grub.cfg', 'include/kernel/version.h', 'make.conf', 'ritchie.conf']
-ARCHES = ['amd64']
+ARCHES = [
+    'amd64'
+]
 
+CMDS = [
+    'clean'
+]
+
+FILES = [
+    'grub.cfg',
+    'include/kernel/version.h',
+    'make.conf',
+    'ritchie.conf'
+]
 
 
 # Replaces the matched contents of a file with the given string.
@@ -63,24 +75,48 @@ def update(filename, search, pattern, string):
 # This is I don't have to type it myself every time.
 def clean():
     for f in FILES[:-1]:
-        print('Resetting \''+ f +'\'... ', end='')
+        print('Resetting \'', f, '\'... ', sep='', end='')
         os.system('git checkout '+f)
         print('DONE')
 
 
+# Prints the command usage along with
+# supported architectures and commands
+def print_usage():
+    print('usage: ./configure.py [-a arch] [-c cmd]\n')
+    print('Architectures:', ARCHES)
+    print('Subcommands:', CMDS)
+    sys.exit()
+
+
 # The main function of this script.
 if __name__ == "__main__":
-    if len(sys.argv) <= 1:
-        print('usage: ./configure.py [arch | cmd]')
-        print('Architectures:', ARCHES)
-        print('Subcommands:', ['clean'])
-        sys.exit()
+    arch = ''
+    cmd = ''
 
-    elif sys.argv[1] == 'clean':
+    try:
+        short_opts = 'ha:c:'
+        long_opts = ['help', 'arch=', 'cmd=']
+        opts, args = getopt.getopt(sys.argv[1:], short_opts, long_opts)
+    except getopt.GetoptError as error:
+        print('Invalid argument: \"', str(error), '\"\n')
+        print_usage()
+
+    if len(opts) == 0:
+        print_usage()
+
+    for o, a in opts:
+        if o == '-h' or o == '--help':
+            print_usage()
+        elif o == '-a' or o == '--arch':
+            arch = a
+        elif o == '-c' or o == '--cmd':
+            cmd = a
+
+    if cmd == 'clean':
         clean()
 
-    elif sys.argv[1] in ARCHES:
-        arch = sys.argv[1]
+    elif arch in ARCHES:
         config = configparser.ConfigParser()
         config.read(FILES[3])
 
@@ -120,7 +156,3 @@ if __name__ == "__main__":
         update(FILES[2], 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
         update(FILES[2], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
         print('DONE')
-
-    else:
-        print('Architectures:', ARCHES)
-        print('Subcommands:', ['clean'])
