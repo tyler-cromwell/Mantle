@@ -34,12 +34,12 @@ CMDS = [
     'clean'
 ]
 
-FILES = [
-    'grub.cfg',
-    'include/kernel/version.h',
-    'make.conf',
-    'ritchie.conf'
-]
+FILES = {
+    'grub' : 'grub.cfg',
+    'version' : 'include/kernel/version.h',
+    'make' : 'make.conf',
+    'ritchie' : 'ritchie.conf'
+}
 
 
 # Replaces the matched contents of a file with the given string.
@@ -74,9 +74,9 @@ def update(filename, search, pattern, string):
 #
 # This is I don't have to type it myself every time.
 def clean():
-    for f in FILES[:-1]:
-        print('Resetting \'', f, '\'... ', sep='', end='')
-        os.system('git checkout '+f)
+    for k in ['grub', 'version', 'make']:
+        print('Resetting \'', FILES[k], '\'... ', sep='', end='')
+        os.system('git checkout '+ FILES[k])
         print('DONE')
 
 
@@ -118,7 +118,7 @@ if __name__ == "__main__":
 
     elif arch in ARCHES:
         config = configparser.ConfigParser()
-        config.read(FILES[3])
+        config.read(FILES['ritchie'])
 
         # Read in the options
         (name, version, codename) = [pair[1] for pair in config.items('Version')]
@@ -139,20 +139,20 @@ if __name__ == "__main__":
         image_string = name.lower() +"-v"+ release + branch
 
         # Update the GRUB configuration file
-        print('Updating \''+ FILES[0] +'\'... ', end='')
-        update(FILES[0], 'menuentry', r'\".*\"', version_string)
-        update(FILES[0], 'multiboot', r'/boot/.*$', '/boot/'+image_string)
+        print('Updating \''+ FILES['grub'] +'\'... ', end='')
+        update(FILES['grub'], 'menuentry', r'\".*\"', version_string)
+        update(FILES['grub'], 'multiboot', r'/boot/.*$', '/boot/'+image_string)
         print('DONE')
 
         # Update kernel version header file
-        print('Updating \''+ FILES[1] +'\'... ', end='')
-        update(FILES[1], 'PROJECT', r'PROJECT \".*\"', 'PROJECT \"'+ name +'\"')
-        update(FILES[1], 'VERSION', r'VERSION \".*\"', 'VERSION \"'+ version + branch +'\"')
-        update(FILES[1], 'CODENAME', r'CODENAME \".*\"', 'CODENAME \"'+ codename +'\"')
+        print('Updating \''+ FILES['version'] +'\'... ', end='')
+        update(FILES['version'], 'PROJECT', r'PROJECT \".*\"', 'PROJECT \"'+ name +'\"')
+        update(FILES['version'], 'VERSION', r'VERSION \".*\"', 'VERSION \"'+ version + branch +'\"')
+        update(FILES['version'], 'CODENAME', r'CODENAME \".*\"', 'CODENAME \"'+ codename +'\"')
         print('DONE')
 
         # Update make.conf file
-        print('Updating \''+ FILES[2] +'\'... ', end='')
-        update(FILES[2], 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
-        update(FILES[2], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
+        print('Updating \''+ FILES['make'] +'\'... ', end='')
+        update(FILES['make'], 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
+        update(FILES['make'], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
         print('DONE')
