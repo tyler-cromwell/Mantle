@@ -22,7 +22,7 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - `grub.cfg` - Basic GRUB config file.
 - `configure.py` - Python 3 script that updates the following files:
   - `make.conf`, `grub.cfg`, and `version.h`.
-  - Running `./configure.py clean` will run `git checkout` on each file.
+  - Running `./configure.py -c clean` will run `git checkout` on each file.
 - `ritchie.conf` - Project configuration file, contains various options.
   - `Name`: The project name.
   - `Version`: The version string.
@@ -39,7 +39,7 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 - xorriso (>= 1.2.9)
 
 ## Building / Testing
-1. `./configure.py amd64`
+1. `./configure.py -a amd64`
 2. `make iso`
 3. Either burn to USB or `qemu-system-x86_64 -cdrom <ISO> -m 2G`
 
