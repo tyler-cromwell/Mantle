@@ -83,7 +83,11 @@ def clean():
 # Prints the command usage along with
 # supported architectures and commands
 def print_usage():
-    print('usage: ./configure.py [-a arch] [-c cmd]\n')
+    print('usage: ./configure.py [-a arch] [-c cmd]')
+    print('  -h --help\t\tPrints this text')
+    print('  -a --arch\t\tThe target architecture')
+    print('  -c --cmd \t\tSpecific command')
+    print()
     print('Architectures:', ARCHES)
     print('Subcommands:', CMDS)
     sys.exit()
