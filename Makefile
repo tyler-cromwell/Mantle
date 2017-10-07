@@ -26,7 +26,7 @@ LD_SCRIPT = link.ld
 # LD specified in make.conf
 AS = nasm
 
-INCLUDE = -I ./include/
+INCLUDE = -I ./include/ -I ./arch/include/
 
 ASFLAGS = -felf64
 CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse \
