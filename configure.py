@@ -34,11 +34,12 @@ CMDS = [
     'clean'
 ]
 
+CONF = 'ritchie.conf'
+
 FILES = {
     'grub' : 'grub.cfg',
     'version' : 'include/kernel/version.h',
-    'make' : 'make.conf',
-    'ritchie' : 'ritchie.conf'
+    'make' : 'make.conf'
 }
 
 
@@ -74,7 +75,7 @@ def update(filename, search, pattern, string):
 #
 # This is I don't have to type it myself every time.
 def clean():
-    for k in ['grub', 'version', 'make']:
+    for k in FILES.keys():
         print('Resetting \'', FILES[k], '\'... ', sep='', end='')
         os.system('git checkout '+ FILES[k])
         print('DONE')
@@ -122,7 +123,7 @@ if __name__ == "__main__":
 
     elif arch in ARCHES:
         config = configparser.ConfigParser()
-        config.read(FILES['ritchie'])
+        config.read(CONF)
 
         # Read in the options
         (name, version, codename) = [pair[1] for pair in config.items('Version')]
