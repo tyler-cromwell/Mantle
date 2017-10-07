@@ -8,8 +8,9 @@ This project is named in honor of the late, great [Dennis Ritchie][dmr].
 
 ## Repository Hierarchy
 - `arch` - Architecture specific code.
+    - `arch/include` - Architecture specific header files.
 - `docs` - Documentation.
-- `include` - All header files used by the kernel.
+- `include` - Architecture independent headers.
 - `lib` - Platform independent library functions.
 
 ## Toolchain
