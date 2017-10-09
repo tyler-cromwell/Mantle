@@ -17,10 +17,10 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library header(s) */
+// C Standard Library header(s)
 #include <stddef.h>
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <kernel/types.h>
 #include <lib/string.h>
 
@@ -33,7 +33,7 @@ char* itoa(struct ItoaOptions *opts, long number) {
     ushort_t c = 0;
     uchar_t base = 0;
 
-    /* Determine base */
+    // Determine base
     if (opts->binary) base = 2;
     else if (opts->octal) base = 8;
     else if (opts->hex) base = 16;
@@ -41,12 +41,12 @@ char* itoa(struct ItoaOptions *opts, long number) {
 
     memset(buffer, 0, ITOA_BUFSIZ);
 
-    /* If number is zero, just stop */
+    // If number is zero, just stop
     if (number == 0) {
         *--string = '0';
         c++;
     }
-    /* Convert, up to a base of 16 */
+    // Convert, up to a base of 16
     else {
         long i = number;
 
@@ -63,7 +63,7 @@ char* itoa(struct ItoaOptions *opts, long number) {
         }
     }
 
-    /* Print leading zeros */
+    // Print leading zeros
     if (opts->pad) {
         uchar_t d = 0;
         if (base == 2) d = 64;
@@ -98,7 +98,7 @@ void *memset(void *dest, int c, size_t n) {
 
 
 int8_t strlcmp(const char *s1, const char *s2) {
-    /* If a string is NULL, return an error */
+    // If a string is NULL, return an error
     if (s1 == NULL) {
         return -1;
     }
@@ -106,12 +106,12 @@ int8_t strlcmp(const char *s1, const char *s2) {
         return -2;
     }
 
-    /* Get lengths */
+    // Get lengths
     size_t sl1 = strlen(s1);
     size_t sl2 = strlen(s2);
     size_t l = 0;
 
-    /* Compare length before content */
+    // Compare length before content
     if (sl1 == sl2) {
         return !strncmp(s1, s2, sl1);
     } else {
@@ -158,7 +158,7 @@ void strlower(char *string) {
     char *s = string;
     size_t n = strlen(string);
 
-    /* Iterate until NULL byte or string length */
+    // Iterate until NULL byte or string length
     for (size_t i = 0; i < n && *s != '\0'; i++, s++) {
         if (*s >= 'A' && *s <= 'Z') {
             *s = *s + 32;
@@ -171,7 +171,7 @@ void strupper(char *string) {
     char *s = string;
     size_t n = strlen(string);
 
-    /* Iterate until NULL byte or string length */
+    // Iterate until NULL byte or string length
     for (size_t i = 0; i < n && *s != '\0'; i++, s++) {
         if (*s >= 'a' && *s <= 'z') {
             *s = *s - 32;

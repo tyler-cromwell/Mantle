@@ -17,17 +17,17 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library header(s) */
+// C Standard Library header(s)
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <amd64/asm.h>
 #include <kernel/types.h>
 #include <lib/string.h>
 
-/* Macro constants */
+// Macro constants
 #define CONSOLE_START   (char*) 0xb8000 /* The starting address for video memory */
 #define CONSOLE_END     (char*) 0xb8fa0 /* The ending address for video memory */
 #define TAB_WIDTH       4       /* The number of characters to advance by for indentation */

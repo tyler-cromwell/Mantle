@@ -17,7 +17,7 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <kernel/types.h>
 
 
@@ -31,7 +31,7 @@ void cpuid_vendor(char *id) {
         : "a" (eax)
     );
 
-    /* Construct the vendor string */
+    // Construct the vendor string
     for (byte_t i = 0; i < 4; i++) {
         id[i+0] = ebx >> (i * 8);
         id[i+4] = edx >> (i * 8);

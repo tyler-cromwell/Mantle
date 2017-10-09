@@ -17,10 +17,10 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library header(s) */
+// C Standard Library header(s)
 #include <stdint.h>
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <amd64/asm.h>
 #include <kernel/types.h>
 

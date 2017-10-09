@@ -20,14 +20,14 @@
 #ifndef LIB_STRING_H
 #define LIB_STRING_H
 
-/* C Standard Library header(s) */
+// C Standard Library header(s)
 #include <stddef.h>
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <kernel/types.h>
 
 
-/* Itoa conversion structure */
+// Itoa conversion structure
 struct ItoaOptions {
     byte_t pad      : 1;
     byte_t binary   : 1;

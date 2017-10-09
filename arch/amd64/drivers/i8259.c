@@ -17,18 +17,18 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library header(s) */
+// C Standard Library header(s)
 #include <stdint.h>
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <amd64/asm.h>
 #include <kernel/types.h>
 
-/* Master PIC */
+// Master PIC
 #define MASTER_CMD  0x20
 #define MASTER_DATA 0x21
 
-/* Slave PIC */
+// Slave PIC
 #define SLAVE_CMD   0xA0
 #define SLAVE_DATA  0xA1
 
@@ -37,7 +37,7 @@ void i8259_set_mask(byte_t irq) {
     word_t port;
     byte_t value;
 
-    /* Determine PIC */
+    // Determine PIC
     if (irq < 8) {
         port = MASTER_DATA;
     } else {
@@ -54,7 +54,7 @@ void i8259_clear_mask(byte_t irq) {
     word_t port;
     byte_t value;
 
-    /* Determine PIC */
+    // Determine PIC
     if (irq < 8) {
         port = MASTER_DATA;
     } else {

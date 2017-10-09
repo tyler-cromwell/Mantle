@@ -17,16 +17,16 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <amd64/asm.h>
 #include <amd64/i8259.h>
 #include <kernel/types.h>
 
-/* Keyboard ports */
+// Keyboard ports
 #define KEYBOARD_DATA   0x60
 #define KEYBOARD_STATUS 0x64
 
-/* US QWERTY keyboard map */
+// US QWERTY keyboard map
 static byte_t keymap[128] = {
     0,          /* <NOTHING> */
     27,         /* Escape */
@@ -64,7 +64,7 @@ static byte_t keymap[128] = {
     0,          /* All other keys are undefined */
 };
 
-/* Newest character read from the keyboard */
+// Newest character read from the keyboard
 static volatile char next = -1;
 
 
@@ -85,7 +85,7 @@ void keyboard_handler(void) {
 
         char key = keymap[scan];
 
-        /* Only printable characters */
+        // Only printable characters
         if ((scan >= 0x02 && scan <= 0x0e) ||
             (scan >= 0x10 && scan <= 0x1c) ||
             (scan >= 0x1e && scan <= 0x29) ||
@@ -104,9 +104,9 @@ void keyboard_handler(void) {
  */
 char keyboard_getchar(void) {
     i8259_clear_mask(I8259_IRQ_KEYBOARD);
-    while (next == -1) {}                   /* Wait for IRQ */
+    while (next == -1) {}                   // Wait for IRQ
     i8259_set_mask(I8259_IRQ_KEYBOARD);
     char c = next;
-    next = -1;                              /* Reset buffer */
+    next = -1;                              // Reset buffer
     return c;
 }

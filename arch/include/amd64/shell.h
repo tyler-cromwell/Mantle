@@ -20,15 +20,15 @@
 #ifndef AMD64_SHELL_H
 #define AMD64_SHELL_H
 
-/* C Standard Library header(s) */
+// C Standard Library header(s)
 #include <stdint.h>
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <amd64/asm.h>
 #include <amd64/multiboot.h>
 #include <kernel/types.h>
 
-/* Macro Constants */
+// Macro Constants
 #define SHELL_BUFSIZ    16
 
 

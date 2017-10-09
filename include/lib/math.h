@@ -20,7 +20,7 @@
 #ifndef LIB_MATH_H
 #define LIB_MATH_H
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <kernel/types.h>
 
 

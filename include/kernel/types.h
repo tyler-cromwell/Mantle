@@ -20,16 +20,16 @@
 #ifndef KERNEL_TYPES_H
 #define KERNEL_TYPES_H
 
-/* C Standard Library header(s) */
+// C Standard Library header(s)
 #include <stdint.h>
 
-/* Unsigned primitives */
+// Unsigned primitives
 typedef unsigned char uchar_t;
 typedef unsigned short ushort_t;
 typedef unsigned int uint_t;
 typedef unsigned long ulong_t;
 
-/* Architecture word sizes */
+// Architecture word sizes
 typedef uint8_t byte_t;
 typedef uint16_t word_t;
 typedef uint32_t dword_t;

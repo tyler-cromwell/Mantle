@@ -17,28 +17,28 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library header(s) */
+// C Standard Library header(s)
 #include <stddef.h>
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <amd64/console.h>
 #include <amd64/multiboot.h>
 #include <kernel/types.h>
 #include <lib/string.h>
 
-/* Macros for converting byte metrics */
+// Macros for converting byte metrics
 #define CONVERT_NUM 1024
 #define CONVERT_UP(number) (number) / CONVERT_NUM
 #define CONVERT_DOWN(number) (number) * CONVERT_NUM
 
-/* Memory Map entry types */
-#define MMAP_AVAILABLE          1   /* Memory available for use */
-#define MMAP_RESERVED           2   /* Unusable memory */
-#define MMAP_ACPI_RECLAIMABLE   3   /* Ususable once finished with ACPI tables */
-#define MMAP_NVSRAM             4   /* Non-volatile static RAM */
-#define MMAP_BAD_RAM            5   /* Faulty RAM */
+// Memory Map entry types
+#define MMAP_AVAILABLE          1   // Memory available for use
+#define MMAP_RESERVED           2   // Unusable memory
+#define MMAP_ACPI_RECLAIMABLE   3   // Ususable once finished with ACPI tables
+#define MMAP_NVSRAM             4   // Non-volatile static RAM
+#define MMAP_BAD_RAM            5   // Faulty RAM
 
-/* Multiboot information structures */
+// Multiboot information structures
 static struct MultibootInfo *info;
 static struct MultibootMmap *mmap;
 
@@ -53,18 +53,18 @@ void multiboot_init(struct MultibootInfo *mbinfo) {
 
 
 void multiboot_dump(void) {
-    /* Dump the Bootloader name */
+    // Dump the Bootloader name
     if (info->flags & MULTIBOOT_BOOTLOADER) {
         console_printf(FG_WHITE, "Bootloader: ");
         console_printf(FG_BROWN, "%s\n", info->boot_loader_name);
     }
 
-    /* Dump number of boot modules */
+    // Dump number of boot modules
     if (info->flags & MULTIBOOT_MODULES) {
         console_printf(FG_WHITE, "Number of boot modules: %u\n", info->mods_count);
     }
 
-    /* Dump the amount of Lower and Upper Memory */
+    // Dump the amount of Lower and Upper Memory
     if (info->flags & MULTIBOOT_MEMORY) {
         console_printf(FG_WHITE, "Lower Memory: %uKB\n", info->mem_lower);
 
@@ -76,7 +76,7 @@ void multiboot_dump(void) {
         }
     }
 
-    /* Dump the Memory Map */
+    // Dump the Memory Map
     if (info->flags & MULTIBOOT_MMAP) {
         ulong_t ents = info->mmap_length / sizeof(struct MultibootMmap);
         console_printf(FG_WHITE, "\nMemory Map:\n");
@@ -86,7 +86,7 @@ void multiboot_dump(void) {
             ulong_t addr = mmap[i].base;
             char str[17];
 
-            /* Region Base Address */
+            // Region Base Address
             memcpy(str, itoa(&opts, addr), 17);
             if (ents >= 10 && i < 10) {
                 console_printf(FG_WHITE, "[ %u]: 0x%s - ", i, str);
@@ -94,12 +94,12 @@ void multiboot_dump(void) {
                 console_printf(FG_WHITE, "[%u]: 0x%s - ", i, str);
             }
 
-            /* Region Ending Address */
+            // Region Ending Address
             addr = mmap[i].base + mmap[i].length - 1;
             memcpy(str, itoa(&opts, addr), 17);
             console_printf(FG_WHITE, "0x%s (", str);
 
-            /* Region length */
+            // Region length
             addr = CONVERT_UP(mmap[i].length);
             if (addr >= CONVERT_NUM) {
                 addr = CONVERT_UP(addr);
@@ -108,7 +108,7 @@ void multiboot_dump(void) {
                 console_printf(FG_WHITE, "%uKB, ", addr);
             }
 
-            /* Region type */
+            // Region type
             switch (mmap[i].type) {
                 case MMAP_AVAILABLE:
                     console_printf(FG_WHITE, "Available");

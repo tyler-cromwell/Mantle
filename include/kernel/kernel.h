@@ -20,7 +20,7 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-/* Linker Script Symbols */
+// Linker Script Symbols
 extern struct undefined KERNEL_LMA;
 extern struct undefined KERNEL_END;
 extern struct undefined KERNEL_SIZE;
