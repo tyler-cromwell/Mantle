@@ -43,21 +43,21 @@ void init_kernel(ulong_t magic, struct MultibootInfo *mbinfo, ulong_t pages) {
     console_clear();
     console_printf(FG_BLUE_L, STRING"\n");
 
-    /* Setup critical components */
+    // Setup critical components
     multiboot_init(mbinfo);
-    idt_configure();            /* Interrupts */
-    paging_configure(           /* Virtual Memory */
+    idt_configure();            // Interrupts
+    paging_configure(           // Virtual Memory
         multiboot_memsize(),
         pages
     );
 
     console_printf(FG_WHITE, "\n");
 
-    /* Wait for commands */
+    // Wait for commands
     while (1) {
         char *input = shell_readline("> ");
 
-        /* Interpret input */
+        // Interpret input
         if (strlcmp(input, "kinfo") > 0) {
             shell_cmd_kinfo();
         }
@@ -88,7 +88,7 @@ void init_kernel(ulong_t magic, struct MultibootInfo *mbinfo, ulong_t pages) {
             console_printf(FG_WHITE, "Unkown command \"%s\"\n", input);
         }
 
-        /* Reset input buffer */
+        // Reset input buffer
         memset(input, '\0', SHELL_BUFSIZ);
     }
 

@@ -20,30 +20,30 @@
 #ifndef AMD64_IDT_H
 #define AMD64_IDT_H
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <kernel/types.h>
 
 
-/* A Long Mode IDT interrupt gate */
+// A Long Mode IDT interrupt gate
 struct IdtGate {
-    word_t offset_low;      /* Lower portion of the offset */
-    word_t selector;        /* Interrupt selector */
-    byte_t zero1;           /* Always zero */
-    byte_t type_attr;       /* Type attributes */
-    word_t offset_middle;   /* Middle portion of the offset */
-    dword_t offset_high;    /* Upper portion of the offset */
-    dword_t zero2;          /* Always zero */
+    word_t offset_low;      // Lower portion of the offset
+    word_t selector;        // Interrupt selector
+    byte_t zero1;           // Always zero
+    byte_t type_attr;       // Type attributes
+    word_t offset_middle;   // Middle portion of the offset
+    dword_t offset_high;    // Upper portion of the offset
+    dword_t zero2;          // Always zero
 } __attribute__((__packed__));
 
 
-/* The Long Mode IDTR register */
+// The Long Mode IDTR register
 struct Idtr {
-    word_t limit;   /* The length of the IDT */
-    qword_t base;   /* IDT base address */
+    word_t limit;   // The length of the IDT
+    qword_t base;   // IDT base address
 } __attribute__((__packed__));
 
 
-/* Selector Error code */
+// Selector Error code
 struct SelectorError {
     dword_t ext         : 1;
     dword_t idt         : 1;
@@ -53,7 +53,7 @@ struct SelectorError {
 } __attribute__((__packed__));
 
 
-/* Page Fault Error code */
+// Page Fault Error code
 struct PageFaultError {
     dword_t p           : 1;
     dword_t rw          : 1;
@@ -64,7 +64,7 @@ struct PageFaultError {
 } __attribute__((__packed__));
 
 
-/* Register states before Interrupt */
+// Register states before Interrupt
 struct InterruptStack {
     qword_t ds;
     qword_t r15, r14, r13, r12, r11, r10, r9, r8;

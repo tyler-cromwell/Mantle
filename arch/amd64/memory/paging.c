@@ -17,20 +17,20 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* C Standard Library header(s) */
+// C Standard Library header(s)
 #include <stddef.h>
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <amd64/console.h>
 #include <kernel/types.h>
 
-/* Macro Constants */
+// Macro Constants
 #define MAX_PDP     (512) - 1
 #define MAX_PD      (512 * 512) - 1
 #define MAX_PT      (512 * 512 * 512) - 1
 #define MAX_PAGE    (512 * 512 * 512 * 512) - 1
 
-/* Counters */
+// Counters
 static ushort_t pointers = 0;
 static uint_t directories = 0;
 static uint_t tables = 0;
@@ -48,9 +48,9 @@ static ulong_t unmapped_frames = 0;
  *   ulong_t page_num: Total number of in-use pages.
  */
 void paging_configure(size_t memory, ulong_t page_num) {
-    size_t max_frames = memory / 4;     /* 4KB per page/frame */
+    size_t max_frames = memory / 4;     // 4KB per page/frame
 
-    /* Setup counters */
+    // Setup counters
     pages = page_num;
     tables = (pages + 512 - (pages % 512)) / 512;
     directories = (tables + 512 - (tables % 512)) / 512;

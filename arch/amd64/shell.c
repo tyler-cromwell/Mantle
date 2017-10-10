@@ -17,7 +17,7 @@
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <amd64/console.h>
 #include <amd64/cpuid.h>
 #include <amd64/multiboot.h>
@@ -26,10 +26,10 @@
 #include <kernel/types.h>
 #include <lib/string.h>
 
-/* External functions / variables */
-extern char keyboard_getchar(void);     /* Defined in "keyboard.c" */
+// External functions / variables
+extern char keyboard_getchar(void);     // Defined in "keyboard.c"
 
-/* Internal variables */
+// Internal variables
 static char input[SHELL_BUFSIZ] = {0};
 
 
@@ -44,20 +44,20 @@ char* shell_readline(char *prompt) {
     while (1) {
         char letter = keyboard_getchar();
 
-        /* Handle Newline */
+        // Handle Newline
         if (letter == '\n') {
             backspaces = 0;
             console_printf(FG_WHITE, "%c", letter);
             break;
         }
-        /* Handle Backspace */
+        // Handle Backspace
         else if (letter == '\b' && next != input) {
             backspaces--;
             next--;
             *next = '\0';
             console_printf(FG_WHITE, "%c", letter);
         }
-        /* Handle printable characters */
+        // Handle printable characters
         else if (letter >= 32 && letter <= 126 && next != end) {
             backspaces++;
             *next = letter;
@@ -71,7 +71,7 @@ char* shell_readline(char *prompt) {
 
 
 void shell_cmd_kinfo(void) {
-    /* Get Kernel size */
+    // Get Kernel size
     ulong_t size = ((ulong_t) &KERNEL_SIZE) / 1024;
     console_printf(FG_WHITE, "Size in memory:\t\t%uKB\n", size);
     console_printf(FG_WHITE, "Physical address:\t%x\n", &KERNEL_LMA);
@@ -84,12 +84,12 @@ void shell_cmd_kinfo(void) {
 
 
 void shell_cmd_cpuinfo(void) {
-    /* Get CPU vendor name */
+    // Get CPU vendor name
     char id[13] = {0};
     cpuid_vendor(id);
     console_printf(FG_WHITE, "vendor_id: ");
 
-    /* Print CPU vendor name */
+    // Print CPU vendor name
     if (!strncmp(id, VENDOR_INTEL, strlen(id))) {
         console_printf(FG_CYAN_L, "%s\n", id);
     } else if (!strncmp(id, VENDOR_AMD, strlen(id))) {
@@ -98,7 +98,7 @@ void shell_cmd_cpuinfo(void) {
         console_printf(FG_GREY_L, "%s\n", id);
     }
 
-    /* Get and print number of processors */
+    // Get and print number of processors
     console_printf(FG_WHITE, "processors: %u\n", cpuid_cpus());
 }
 
