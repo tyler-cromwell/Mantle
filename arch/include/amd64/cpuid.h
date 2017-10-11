@@ -20,10 +20,10 @@
 #ifndef AMD64_CPUID_H
 #define AMD64_CPUID_H
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <kernel/types.h>
 
-/* Macro constants */
+// Macro constants
 #define VENDOR_AMD      "AuthenticAMD"
 #define VENDOR_INTEL    "GenuineIntel"
 

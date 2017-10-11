@@ -20,17 +20,17 @@
 #ifndef AMD64_ASM_H
 #define AMD64_ASM_H
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <kernel/types.h>
 
-/* Control Register numbers */
+// Control Register numbers
 #define CR0 0
 #define CR2 2
 #define CR3 3
 #define CR4 4
 #define CR8 8
 
-/* Control Register masks, discards unused bits */
+// Control Register masks, discards unused bits
 #define CR0_MASK    0x00000e005003f
 #define CR3_MASK    0xffffffffff018
 #define CR4_MASK    0x00000000507ff

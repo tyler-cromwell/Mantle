@@ -20,7 +20,7 @@
 #ifndef AMD64_I8253_H
 #define AMD64_I8253_H
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <kernel/types.h>
 
 

@@ -20,18 +20,18 @@
 #ifndef AMD64_I8259_H
 #define AMD64_I8259_H
 
-/* Kernel header(s) */
+// Kernel header(s)
 #include <kernel/types.h>
 
-/* Master PIC */
+// Master PIC
 #define I8259_MASTER_CMD    0x20
 #define I8259_MASTER_DATA   0x21
 
-/* Slave PIC */
+// Slave PIC
 #define I8259_SLAVE_CMD     0xA0
 #define I8259_SLAVE_DATA    0xA1
 
-/* Device IRQ numbers */
+// Device IRQ numbers
 #define I8259_IRQ_TIMER     0x00
 #define I8259_IRQ_KEYBOARD  0x01
 
