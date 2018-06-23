@@ -1,19 +1,19 @@
 /**********************************************************************
-  Copyright (C) 2015 Tyler Cromwell <tjc6185@gmail.com>
+  Copyright (C) 2015-Present Tyler Cromwell <tjc6185@gmail.com>
 
-  This file is part of Ritchie.
+  This file is part of Mantle.
 
-  Ritchie is free software: you can redistribute it and/or modify
+  Mantle is free software: you can redistribute it and/or modify
   it under Version 2 of the terms of the GNU General Public License
   as published by the Free Software Foundation.
 
-  Ritchie is distributed in the hope that it will be useful,
+  Mantle is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY of FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with Ritchie.
+  along with Mantle.
   If not, see <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 **********************************************************************/
 

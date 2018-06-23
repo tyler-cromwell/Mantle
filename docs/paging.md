@@ -1,7 +1,7 @@
 # Paging
 
 ### Introduction
-Ritchie uses 64-bit Paging with 4 KB page sizes.
+Mantle uses 64-bit Paging with 4 KB page sizes.
 Each table in the paging hierarchy can hold up to 512 entries, each 8 bytes in size.
 The first 16 MB of the virtual address space is Identity Mapped to the first 16 MB of physical memory.
 The kernel is loaded immediately after the first 16 MB of physical memory and is also Identity Mapped for its entire size.
