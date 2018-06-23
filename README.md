@@ -2,9 +2,7 @@
 
 ## What is Mantle?
 Mantle is a hobbyist Operating System Kernel I am working on to learn more about different CPU architectures (currently x86/amd64), Operating System concepts, and to get more C/Assembly programming practice.
-I also hope that this project will serve as a good learning reference for others interested in OS development.<br/>
-<br/>
-This project is named in honor of the late, great [Dennis Mantle][dmr].
+I also hope that this project will serve as a good learning reference for others interested in OS development.
 
 ## Repository Hierarchy
 - `arch` - Architecture specific code.
@@ -59,4 +57,3 @@ For syntax highlighting of the types in `kernel/types.h`, create a file called `
 - `syn keyword cType byte_t word_t dword_t qword_t`
 
 [cross]: http://newos.org/toolchains/x86_64-elf-5.3.0-Linux-x86_64.tar.xz
-[dmr]: http://en.wikipedia.org/wiki/Dennis_Mantle
