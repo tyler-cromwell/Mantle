@@ -34,7 +34,7 @@ CMDS = [
     'clean'
 ]
 
-CONF = 'ritchie.conf'
+CONF = 'mantle.conf'
 
 FILES = {
     'grub' : 'grub.cfg',
