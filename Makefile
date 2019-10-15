@@ -58,7 +58,7 @@ iso: all
 	@cp $(IMAGE) isodir/boot/$(IMAGE)
 	@mkdir -p isodir/boot/grub
 	@cp grub.cfg isodir/boot/grub/grub.cfg
-	grub2-mkrescue -o $(IMAGE).iso isodir
+	grub-mkrescue -o $(IMAGE).iso isodir
 
 .PHONY: clean
 clean:

@@ -2,8 +2,8 @@
 *.swp
 *.txt
 *.iso
-ritchie*
-!ritchie.conf
+mantle*
+!mantle.conf
 
 notes.txt
 
