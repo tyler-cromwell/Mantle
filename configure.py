@@ -39,7 +39,7 @@ CONF = 'mantle.conf'
 FILES = {
     'grub' : 'grub.cfg',
     'version' : 'include/kernel/version.h',
-    'make' : 'make.conf'
+    'make' : 'Makefile'
 }
 
 
@@ -156,8 +156,7 @@ if __name__ == "__main__":
         update(FILES['version'], 'CODENAME', r'CODENAME \".*\"', 'CODENAME \"'+ codename +'\"')
         print('DONE')
 
-        # Update make.conf file
+        # Update Makefile
         print('Updating \''+ FILES['make'] +'\'... ', end='')
-        update(FILES['make'], 'ARCH', r'ARCH = .*', 'ARCH = '+ arch)
         update(FILES['make'], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
         print('DONE')

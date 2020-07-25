@@ -18,21 +18,19 @@
 ########################################################################
 
 # Important variables
-include make.conf
+IMAGE = <IMAGE>
 LD_SCRIPT = link.ld
 
 # Programs for building
-# CC specified in make.conf
-# LD specified in make.conf
 AS = nasm
+CC = ~/workspace/x86_64-elf-5.3.0-Linux-x86_64/bin/x86_64-elf-gcc
+LD = ~/workspace/x86_64-elf-5.3.0-Linux-x86_64/bin/x86_64-elf-gcc
 
 INCLUDE = -I ./include/ -I ./arch/include/
 
 ASFLAGS = -felf64
-CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse \
-		 -mno-sse2 -std=gnu99 $(INCLUDE)
-LDFLAGS = -ffreestanding -nostdlib -lgcc -z max-page-size=0x1000 \
-		  -T $(LD_SCRIPT) -o $(IMAGE)
+CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -std=gnu99 $(INCLUDE)
+LDFLAGS = -ffreestanding -nostdlib -lgcc -z max-page-size=0x1000 -T $(LD_SCRIPT) -o $(IMAGE)
 
 ASM_SRC = $(shell find ./ -name '*.asm')
 ASM_OBJ = $(ASM_SRC:%.asm=%.o)

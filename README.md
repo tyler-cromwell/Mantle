@@ -20,15 +20,11 @@ I also hope that this project will serve as a good learning reference for others
 - `link.ld` - Linker script that organizes the binary layout.
 - `grub.cfg` - Basic GRUB config file.
 - `configure.py` - Python 3 script that updates the following files:
-  - `make.conf`, `grub.cfg`, and `version.h`.
   - Running `./configure.py -c clean` will run `git checkout` on each file.
 - `mantle.conf` - Project configuration file, contains various options.
   - `Name`: The project name.
   - `Version`: The version string.
   - `Codename`: The codename.
-- `make.conf` - File containing Makefile variables (populated by `configure.py`).
-  - `ARCH`: The architecture to build.
-  - `IMAGE`: The kernel binary image.
 
 ## Dependencies
 - GCC Cross Compiler
