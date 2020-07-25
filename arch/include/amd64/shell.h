@@ -61,4 +61,10 @@ void shell_cmd_cpuinfo(void);
  */
 void shell_cmd_multiboot(ulong_t magic);
 
+
+/*
+ * Initiates system shutdown.
+ */
+void shell_cmd_shutdown();
+
 #endif

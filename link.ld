@@ -22,7 +22,6 @@ ENTRY (kernel_boot)
 
 SECTIONS {
     KERNEL_VMA = 0x0000000000000000;    /* 0MB */
-    /*KERNEL_VMA = 0x0000000001000000;  /* 16MB */
     KERNEL_LMA = 0x0000000001000000;    /* 16MB */
 
     . = KERNEL_LMA;
@@ -32,6 +31,7 @@ SECTIONS {
         BOOTSTRAP = .;
         *boot* (.multiboot) /* Mulitboot Header */
         *boot* (.text)
+        *boot* (.rodata)
         *boot* (.data)
         *boot* (.bss)
     }
@@ -42,7 +42,12 @@ SECTIONS {
     .text : AT(ADDR(.text) - KERNEL_VMA) {
         SECTION_TEXT = .;
         *(EXCLUDE_FILE(*boot) .text)
-        *(.rodata*)
+        . = ALIGN(0x1000);
+    }
+
+    .rodata : AT(ADDR(.rodata) - KERNEL_VMA) {
+        SECTION_RODATA = .;
+        *(EXCLUDE_FILE(*boot) .rodata)
         . = ALIGN(0x1000);
     }
 
@@ -50,11 +55,6 @@ SECTIONS {
     .data : AT(ADDR(.data) - KERNEL_VMA) {
         SECTION_DATA = .;
         *(EXCLUDE_FILE(*boot) .data)
-        . = ALIGN(0x1000);
-    }
-
-    .eh_frame : AT(ADDR(.eh_frame) - KERNEL_VMA) {
-        *(.eh_frame)
         . = ALIGN(0x1000);
     }
 

@@ -18,6 +18,7 @@
 **********************************************************************/
 
 // Kernel header(s)
+#include <amd64/asm.h>
 #include <amd64/console.h>
 #include <amd64/cpuid.h>
 #include <amd64/multiboot.h>
@@ -109,4 +110,9 @@ void shell_cmd_multiboot(ulong_t magic) {
     } else {
         console_printf(FG_WHITE, "Kernel not booted via Multiboot\n");
     }
+}
+
+
+void shell_cmd_shutdown() {
+    outw(0x604, 0x2000);
 }

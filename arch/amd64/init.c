@@ -73,6 +73,9 @@ void init_kernel(ulong_t magic, struct MultibootInfo *mbinfo, ulong_t pages) {
         else if (strlcmp(input, "clear") > 0) {
             console_clear();
         }
+        else if (strlcmp(input, "shutdown") > 0) {
+            shell_cmd_shutdown();
+        }
         else if (strlcmp(input, "help") > 0) {
             console_printf(FG_WHITE, "clear: Clears the screen.\n");
             console_printf(FG_WHITE, "cpuinfo: Prints CPUID information.\n");
@@ -80,6 +83,7 @@ void init_kernel(ulong_t magic, struct MultibootInfo *mbinfo, ulong_t pages) {
             console_printf(FG_WHITE, "kinfo: Prints information about the kernel.\n");
             console_printf(FG_WHITE, "pageinfo: Prints information about the paging tree.\n");
             console_printf(FG_WHITE, "multiboot: Prints Multiboot information.\n");
+            console_printf(FG_WHITE, "shutdown: Shuts down the machine (QEMU).\n");
         }
         else if (strlcmp(input, "halt") > 0) {
             break;

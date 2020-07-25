@@ -113,4 +113,15 @@ static inline void outb(word_t port, byte_t value) {
     asm volatile ("outb %0, %1": : "a"(value), "Nd"(port));
 }
 
+
+/*
+ * Write a word to an I/O port.
+ * Arguments:
+ *   word_t port: The port to write to.
+ *   word_t value: The value to write.
+ */
+static inline void outw(word_t port, word_t value) {
+    asm volatile ("outw %0, %1": : "a"(value), "Nd"(port));
+}
+
 #endif
