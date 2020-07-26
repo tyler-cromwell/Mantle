@@ -22,6 +22,7 @@ NAME = <NAME>
 VERSION = <VERSION>
 CODENAME = <CODENAME>
 IMAGE = <IMAGE>
+STRING = <STRING>
 LD_SCRIPT = link.ld
 
 # Programs for building
@@ -29,7 +30,7 @@ AS = nasm
 CC = ~/workspace/x86_64-elf-5.3.0-Linux-x86_64/bin/x86_64-elf-gcc
 LD = ~/workspace/x86_64-elf-5.3.0-Linux-x86_64/bin/x86_64-elf-gcc
 
-MACROS = -D NAME=\"$(NAME)\" -D VERSION=\"$(VERSION)\" -D CODENAME=\"$(CODENAME)\" -D STRING=\"$(IMAGE)\"
+MACROS = -D NAME=\"$(NAME)\" -D VERSION=\"$(VERSION)\" -D CODENAME=\"$(CODENAME)\" -D STRING=\"$(STRING)\"
 INCLUDE = -I ./include/ -I ./arch/include/
 
 ASFLAGS = -felf64

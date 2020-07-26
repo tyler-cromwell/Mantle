@@ -153,5 +153,6 @@ if __name__ == "__main__":
         update(FILES['make'], 'NAME', r'NAME = .*', 'NAME = '+ name)
         update(FILES['make'], 'VERSION', r'VERSION = .*', 'VERSION = '+ version + branch)
         update(FILES['make'], 'CODENAME', r'CODENAME = .*', 'CODENAME = '+ codename)
+        update(FILES['make'], 'STRING', r'STRING = .*', 'STRING = '+ version_string)
         update(FILES['make'], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
         print('DONE')
