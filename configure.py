@@ -140,7 +140,7 @@ if __name__ == "__main__":
 
         # Construct version and binary image strings
         version_string = "\""+ name +" "+ version + branch +" ("+codename+")\""
-        image_string = name.lower() +"-v"+ release + branch
+        image_string = name.lower() +"-v"+ release + branch +"."+ arch
 
         # Update the GRUB configuration file
         print('Updating \''+ FILES['grub'] +'\'... ', end='')
