@@ -18,6 +18,9 @@
 ########################################################################
 
 # Important variables
+NAME = <NAME>
+VERSION = <VERSION>
+CODENAME = <CODENAME>
 IMAGE = <IMAGE>
 LD_SCRIPT = link.ld
 
@@ -26,10 +29,11 @@ AS = nasm
 CC = ~/workspace/x86_64-elf-5.3.0-Linux-x86_64/bin/x86_64-elf-gcc
 LD = ~/workspace/x86_64-elf-5.3.0-Linux-x86_64/bin/x86_64-elf-gcc
 
+MACROS = -D NAME=\"$(NAME)\" -D VERSION=\"$(VERSION)\" -D CODENAME=\"$(CODENAME)\" -D STRING=\"$(IMAGE)\"
 INCLUDE = -I ./include/ -I ./arch/include/
 
 ASFLAGS = -felf64
-CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -std=gnu99 $(INCLUDE)
+CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -std=gnu99 $(MACROS) $(INCLUDE)
 LDFLAGS = -ffreestanding -nostdlib -lgcc -z max-page-size=0x1000 -T $(LD_SCRIPT) -o $(IMAGE)
 
 ASM_SRC = $(shell find ./ -name '*.asm')

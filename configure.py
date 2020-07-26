@@ -38,7 +38,6 @@ CONF = 'mantle.conf'
 
 FILES = {
     'grub' : 'grub.cfg',
-    'version' : 'include/kernel/version.h',
     'make' : 'Makefile'
 }
 
@@ -149,14 +148,10 @@ if __name__ == "__main__":
         update(FILES['grub'], 'multiboot', r'/boot/.*$', '/boot/'+image_string)
         print('DONE')
 
-        # Update kernel version header file
-        print('Updating \''+ FILES['version'] +'\'... ', end='')
-        update(FILES['version'], 'PROJECT', r'PROJECT \".*\"', 'PROJECT \"'+ name +'\"')
-        update(FILES['version'], 'VERSION', r'VERSION \".*\"', 'VERSION \"'+ version + branch +'\"')
-        update(FILES['version'], 'CODENAME', r'CODENAME \".*\"', 'CODENAME \"'+ codename +'\"')
-        print('DONE')
-
         # Update Makefile
         print('Updating \''+ FILES['make'] +'\'... ', end='')
+        update(FILES['make'], 'NAME', r'NAME = .*', 'NAME = '+ name)
+        update(FILES['make'], 'VERSION', r'VERSION = .*', 'VERSION = '+ version + branch)
+        update(FILES['make'], 'CODENAME', r'CODENAME = .*', 'CODENAME = '+ codename)
         update(FILES['make'], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
         print('DONE')

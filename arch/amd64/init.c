@@ -22,7 +22,6 @@
 #include <amd64/multiboot.h>
 #include <amd64/shell.h>
 #include <kernel/types.h>
-#include <kernel/version.h>
 #include <lib/string.h>
 
 // Local headers
