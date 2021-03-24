@@ -34,24 +34,36 @@ MACROS = -D NAME=\"$(NAME)\" -D VERSION=\"$(VERSION)\" -D CODENAME=\"$(CODENAME)
 INCLUDE = -I ./include/ -I ./arch/include/
 
 ASFLAGS = -felf64
-CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -std=gnu99 $(MACROS) $(INCLUDE)
-LDFLAGS = -ffreestanding -nostdlib -lgcc -z max-page-size=0x1000 -T $(LD_SCRIPT) -o $(IMAGE)
+CFLAGS = -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -std=gnu99
+LDFLAGS = -ffreestanding -nostdlib -lgcc -z max-page-size=0x1000 -T $(LD_SCRIPT)
 
 ASM_SRC = $(shell find ./ -name '*.asm')
 ASM_OBJ = $(ASM_SRC:%.asm=%.o)
+ASM_OBJ_DBG = $(ASM_SRC:%.asm=%.o.debug)
 
 C_SRC = $(shell find ./ -name '*.c')
 C_OBJ = $(C_SRC:%.c=%.o)
+C_OBJ_DBG = $(C_SRC:%.c=%.o.debug)
 
 %.o: %.asm
 	$(AS) $(ASFLAGS) $< -o $@
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(MACROS) $(INCLUDE) -c $< -o $@
+
+%.o.debug: %.asm
+	$(AS) $(ASFLAGS) $< -o $@
+
+%.o.debug: %.c
+	$(CC) $(CFLAGS) -ggdb $(MACROS) -D DEBUG $(INCLUDE) -c $< -o $@
 
 .PHONY: all
 all: $(ASM_OBJ) $(C_OBJ)
-	$(LD) $(LDFLAGS) $(C_OBJ) $(ASM_OBJ)
+	$(LD) $(LDFLAGS) -o $(IMAGE) $(C_OBJ) $(ASM_OBJ)
+
+.PHONY: debug
+debug: $(ASM_OBJ_DBG) $(C_OBJ_DBG)
+	$(LD) $(LDFLAGS) -o $(IMAGE).debug $(C_OBJ_DBG) $(ASM_OBJ_DBG)
 
 .PHONY: iso
 iso: all
@@ -66,6 +78,8 @@ iso: all
 .PHONY: clean
 clean:
 	@find ./ -name '*.o' | xargs rm -rf
+	@find ./ -name '*.o.debug' | xargs rm -rf
 	@rm -rf $(IMAGE)
+	@rm -rf $(IMAGE).debug
 	@rm -rf $(IMAGE).iso
 	@rm -rf isodir/
