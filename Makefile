@@ -52,7 +52,7 @@ C_OBJ_DBG = $(C_SRC:%.c=%.o.debug)
 	$(CC) $(CFLAGS) $(MACROS) $(INCLUDE) -c $< -o $@
 
 %.o.debug: %.asm
-	$(AS) $(ASFLAGS) $< -o $@
+	$(AS) $(ASFLAGS) -F dwarf -g $< -o $@
 
 %.o.debug: %.c
 	$(CC) $(CFLAGS) -ggdb $(MACROS) -D DEBUG $(INCLUDE) -c $< -o $@

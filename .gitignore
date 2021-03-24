@@ -1,4 +1,5 @@
 *.o
+*.o.debug
 *.swp
 *.txt
 *.iso
