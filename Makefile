@@ -26,10 +26,31 @@ STRING = <STRING>
 LD_SCRIPT = link.ld
 
 # Programs for building
-AS = nasm
-CC = ~/workspace/x86_64-elf-5.3.0-Linux-x86_64/bin/x86_64-elf-gcc
-LD = ~/workspace/x86_64-elf-5.3.0-Linux-x86_64/bin/x86_64-elf-gcc
+# Homebrew's x86_64-elf-tools installs grub-mkrescue as `x86_64-elf-grub-mkrescue`
+# Linux packages it as plain `grub-mkrescue`.
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+GRUB_MKRESCUE ?= x86_64-elf-grub-mkrescue
+else
+GRUB_MKRESCUE ?= grub-mkrescue
+endif
 
+# Cross-compiler prefix. Override at the command line, e.g. `make CROSS_PREFIX=x86_64-elf-`.
+CROSS_PREFIX ?= x86_64-elf-
+
+# Assumes the prefix above is already resolvable on PATH
+TOOLCHAIN_DIR ?=
+ifneq ($(TOOLCHAIN_DIR),)
+export PATH := $(TOOLCHAIN_DIR)/bin:$(PATH)
+endif
+
+TOOLCHAIN_BIN := $(if $(TOOLCHAIN_DIR),$(TOOLCHAIN_DIR)/bin/,)
+
+AS := nasm  # separate tool, see above
+CC := $(TOOLCHAIN_BIN)$(CROSS_PREFIX)gcc
+LD := $(TOOLCHAIN_BIN)$(CROSS_PREFIX)gcc
+
+# Arguments
 MACROS = -D NAME=\"$(NAME)\" -D VERSION=\"$(VERSION)\" -D CODENAME=\"$(CODENAME)\" -D STRING=\"$(STRING)\"
 INCLUDE = -I ./include/ -I ./arch/include/
 
@@ -45,6 +66,7 @@ C_SRC = $(shell find ./ -name '*.c')
 C_OBJ = $(C_SRC:%.c=%.o)
 C_OBJ_DBG = $(C_SRC:%.c=%.o.debug)
 
+# Build rules
 %.o: %.asm
 	$(AS) $(ASFLAGS) $< -o $@
 
@@ -73,7 +95,7 @@ iso: all
 	@cp $(IMAGE) isodir/boot/$(IMAGE)
 	@mkdir -p isodir/boot/grub
 	@cp grub.cfg isodir/boot/grub/grub.cfg
-	grub-mkrescue -o $(IMAGE).iso isodir
+	$(GRUB_MKRESCUE) -o $(IMAGE).iso isodir
 
 .PHONY: clean
 clean:
