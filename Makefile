@@ -81,27 +81,27 @@ C_OBJ_DBG = $(C_SRC:%.c=%.o.debug)
 
 .PHONY: all
 all: $(ASM_OBJ) $(C_OBJ)
-	$(LD) $(LDFLAGS) -o $(IMAGE) $(C_OBJ) $(ASM_OBJ)
+	@mkdir -p out/
+	$(LD) $(LDFLAGS) -o out/$(IMAGE) $(C_OBJ) $(ASM_OBJ)
 
 .PHONY: debug
 debug: $(ASM_OBJ_DBG) $(C_OBJ_DBG)
-	$(LD) $(LDFLAGS) -o $(IMAGE).debug $(C_OBJ_DBG) $(ASM_OBJ_DBG)
+	@mkdir -p out/
+	$(LD) $(LDFLAGS) -o out/$(IMAGE).debug $(C_OBJ_DBG) $(ASM_OBJ_DBG)
 
 .PHONY: iso
 iso: all
 	@rm -rf isodir/
 	@mkdir -p isodir
 	@mkdir -p isodir/boot
-	@cp $(IMAGE) isodir/boot/$(IMAGE)
+	@cp out/$(IMAGE) isodir/boot/$(IMAGE)
 	@mkdir -p isodir/boot/grub
 	@cp grub.cfg isodir/boot/grub/grub.cfg
-	$(GRUB_MKRESCUE) -o $(IMAGE).iso isodir
+	$(GRUB_MKRESCUE) -o out/$(IMAGE).iso isodir
 
 .PHONY: clean
 clean:
 	@find ./ -name '*.o' | xargs rm -rf
 	@find ./ -name '*.o.debug' | xargs rm -rf
-	@rm -rf $(IMAGE)
-	@rm -rf $(IMAGE).debug
-	@rm -rf $(IMAGE).iso
+	@rm -rf out/
 	@rm -rf isodir/
