@@ -40,11 +40,20 @@ CROSS_PREFIX ?= x86_64-elf-
 
 # Assumes the prefix above is already resolvable on PATH
 TOOLCHAIN_DIR ?=
-ifneq ($(TOOLCHAIN_DIR),)
+ifneq ($(MAKECMDGOALS),clean)
+ifeq ($(strip $(TOOLCHAIN_DIR)),)
+$(error TOOLCHAIN_DIR must be set, e.g. `make TOOLCHAIN_DIR=/path/to/toolchain`)
+else
 export PATH := $(TOOLCHAIN_DIR)/bin:$(PATH)
+endif
 endif
 
 TOOLCHAIN_BIN := $(if $(TOOLCHAIN_DIR),$(TOOLCHAIN_DIR)/bin/,)
+
+OUT_DIR ?=
+ifeq ($(strip $(OUT_DIR)),)
+$(error OUT_DIR must be set, e.g. `make OUT_DIR=out`)
+endif
 
 AS := nasm  # separate tool, see above
 CC := $(TOOLCHAIN_BIN)$(CROSS_PREFIX)gcc
@@ -81,27 +90,27 @@ C_OBJ_DBG = $(C_SRC:%.c=%.o.debug)
 
 .PHONY: all
 all: $(ASM_OBJ) $(C_OBJ)
-	@mkdir -p out/
-	$(LD) $(LDFLAGS) -o out/$(IMAGE) $(C_OBJ) $(ASM_OBJ)
+	@mkdir -p $(OUT_DIR)/
+	$(LD) $(LDFLAGS) -o $(OUT_DIR)/$(IMAGE) $(C_OBJ) $(ASM_OBJ)
 
 .PHONY: debug
 debug: $(ASM_OBJ_DBG) $(C_OBJ_DBG)
-	@mkdir -p out/
-	$(LD) $(LDFLAGS) -o out/$(IMAGE).debug $(C_OBJ_DBG) $(ASM_OBJ_DBG)
+	@mkdir -p $(OUT_DIR)/
+	$(LD) $(LDFLAGS) -o $(OUT_DIR)/$(IMAGE).debug $(C_OBJ_DBG) $(ASM_OBJ_DBG)
 
 .PHONY: iso
 iso: all
 	@rm -rf isodir/
 	@mkdir -p isodir
 	@mkdir -p isodir/boot
-	@cp out/$(IMAGE) isodir/boot/$(IMAGE)
+	@cp $(OUT_DIR)/$(IMAGE) isodir/boot/$(IMAGE)
 	@mkdir -p isodir/boot/grub
 	@cp grub.cfg isodir/boot/grub/grub.cfg
-	$(GRUB_MKRESCUE) -o out/$(IMAGE).iso isodir
+	$(GRUB_MKRESCUE) -o $(OUT_DIR)/$(IMAGE).iso isodir
 
 .PHONY: clean
 clean:
 	@find ./ -name '*.o' | xargs rm -rf
 	@find ./ -name '*.o.debug' | xargs rm -rf
-	@rm -rf out/
+	@rm -rf $(OUT_DIR)/
 	@rm -rf isodir/
