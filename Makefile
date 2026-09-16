@@ -38,7 +38,6 @@ endif
 # Cross-compiler prefix. Override at the command line, e.g. `make CROSS_PREFIX=x86_64-elf-`.
 CROSS_PREFIX ?= x86_64-elf-
 
-# Assumes the prefix above is already resolvable on PATH
 TOOLCHAIN_DIR ?=
 ifneq ($(MAKECMDGOALS),clean)
 ifeq ($(strip $(TOOLCHAIN_DIR)),)
