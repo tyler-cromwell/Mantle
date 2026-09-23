@@ -83,7 +83,7 @@ def clean():
 # Prints the command usage along with
 # supported architectures and commands
 def print_usage():
-    print('usage: ./configure.py [-a arch] [-c cmd]')
+    print('usage: ./configure.py [-a arch | -c cmd]')
     print('  -h --help\t\tPrints this text')
     print('  -a --arch\t\tThe target architecture')
     print('  -c --cmd \t\tSpecific command')
@@ -117,10 +117,10 @@ if __name__ == "__main__":
         elif o == '-c' or o == '--cmd':
             cmd = v
 
-    if cmd == 'clean':
-        clean()
-
-    elif arch in ARCHES:
+    if arch == '' and cmd in CMDS:
+        if cmd == 'clean':
+            clean()
+    elif cmd == '' and arch in ARCHES:
         config = configparser.ConfigParser()
         config.read(MANTLE_CONFIG)
 
