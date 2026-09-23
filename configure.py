@@ -109,13 +109,13 @@ if __name__ == "__main__":
     if len(opts) == 0:
         print_usage()
 
-    for o, a in opts:
+    for o, v in opts:
         if o == '-h' or o == '--help':
             print_usage()
         elif o == '-a' or o == '--arch':
-            arch = a
+            arch = v
         elif o == '-c' or o == '--cmd':
-            cmd = a
+            cmd = v
 
     if cmd == 'clean':
         clean()
