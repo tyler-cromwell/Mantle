@@ -34,12 +34,12 @@ CMDS = [
     'clean'
 ]
 
-CONF = 'mantle.conf'
-
-FILES = {
+TARGET_FILES = {
     'grub' : 'grub.cfg',
     'make' : 'Makefile'
 }
+
+MANTLE_CONFIG = 'mantle.conf'
 
 
 # Replaces the matched contents of a file with the given string.
@@ -74,9 +74,9 @@ def update(filename, search, pattern, string):
 #
 # This is I don't have to type it myself every time.
 def clean():
-    for k in FILES.keys():
-        print('Resetting \'', FILES[k], '\'... ', sep='', end='')
-        os.system('git checkout '+ FILES[k])
+    for k in TARGET_FILES.keys():
+        print('Resetting \'', TARGET_FILES[k], '\'... ', sep='', end='')
+        subprocess.getoutput('git checkout '+ TARGET_FILES[k])
         print('DONE')
 
 
@@ -89,7 +89,7 @@ def print_usage():
     print('  -c --cmd \t\tSpecific command')
     print()
     print('Architectures:', ARCHES)
-    print('Subcommands:', CMDS)
+    print('Commands:', CMDS)
     sys.exit()
 
 
@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     elif arch in ARCHES:
         config = configparser.ConfigParser()
-        config.read(CONF)
+        config.read(MANTLE_CONFIG)
 
         # Read in the options
         (name, version, codename) = [pair[1] for pair in config.items('Version')]
@@ -143,16 +143,18 @@ if __name__ == "__main__":
         image_string = name.lower() +"-v"+ release + branch +"."+ arch
 
         # Update the GRUB configuration file
-        print('Updating \''+ FILES['grub'] +'\'... ', end='')
-        update(FILES['grub'], 'menuentry', r'\".*\"', version_string)
-        update(FILES['grub'], 'multiboot', r'/boot/.*$', '/boot/'+image_string)
+        grubcfg = TARGET_FILES['grub']
+        print('Updating \''+ grubcfg +'\'... ', end='')
+        update(grubcfg, 'menuentry', r'\".*\"', version_string)
+        update(grubcfg, 'multiboot', r'/boot/.*$', '/boot/'+image_string)
         print('DONE')
 
         # Update Makefile
-        print('Updating \''+ FILES['make'] +'\'... ', end='')
-        update(FILES['make'], 'NAME', r'NAME = .*', 'NAME = '+ name)
-        update(FILES['make'], 'VERSION', r'VERSION = .*', 'VERSION = '+ version + branch)
-        update(FILES['make'], 'CODENAME', r'CODENAME = .*', 'CODENAME = '+ codename)
-        update(FILES['make'], 'STRING', r'STRING = .*', 'STRING = '+ version_string)
-        update(FILES['make'], 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
+        makefile = TARGET_FILES['make']
+        print('Updating \''+ makefile +'\'... ', end='')
+        update(makefile, 'NAME', r'NAME = .*', 'NAME = '+ name)
+        update(makefile, 'VERSION', r'VERSION = .*', 'VERSION = '+ version + branch)
+        update(makefile, 'CODENAME', r'CODENAME = .*', 'CODENAME = '+ codename)
+        update(makefile, 'STRING', r'STRING = .*', 'STRING = '+ version_string)
+        update(makefile, 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
         print('DONE')
