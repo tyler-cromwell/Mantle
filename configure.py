@@ -158,3 +158,5 @@ if __name__ == "__main__":
         update(makefile, 'STRING', r'STRING = .*', 'STRING = '+ version_string)
         update(makefile, 'IMAGE', r'IMAGE = .*', 'IMAGE = '+ image_string)
         print('DONE')
+    else:
+        print_usage()
